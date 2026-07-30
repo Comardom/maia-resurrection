@@ -1,0 +1,18 @@
+/* ── CSS Reset ──────────────────────────── */
+/* 消除浏览器默认边距和内边距 */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+}
+
+/* 图片默认块级化，防止底部产生空隙 */
+img {
+  max-inline-size: 100%;
+  display: block;
+}

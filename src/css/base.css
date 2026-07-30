@@ -1,0 +1,32 @@
+/* ── 基础元素样式 ──────────────────────── */
+/* 在主题变量加载后使用，依赖 theme.css */
+
+html, body {
+  background: var(--theme-bg);
+  color: var(--theme-color);
+  transition: background 0.4s ease, color 0.4s ease;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button, input, textarea {
+  background-color: var(--theme-bg-button);
+  color: var(--theme-color-button);
+  border: 1px solid var(--theme-border-button);
+  transition: background-color 0.3s ease, color 0.3s ease, border 0.3s ease;
+}
+.dark button:hover {
+  background-color: var(--theme-bg-button-hover);
+}
+
+::selection {
+  background-color: #ccc;
+  color: black;
+}
+.dark ::selection {
+  background-color: #555;
+  color: white;
+}

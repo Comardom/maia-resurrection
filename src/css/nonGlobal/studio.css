@@ -1,0 +1,21 @@
+#snap-state[data-current-section="3"] ~ .some-element {
+    opacity: 1;
+}
+.snap-wrapper {
+    position: relative; /* 成为所有 snap-section 的定位父级 */
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden; /* 隐藏所有超出屏幕的内容 */
+}
+
+.snap-section {
+    position: absolute; /* 所有 section 绝对定位，实现堆叠 */
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+html,body{
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+}

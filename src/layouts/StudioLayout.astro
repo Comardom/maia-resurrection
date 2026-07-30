@@ -1,0 +1,66 @@
+---
+const themeCookie = Astro.cookies.get('theme');
+const isDark = themeCookie?.value === 'dark';
+const { title, description } = Astro.props
+
+import '/src/css/reset.css'
+import '/src/css/theme.css'
+import '/src/css/base.css'
+import '/src/css/fonts.css'
+---
+
+<html lang="zh-CN" class={isDark ? 'dark' : ''}>
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={Astro.url} />
+    <link rel="icon" type="image/svg+xml"
+          href={isDark ? '/plastic-white-trans-wswd.svg' : '/plastic-black-trans-wswd.svg'} />
+
+    <!-- OG -->
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" /><!--如果是文章用 article，视频用 video-->
+    <meta property="og:url" content={Astro.url} />
+    <meta property="og:image" content={Astro.url.origin + '/plastic-blue-trans-wswd.svg'} />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <!-- JSON-LD -->
+    <script is:inline type="application/ld+json" set:html={JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        "name": "河南大学网站工作室",
+        "url": Astro.url.origin,
+    })} />
+
+    <slot name="head" />
+    <style>
+        /* ── 布局专属样式 ────────────── */
+        html, body {
+            block-size: 100dvb;
+            inline-size: 100dvi;
+            overflow: hidden;
+            touch-action: pan-y;
+            scrollbar-width: none;
+        }
+        body::-webkit-scrollbar {
+            display: none;
+        }
+
+        /* 全屏翻页：所有 section 堆叠在视口内 */
+        .snap-section {
+            position: absolute;
+            inset: 0;
+        }
+    </style>
+</head>
+<body>
+<slot />
+<script>
+import { initPageAnimator } from '@/utils/pageAnimator'
+initPageAnimator()
+</script>
+</body>
+</html>

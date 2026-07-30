@@ -1,0 +1,134 @@
+---
+
+---
+<header>
+    <div class="top-bar">
+        <div class="left-group">
+            <a href="/" class="logo-wrapper">
+                <img src="/plastic-black-trans-wswd.svg" class="logo logo-light" alt="河南大学网站工作室" />
+                <img src="/plastic-white-trans-wswd.svg" class="logo logo-dark" alt="河南大学网站工作室" />
+            </a>
+            <span class="title-text">河南大学网站工作室</span>
+        </div>
+        <div class="right-group">
+            <button id="theme-toggle" class="theme-toggle">
+                <span id="toggle-icon">🌙</span>
+                <span id="toggle-label">暗色</span>
+            </button>
+        </div>
+    </div>
+</header>
+<style>
+    .top-bar {
+        position: fixed;
+        top: 0; left: 0; width: 100%;
+        min-block-size: 8svb;
+        padding: 0.5rem 1rem;
+        z-index: 1000;
+        display: flex;
+        align-items: center;
+        transition: background-color 0.3s, color 0.3s;
+        border-bottom: 1px solid rgba(20, 20, 20, 0.2);
+        transform-origin: top center;
+        animation: breathe-y 6s ease-in-out infinite;
+        justify-content: space-between;
+    }
+
+    /* 亮色 */
+    .top-bar {
+        background: #f5f5f5;
+        color: #333;
+    }
+
+    /* 深色 — 通过 :global(.dark) 监听 html 的 class */
+    :global(.dark) .top-bar {
+        background: #2c2c2c;
+        color: #f0f0f0;
+    }
+
+    .logo-wrapper {
+        position: relative;
+        display: flex;
+    }
+    .logo {
+        height: 3rem;
+        width: auto;
+        transition: opacity 0.3s;
+    }
+    .logo-light { opacity: 1; }       /* 亮色显示 */
+    .logo-dark  { opacity: 0; position: absolute; }  /* 叠在下面 */
+
+    :global(.dark) .logo-light { opacity: 0; }
+    :global(.dark) .logo-dark  { opacity: 1; }
+
+
+    .left-group,.right-group{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 1rem;
+    }
+    /* 内部元素：等比缩放，从边缘向中心 */
+    .left-group {
+        transform-origin: left center;
+        animation: breathe-xy 6s ease-in-out infinite;
+    }
+    .right-group {
+        transform-origin: right center;
+        animation: breathe-xy 6s ease-in-out infinite;
+    }
+
+    @keyframes breathe-y {
+        0%, 100% { transform: scaleY(1); }
+        50%      { transform: scaleY(1.03); }
+    }
+
+    @keyframes breathe-xy {
+        0%, 100% { transform: scale(1); }
+        50%      { transform: scale(1.03); }
+    }
+
+    /*.logo {
+        height: 3rem;
+        width: auto;
+        display: block;
+    }
+    !* 默认（亮色）：显示黑色 logo *!
+    .logo-dark { display: none; }
+
+    !* 深色：显示白色 logo，隐藏黑色 logo *!
+    :global(.dark) .logo-light { display: none; }
+    :global(.dark) .logo-dark { display: block; }*/
+
+    .title-text {
+        font-weight: 350;
+        font-size: 1.2rem;
+        letter-spacing: 0.125rem;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", "Noto Sans CJK SC", sans-serif;
+    }
+
+    .theme-toggle span{
+        font-weight: 400;
+        font-size: 0.9rem;
+        letter-spacing: 0.0125rem;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", "Noto Sans CJK SC", sans-serif;
+    }
+
+    .theme-toggle {
+        padding: 0.4rem 0.8rem;
+        font-size: 0.9rem;
+        background: transparent;
+        border: 1px solid;
+        border-radius: 0.4em;
+        cursor: pointer;
+        color: inherit;
+        transition: background-color 0.3s;
+    }
+    .theme-toggle:hover {
+        background-color: rgba(128, 128, 128, 0.15);
+    }
+</style>
+<script>
+    import { initThemeToggle } from './headerScript'
+    initThemeToggle()
+</script>

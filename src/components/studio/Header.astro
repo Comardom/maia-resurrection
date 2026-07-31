@@ -15,7 +15,8 @@
                 <img src="/luna-black.svg"  class="icon icon-luna-black"  alt="" />
                 <img src="/solar-white.svg" class="icon icon-solar-white" alt="" />
             </button>
-            <button id="app-menu-toggle" class="app-menu-toggle" aria-label="打开应用中心">
+            <button id="app-menu-toggle" class="app-menu-toggle" aria-label="打开应用中心"
+                aria-expanded="false" aria-controls="app-menu">
                 <img src="/more-black.svg" class="icon icon-more-black" alt="" />
                 <img src="/more-white.svg" class="icon icon-more-white" alt="" />
             </button>
@@ -23,7 +24,9 @@
         </div>
     </div>
 
-    <div id="app-menu" class="app-menu" aria-hidden="true">
+    <div id="app-menu" class="app-menu" role="dialog" aria-modal="true"
+        aria-labelledby="app-menu-title" aria-hidden="true" inert>
+        <h2 id="app-menu-title" class="sr-only">应用中心</h2>
         <div class="app-menu-tiles">
             <a href="/nihilum" class="tile"><span>论坛</span></a>
             <a href="http://exam.xn--2qqp2vw2b55cnt3a7mt1eh.cn/" class="tile"><span>考试系统</span></a>
@@ -270,6 +273,27 @@
         transition: background-color 0.2s;
     }
     .tile:hover { background: #0a8ad6; }
+
+    /* 屏幕阅读器专用隐藏标题 */
+    .sr-only {
+        position: absolute;
+        inline-size: 1px;
+        block-size: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        white-space: nowrap;
+        border: 0;
+    }
+
+    /* 减少动态效果偏好 */
+    @media (prefers-reduced-motion: reduce) {
+        .app-menu,
+        .app-menu-backdrop {
+            transition: none;
+        }
+    }
 </style>
 <script>
     import { initThemeToggle, initAppMenu } from './headerScript'

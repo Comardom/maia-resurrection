@@ -11,19 +11,37 @@
             <span class="title-text">河南大学网站工作室</span>
         </div>
         <div class="right-group">
-            <button id="theme-toggle" class="theme-toggle">
-                <span id="toggle-icon">🌙</span>
-                <span id="toggle-label">暗色</span>
+            <button id="theme-toggle" class="theme-toggle" aria-label="切换主题">
+                <img src="/luna-black.svg"  class="icon icon-luna-black"  alt="" />
+                <img src="/solar-white.svg" class="icon icon-solar-white" alt="" />
             </button>
+            <button id="app-menu-toggle" class="app-menu-toggle" aria-label="打开应用中心">
+                <img src="/more-black.svg" class="icon icon-more-black" alt="" />
+                <img src="/more-white.svg" class="icon icon-more-white" alt="" />
+            </button>
+
         </div>
     </div>
+
+    <div id="app-menu" class="app-menu" aria-hidden="true">
+        <div class="app-menu-tiles">
+            <a href="/nihilum" class="tile"><span>论坛</span></a>
+            <a href="http://exam.xn--2qqp2vw2b55cnt3a7mt1eh.cn/" class="tile"><span>考试系统</span></a>
+        </div>
+        <button id="app-menu-close" class="app-menu-close" aria-label="关闭应用中心">
+            <img src="/close-black.svg" class="icon icon-close-black" alt="" />
+            <img src="/close-white.svg" class="icon icon-close-white" alt="" />
+        </button>
+    </div>
+    <div id="app-menu-backdrop" class="app-menu-backdrop"></div>
 </header>
 <style>
     .top-bar {
         position: fixed;
-        top: 0; left: 0; width: 100%;
-        min-block-size: 8svb;
-        padding: 0.5rem 1rem;
+        top: 0; left: 0;
+        inline-size: 100lvi;
+        min-block-size: 7svb;
+        padding-inline: 2rem;
         z-index: 1000;
         display: flex;
         align-items: center;
@@ -88,18 +106,6 @@
         50%      { transform: scale(1.03); }
     }
 
-    /*.logo {
-        height: 3rem;
-        width: auto;
-        display: block;
-    }
-    !* 默认（亮色）：显示黑色 logo *!
-    .logo-dark { display: none; }
-
-    !* 深色：显示白色 logo，隐藏黑色 logo *!
-    :global(.dark) .logo-light { display: none; }
-    :global(.dark) .logo-dark { display: block; }*/
-
     .title-text {
         font-weight: 350;
         font-size: 1.2rem;
@@ -107,28 +113,166 @@
         font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", "Noto Sans CJK SC", sans-serif;
     }
 
-    .theme-toggle span{
-        font-weight: 400;
-        font-size: 0.9rem;
-        letter-spacing: 0.0125rem;
-        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", "Noto Sans CJK SC", sans-serif;
-    }
 
     .theme-toggle {
-        padding: 0.4rem 0.8rem;
-        font-size: 0.9rem;
+        padding: 0;
+        font-size: 1rem;
         background: transparent;
-        border: 1px solid;
-        border-radius: 0.4em;
+        inline-size: 2.5rem;
+        block-size: 2.5rem;
+        border: 0.15rem solid #bebebe;
+        border-radius: 1.25em;
         cursor: pointer;
         color: inherit;
         transition: background-color 0.3s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        position: relative;
     }
+    .theme-toggle .icon {
+        position: absolute;
+        inline-size: 1.4rem;
+        block-size: 1.4rem;
+        opacity: 0;
+        /*transition: opacity 0.3s;*/
+        transform: scale(0.5) rotate(-40deg);   /* 初始：缩小+歪 */
+        transition: opacity 0.35s ease, transform 0.35s ease;
+    }
+
+    .theme-toggle .icon-luna-black { opacity: 1; transform: scale(1) rotate(0); }
+    :global(.dark) .theme-toggle .icon-luna-black { opacity: 0; transform: scale(0.5) rotate(60deg); }
+    :global(.dark) .theme-toggle .icon-solar-white { opacity: 1; transform: scale(1) rotate(0); }
+
+    /* !* 浅色：显示黑月亮 *!
+     .theme-toggle .icon-luna-black { opacity: 1; }
+     !* 深色：显示白太阳 *!
+     :global(.dark) .theme-toggle .icon-luna-black  { opacity: 0; }
+     :global(.dark) .theme-toggle .icon-solar-white { opacity: 1; }*/
+
     .theme-toggle:hover {
         background-color: rgba(128, 128, 128, 0.15);
     }
+
+
+    .app-menu-toggle {
+        padding: 0;
+        font-size: 1rem;
+        background: transparent;
+        inline-size: 2.5rem;
+        block-size: 2.5rem;
+        border: 0.15rem solid #bebebe;
+        border-radius: 1.25em;
+        cursor: pointer;
+        color: inherit;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+    }
+    .app-menu-toggle .icon {
+        position: absolute;
+        inline-size: 1.4rem;
+        block-size: 1.4rem;
+        opacity: 0;
+        transition: opacity 0.3s;
+    }
+    .app-menu-toggle .icon-more-black { opacity: 1; }
+    :global(.dark) .app-menu-toggle .icon-more-black { opacity: 0; }
+    :global(.dark) .app-menu-toggle .icon-more-white { opacity: 1; }
+    .app-menu-toggle:hover { background-color: rgba(128, 128, 128, 0.15); }
+
+    /* 遮挡层 */
+    .app-menu-backdrop {
+        position: fixed;
+        inset: 0;
+        z-index: 1001;
+        background: rgba(0, 0, 0, 0.4);
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.3s;
+    }
+    .app-menu-backdrop.open { opacity: 1; pointer-events: auto; }
+
+    /* 弹窗：顶部滑下，盖住顶栏 */
+    .app-menu {
+        position: fixed;
+        top: 0;
+        inset-inline: 0;
+        block-size: 30dvb;
+        z-index: 1002;
+        background: #fff;
+        color: #333;
+        transform: translateY(-100%);
+        transition: transform 0.3s ease;
+        display: flex;                 /* 新增：行布局 */
+        /* 移除 overflow-y: auto（改由磁贴区自己滚动） */
+    }
+
+    /* 关闭竖条 */
+    .app-menu-close {
+        inline-size: 6.5rem;             /* 竖条宽度（可调） */
+        align-self: stretch;           /* 撑满整个高度 */
+        flex-shrink: 0;
+        padding: 0;
+        border: none;
+        border-inline-start: 1px solid rgba(20, 20, 20, 0.2);   /* 分隔线 */
+        background: transparent;
+        cursor: pointer;
+        position: relative;
+        display: grid;                 /* 用 grid 让两个图标叠在同一格 */
+        place-items: center;
+    }
+
+    /* 图标：不再用 absolute，改用 grid 堆叠 */
+    .app-menu-close .icon {
+        grid-area: 1 / 1;              /* 两个图标重叠在同一单元格 */
+        inline-size: 1.4rem;
+        block-size: 1.4rem;
+        opacity: 0;
+        transition: opacity 0.3s;
+    }
+    .app-menu.open { transform: translateY(0); }
+    :global(.dark) .app-menu { background: #2c2c2c; color: #f0f0f0; }
+    .app-menu-close .icon-close-black { opacity: 1; }
+    :global(.dark) .app-menu-close .icon-close-black { opacity: 0; }
+    :global(.dark) .app-menu-close .icon-close-white { opacity: 1; }
+    :global(.dark) .app-menu-close {
+        border-inline-start-color: rgba(255, 255, 255, 0.2);
+    }
+    .app-menu-close:hover { background-color: rgba(128, 128, 128, 0.15); }
+
+
+
+
+    /* Metro 磁贴 */
+    /* 磁贴区：占剩余宽度，内部滚动 */
+    .app-menu-tiles {
+        flex: 1;
+        overflow-y: auto;
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(6rem, 1fr));
+        gap: 1rem;
+        padding: 3rem;
+        min-inline-size: 0;
+    }
+
+    .tile {
+        aspect-ratio: 1;
+        background: #007ACC;
+        color: #fff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-decoration: none;
+        font-size: 1rem;
+        transition: background-color 0.2s;
+    }
+    .tile:hover { background: #0a8ad6; }
 </style>
 <script>
-    import { initThemeToggle } from './headerScript'
+    import { initThemeToggle, initAppMenu } from './headerScript'
     initThemeToggle()
+    initAppMenu()
 </script>

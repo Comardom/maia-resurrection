@@ -4,23 +4,24 @@
 <header>
     <div class="top-bar">
         <div class="left-group">
-            <a href="/" class="logo-wrapper">
-                <img src="/plastic-black-trans-wswd.svg" class="logo logo-light" alt="河南大学网站工作室" />
-                <img src="/plastic-white-trans-wswd.svg" class="logo logo-dark" alt="河南大学网站工作室" />
-            </a>
-            <span class="title-text">河南大学网站工作室</span>
-        </div>
-        <div class="right-group">
             <button id="theme-toggle" class="theme-toggle" aria-label="切换主题">
                 <img src="/luna-black.svg"  class="icon icon-luna-black"  alt="" />
                 <img src="/solar-white.svg" class="icon icon-solar-white" alt="" />
             </button>
+        </div>
+        <div class="center-group">
+            <a href="/" class="logo-wrapper">
+                <img src="/wswd-black.svg" class="logo logo-light" alt="河南大学网站工作室" />
+                <img src="/wswd-white.svg" class="logo logo-dark" alt="河南大学网站工作室" />
+            </a>
+            <span class="title-text">河南大学网站工作室</span>
+        </div>
+        <div class="right-group">
             <button id="app-menu-toggle" class="app-menu-toggle" aria-label="打开应用中心"
                 aria-expanded="false" aria-controls="app-menu">
                 <img src="/more-black.svg" class="icon icon-more-black" alt="" />
                 <img src="/more-white.svg" class="icon icon-more-white" alt="" />
             </button>
-
         </div>
     </div>
 
@@ -29,7 +30,7 @@
         <h2 id="app-menu-title" class="sr-only">应用中心</h2>
         <div class="app-menu-tiles">
             <a href="/nihilum" class="tile"><span>论坛</span></a>
-            <a href="http://exam.xn--2qqp2vw2b55cnt3a7mt1eh.cn/" class="tile"><span>考试系统</span></a>
+            <a href="https://exam.xn--2qqp2vw2b55cnt3a7mt1eh.cn/" class="tile"><span>考试系统</span></a>
         </div>
         <button id="app-menu-close" class="app-menu-close" aria-label="关闭应用中心">
             <img src="/close-black.svg" class="icon icon-close-black" alt="" />
@@ -48,11 +49,11 @@
         z-index: 1000;
         display: flex;
         align-items: center;
+        gap: 1rem;
         transition: background-color 0.3s, color 0.3s;
         border-bottom: 1px solid rgba(20, 20, 20, 0.2);
         transform-origin: top center;
         animation: breathe-y 6s ease-in-out infinite;
-        justify-content: space-between;
     }
 
     /* 亮色 */
@@ -83,7 +84,7 @@
     :global(.dark) .logo-dark  { opacity: 1; }
 
 
-    .left-group,.right-group{
+    .left-group,.center-group,.right-group{
         display: flex;
         align-items: center;
         justify-content: center;
@@ -94,10 +95,19 @@
         transform-origin: left center;
         animation: breathe-xy 6s ease-in-out infinite;
     }
+    .center-group {
+        transform-origin: center;
+        animation: breathe-xy 6s ease-in-out infinite;
+    }
     .right-group {
         transform-origin: right center;
         animation: breathe-xy 6s ease-in-out infinite;
     }
+
+    /* 桌面端：logo 排最左，按钮组推向右端 */
+    .center-group { order: -1; }
+    .left-group   { order: 2; margin-inline-start: auto; }
+    .right-group  { order: 3; }
 
     @keyframes breathe-y {
         0%, 100% { transform: scaleY(1); }
@@ -124,7 +134,7 @@
         inline-size: 2.5rem;
         block-size: 2.5rem;
         border: 0.15rem solid #bebebe;
-        border-radius: 1.25em;
+        border-radius: 50%;
         cursor: pointer;
         color: inherit;
         transition: background-color 0.3s;
@@ -154,8 +164,12 @@
      :global(.dark) .theme-toggle .icon-luna-black  { opacity: 0; }
      :global(.dark) .theme-toggle .icon-solar-white { opacity: 1; }*/
 
-    .theme-toggle:hover {
-        background-color: rgba(128, 128, 128, 0.15);
+    @media (hover: hover) {
+        .theme-toggle:hover,
+        .app-menu-toggle:hover,
+        .app-menu-close:hover {
+            background-color: rgba(128, 128, 128, 0.15);
+        }
     }
 
 
@@ -166,7 +180,7 @@
         inline-size: 2.5rem;
         block-size: 2.5rem;
         border: 0.15rem solid #bebebe;
-        border-radius: 1.25em;
+        border-radius: 50%;
         cursor: pointer;
         color: inherit;
         display: flex;
@@ -184,7 +198,6 @@
     .app-menu-toggle .icon-more-black { opacity: 1; }
     :global(.dark) .app-menu-toggle .icon-more-black { opacity: 0; }
     :global(.dark) .app-menu-toggle .icon-more-white { opacity: 1; }
-    .app-menu-toggle:hover { background-color: rgba(128, 128, 128, 0.15); }
 
     /* 遮挡层 */
     .app-menu-backdrop {
@@ -220,7 +233,8 @@
         flex-shrink: 0;
         padding: 0;
         border: none;
-        border-inline-start: 1px solid rgba(20, 20, 20, 0.2);   /* 分隔线 */
+        border-inline-start: 1px solid rgba(20, 20, 20, 0.2);   /* 左侧分隔线 */
+        border-inline-end: 1px solid rgba(20, 20, 20, 0.2);     /* 右端分隔线 */
         background: transparent;
         cursor: pointer;
         position: relative;
@@ -236,6 +250,18 @@
         opacity: 0;
         transition: opacity 0.3s;
     }
+    /* 关闭按钮的圆形边框（与 2.5rem 圆形按钮视觉一致） */
+    .app-menu-close .icon-close-black,
+    .app-menu-close .icon-close-white {
+        padding: 0.4rem;
+        border: 0.15rem solid #bebebe;
+        border-radius: 50%;
+        box-sizing: content-box;
+    }
+    :global(.dark) .app-menu-close .icon-close-black,
+    :global(.dark) .app-menu-close .icon-close-white {
+        border-color: #8a8a8a;
+    }
     .app-menu.open { transform: translateY(0); }
     :global(.dark) .app-menu { background: #2c2c2c; color: #f0f0f0; }
     .app-menu-close .icon-close-black { opacity: 1; }
@@ -243,8 +269,8 @@
     :global(.dark) .app-menu-close .icon-close-white { opacity: 1; }
     :global(.dark) .app-menu-close {
         border-inline-start-color: rgba(255, 255, 255, 0.2);
+        border-inline-end-color: rgba(255, 255, 255, 0.2);
     }
-    .app-menu-close:hover { background-color: rgba(128, 128, 128, 0.15); }
 
 
 
@@ -285,6 +311,42 @@
         clip: rect(0, 0, 0, 0);
         white-space: nowrap;
         border: 0;
+    }
+
+    /* 触控设备：按钮放大到 WCAG 44px 目标，保持正圆 */
+    @media (pointer: coarse) {
+        .theme-toggle,
+        .app-menu-toggle {
+            inline-size: 2.75rem;
+            block-size: 2.75rem;
+            border-radius: 50%;
+        }
+    }
+
+    /* 移动端：grid 三栏，logo 居中 */
+    @media (max-width: 48rem) {
+        .top-bar {
+            display: grid;
+            grid-template-columns: 1fr auto 1fr;
+            gap: 0;
+        }
+        .left-group   { grid-column: 1; justify-self: start;  order: 0; margin-inline-start: 0; }
+        .center-group { grid-column: 2; justify-self: center; order: 0; }
+        .right-group  { grid-column: 3; justify-self: end;    order: 0; }
+        .title-text { display: none; }
+
+        /* 弹窗适配 */
+        .app-menu {
+            block-size: 22dvb;
+        }
+        .app-menu-close {
+            inline-size: 4rem;
+            margin-inline-end: 1.375rem;
+        }
+        .app-menu-tiles {
+            padding: 1rem;
+            grid-template-columns: repeat(auto-fill, minmax(4.5rem, 1fr));
+        }
     }
 
     /* 减少动态效果偏好 */

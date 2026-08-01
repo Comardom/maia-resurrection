@@ -6,9 +6,9 @@
   --theme-bg: repeating-linear-gradient(
     to right,
     #f0f0f0,
-    #f0f0f0 2px,
-    #ffffff 1px,
-    #ffffff 4px
+    #f0f0f0 0.125rem,
+    #ffffff 0.0625rem,
+    #ffffff 0.25rem
   );
   --theme-color: #222;
   --theme-link: #0066cc;
@@ -25,9 +25,9 @@
   --theme-bg: repeating-linear-gradient(
     to right,
     #1a1a1a,
-    #1a1a1a 2px,
-    #2b2b2b 1px,
-    #2b2b2b 4px
+    #1a1a1a 0.125rem,
+    #2b2b2b 0.0625rem,
+    #2b2b2b 0.25rem
   );
   --theme-color: #e0e0e0;
   --theme-link: #66b2ff;

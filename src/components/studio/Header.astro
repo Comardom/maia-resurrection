@@ -12,7 +12,7 @@
         <div class="center-group">
             <a href="/" class="logo-wrapper">
                 <img src="/wswd-black.svg" class="logo logo-light" alt="河南大学网站工作室" />
-                <img src="/wswd-white.svg" class="logo logo-dark" alt="河南大学网站工作室" />
+                <img src="/wswd-white.svg" class="logo logo-dark" alt="河南大学网站工作室" aria-hidden="true" />
             </a>
             <span class="title-text">河南大学网站工作室</span>
         </div>
@@ -51,21 +51,21 @@
         align-items: center;
         gap: 1rem;
         transition: background-color 0.3s, color 0.3s;
-        border-bottom: 1px solid rgba(20, 20, 20, 0.2);
+        border-bottom: 1px solid var(--studio-topbar-border);
         transform-origin: top center;
         animation: breathe-y 6s ease-in-out infinite;
     }
 
     /* 亮色 */
     .top-bar {
-        background: #f5f5f5;
-        color: #333;
+        background: var(--studio-topbar-bg);
+        color: var(--studio-topbar-color);
     }
 
     /* 深色 — 通过 :global(.dark) 监听 html 的 class */
     :global(.dark) .top-bar {
-        background: #2c2c2c;
-        color: #f0f0f0;
+        background: var(--studio-topbar-bg);
+        color: var(--studio-topbar-color);
     }
 
     .logo-wrapper {
@@ -133,7 +133,7 @@
         background: transparent;
         inline-size: 2.5rem;
         block-size: 2.5rem;
-        border: 0.15rem solid #bebebe;
+        border: 0.15rem solid var(--studio-ring);
         border-radius: 50%;
         cursor: pointer;
         color: inherit;
@@ -168,7 +168,7 @@
         .theme-toggle:hover,
         .app-menu-toggle:hover,
         .app-menu-close:hover {
-            background-color: rgba(128, 128, 128, 0.15);
+            background-color: var(--studio-hover-bg);
         }
     }
 
@@ -179,7 +179,7 @@
         background: transparent;
         inline-size: 2.5rem;
         block-size: 2.5rem;
-        border: 0.15rem solid #bebebe;
+        border: 0.15rem solid var(--studio-ring);
         border-radius: 50%;
         cursor: pointer;
         color: inherit;
@@ -204,7 +204,7 @@
         position: fixed;
         inset: 0;
         z-index: 1001;
-        background: rgba(0, 0, 0, 0.4);
+        background: var(--studio-backdrop);
         opacity: 0;
         pointer-events: none;
         transition: opacity 0.3s;
@@ -218,10 +218,13 @@
         inset-inline: 0;
         block-size: 30dvb;
         z-index: 1002;
-        background: #fff;
-        color: #333;
+        background: var(--studio-panel-bg);
+        color: var(--studio-panel-color);
         transform: translateY(-100%);
-        transition: transform 0.3s ease;
+        visibility: hidden;            /* 关闭态彻底不渲染，防缩放穿帮 */
+        pointer-events: none;          /* 关闭态防误触 */
+        transition: transform 0.3s ease,
+                    visibility 0s linear 0.3s;  /* 滑出结束后再隐藏 */
         display: flex;                 /* 新增：行布局 */
         /* 移除 overflow-y: auto（改由磁贴区自己滚动） */
     }
@@ -233,8 +236,8 @@
         flex-shrink: 0;
         padding: 0;
         border: none;
-        border-inline-start: 1px solid rgba(20, 20, 20, 0.2);   /* 左侧分隔线 */
-        border-inline-end: 1px solid rgba(20, 20, 20, 0.2);     /* 右端分隔线 */
+        border-inline-start: 1px solid var(--studio-panel-border);   /* 左侧分隔线 */
+        border-inline-end: 1px solid var(--studio-panel-border);     /* 右端分隔线 */
         background: transparent;
         cursor: pointer;
         position: relative;
@@ -254,22 +257,28 @@
     .app-menu-close .icon-close-black,
     .app-menu-close .icon-close-white {
         padding: 0.4rem;
-        border: 0.15rem solid #bebebe;
+        border: 0.15rem solid var(--studio-ring-close);
         border-radius: 50%;
         box-sizing: content-box;
     }
     :global(.dark) .app-menu-close .icon-close-black,
     :global(.dark) .app-menu-close .icon-close-white {
-        border-color: #8a8a8a;
+        border-color: var(--studio-ring-close);
     }
-    .app-menu.open { transform: translateY(0); }
-    :global(.dark) .app-menu { background: #2c2c2c; color: #f0f0f0; }
+    .app-menu.open {
+        transform: translateY(0);
+        visibility: visible;           /* 立即显示，再执行滑动 */
+        pointer-events: auto;
+        transition: transform 0.3s ease,
+                    visibility 0s;
+    }
+    :global(.dark) .app-menu { background: var(--studio-panel-bg); color: var(--studio-panel-color); }
     .app-menu-close .icon-close-black { opacity: 1; }
     :global(.dark) .app-menu-close .icon-close-black { opacity: 0; }
     :global(.dark) .app-menu-close .icon-close-white { opacity: 1; }
     :global(.dark) .app-menu-close {
-        border-inline-start-color: rgba(255, 255, 255, 0.2);
-        border-inline-end-color: rgba(255, 255, 255, 0.2);
+        border-inline-start-color: var(--studio-panel-border);
+        border-inline-end-color: var(--studio-panel-border);
     }
 
 
@@ -289,8 +298,8 @@
 
     .tile {
         aspect-ratio: 1;
-        background: #007ACC;
-        color: #fff;
+        background: var(--studio-tile);
+        color: var(--studio-tile-color);
         display: flex;
         align-items: center;
         justify-content: center;
@@ -298,7 +307,7 @@
         font-size: 1rem;
         transition: background-color 0.2s;
     }
-    .tile:hover { background: #0a8ad6; }
+    .tile:hover { background: var(--studio-tile-hover); }
 
     /* 屏幕阅读器专用隐藏标题 */
     .sr-only {

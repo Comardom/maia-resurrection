@@ -1,0 +1,44 @@
+/* ── Studio（顶栏/应用中心）专属配色 ──────────────────── */
+/* 供 Header.astro 引用；与 theme.css 的全局主题变量分层 */
+
+/* 亮色模式（默认） */
+:root {
+  --studio-topbar-bg: #f5f5f5;
+  --studio-topbar-color: #333;
+  --studio-topbar-border: rgba(20, 20, 20, 0.2);
+
+  --studio-panel-bg: #fff;
+  --studio-panel-color: #333;
+  --studio-panel-border: rgba(20, 20, 20, 0.2);
+
+  --studio-ring: #bebebe;
+  --studio-ring-close: #bebebe;
+
+  --studio-backdrop: rgba(0, 0, 0, 0.4);
+  --studio-hover-bg: rgba(128, 128, 128, 0.15);
+
+  --studio-tile: #007ACC;
+  --studio-tile-hover: #0a8ad6;
+  --studio-tile-color: #fff;
+}
+
+/* 暗色模式 */
+.dark {
+  --studio-topbar-bg: #2c2c2c;
+  --studio-topbar-color: #f0f0f0;
+  --studio-topbar-border: rgba(20, 20, 20, 0.2);
+
+  --studio-panel-bg: #2c2c2c;
+  --studio-panel-color: #f0f0f0;
+  --studio-panel-border: rgba(255, 255, 255, 0.2);
+
+  --studio-ring: #bebebe;
+  --studio-ring-close: #8a8a8a;
+
+  --studio-backdrop: rgba(0, 0, 0, 0.4);
+  --studio-hover-bg: rgba(128, 128, 128, 0.15);
+
+  --studio-tile: #007ACC;
+  --studio-tile-hover: #0a8ad6;
+  --studio-tile-color: #fff;
+}

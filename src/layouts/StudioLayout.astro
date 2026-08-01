@@ -1,7 +1,9 @@
 ---
+import { site } from "@/data/site";
 const themeCookie = Astro.cookies.get('theme');
 const isDark = themeCookie?.value === 'dark';
-const { title, description } = Astro.props
+const title = Astro.props.title ?? site.title;
+const description = Astro.props.description ?? site.description;
 
 import '/src/css/reset.css'
 import '/src/css/theme.css'
@@ -17,22 +19,26 @@ import '/src/css/fonts.css'
     <meta name="description" content={description} />
     <link rel="canonical" href={Astro.url} />
     <link rel="icon" type="image/svg+xml"
-          href={isDark ? '/plastic-white-trans-wswd.svg' : '/plastic-black-trans-wswd.svg'} />
+          href={isDark ? site.logo.dark : site.logo.light} />
 
     <!-- OG -->
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" /><!--如果是文章用 article，视频用 video-->
+    <meta property="og:site_name" content={site.name} />
+    <meta property="og:locale" content="zh_CN" />
     <meta property="og:url" content={Astro.url} />
-    <meta property="og:image" content={Astro.url.origin + '/plastic-blue-trans-wswd.svg'} />
+    <meta property="og:image" content={site.url + site.logo.og} />
     <meta name="twitter:card" content="summary_large_image" />
 
     <!-- JSON-LD -->
     <script is:inline type="application/ld+json" set:html={JSON.stringify({
         "@context": "https://schema.org",
         "@type": "Organization",
-        "name": "河南大学网站工作室",
-        "url": Astro.url.origin,
+        "name": site.name,
+        "url": site.url,
+        "logo": site.url + site.logo.og,
+        "sameAs": site.social,
     })} />
 
     <slot name="head" />

@@ -1,6 +1,7 @@
 ---
-
+import { site } from "@/data/site";
 ---
+
 <header>
     <div class="top-bar">
         <div class="left-group">
@@ -11,10 +12,10 @@
         </div>
         <div class="center-group">
             <a href="/" class="logo-wrapper">
-                <img src="/wswd-black.svg" class="logo logo-light" alt="河南大学网站工作室" />
-                <img src="/wswd-white.svg" class="logo logo-dark" alt="河南大学网站工作室" aria-hidden="true" />
+                <img src={site.logo.light} class="logo logo-light" alt={site.name} />
+                <img src={site.logo.dark} class="logo logo-dark" alt={site.name} aria-hidden="true" />
             </a>
-            <span class="title-text">河南大学网站工作室</span>
+            <span class="title-text">{site.name}</span>
         </div>
         <div class="right-group">
             <button id="app-menu-toggle" class="app-menu-toggle" aria-label="打开应用中心"
@@ -29,8 +30,8 @@
         aria-labelledby="app-menu-title" aria-hidden="true" inert>
         <h2 id="app-menu-title" class="sr-only">应用中心</h2>
         <div class="app-menu-tiles">
-            <a href="/nihilum" class="tile"><span>论坛</span></a>
-            <a href="https://exam.xn--2qqp2vw2b55cnt3a7mt1eh.cn/" class="tile"><span>考试系统</span></a>
+            <a href={site.links.forum} class="tile"><span>论坛</span></a>
+            <a href={site.links.exam} class="tile"><span>考试系统</span></a>
         </div>
         <button id="app-menu-close" class="app-menu-close" aria-label="关闭应用中心">
             <img src="/close-black.svg" class="icon icon-close-black" alt="" />

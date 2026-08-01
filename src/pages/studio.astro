@@ -1,11 +1,12 @@
 ---
+import { site } from "@/data/site";
 import StudioLayout from "@/layouts/StudioLayout.astro";
 import Header from "@/components/studio/Header.astro";
-import '/src/css/studioColor.css'
+import '/src/css/nonGlobal/studioColor.css'
 ---
 <StudioLayout
-    title="河南大学网站工作室 | HENU Web Studio"
-    description="河南大学网站工作室成立于2001年，隶属河南大学党委宣传部，是河大官方学生技术团队，承担官网、新闻网等网站集群的建设与维护工作。"
+    title={site.title}
+    description={site.description}
 >
     <Header />
 </StudioLayout>

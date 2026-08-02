@@ -1,16 +1,19 @@
 # 数据层、SEO 与样式重构计划（03）
 
-> 状态：**计划阶段** — 尚未改动任何代码文件
-> 对应讨论：用户提出 4 个问题 → 已确认方向（见下方"已确认决策"）
+> 状态：**已完成** — 全部落地并通过验证（typecheck / build / SSR 输出核对）
+> 对应讨论：用户提出 4 个问题 → 已确认方向 → 已逐项实现
+> 补充：后续追加了 robots.txt / sitemap.xml 与域名决策（`henuws.com`）
 
 ## 背景
 
-当前 `Header.astro`、`studio.astro`、`StudioLayout.astro` 存在四个问题：
+原计划针对 `Header.astro`、`studio.astro`、`StudioLayout.astro` 的四个问题：
 
 1. **内容全部写死**，没有从 data 文件读取（`src/data/` 目录为空）
 2. **alt 语义**是否正确需要确认（logo 图 alt 重复问题）
 3. **SEO 有缺陷**（og:image 用 SVG、缺 site_name/locale、JSON-LD 不完整）
 4. **颜色硬编码**在 Header 的 `<style>` 里，没有抽成独立变量文件
+
+**四项均已解决，见下文各章节落地记录。**
 
 ---
 
@@ -97,15 +100,19 @@ export const site = {
 
 ### 缺陷与补全清单
 
-| # | 缺陷 | 补全 |
-|---|------|------|
-| 1 | `og:image` 用 **SVG**（`wswd-blue-007ACC.svg`），Facebook/X 不支持 SVG | 换 PNG/JPG（需用户提供），暂无则保留 SVG + TODO |
-| 2 | 缺 `og:site_name` | 补 `site.name` |
-| 3 | 缺 `og:locale` | 补 `zh_CN` |
-| 4 | JSON-LD Organization 缺 logo | 补 `"logo": site.logo.og`（绝对路径） |
-| 5 | JSON-LD 缺 `sameAs` | 补各平台链接（待用户提供，没有则跳过） |
-| 6 | title/description 等元数据硬编码 | 全部从 `site.ts` 读取 |
-| 7 | （待确认）`title` 是否保持 `河南大学网站工作室 | HENU Web Studio` | 确认后定 |
+> 状态：**全部已落地**，SSR 输出已核对（og:site_name / og:locale / og:image / JSON-LD logo+sameAs 均正确渲染）
+
+| # | 缺陷 | 补全 | 状态 |
+|---|------|------|------|
+| 1 | `og:image` 用 **SVG**，Facebook/X 不支持 | 换 PNG（`public/wswd-blue-007ACC.png`，1200×1200） | ✅ |
+| 2 | 缺 `og:site_name` | 补 `site.name` | ✅ |
+| 3 | 缺 `og:locale` | 补 `zh_CN` | ✅ |
+| 4 | JSON-LD Organization 缺 logo | 补 `"logo"`（`site.url + site.logo.og`） | ✅ |
+| 5 | JSON-LD 缺 `sameAs` | 补 B站 `https://space.bilibili.com/378145694` | ✅ |
+| 6 | title/description 等元数据硬编码 | 全部从 `site.ts` 读取 | ✅ |
+| 7 | `title` 格式待确认 | 保留 `河南大学网站工作室 | HENU Web Studio` | ✅ |
+
+**额外落地**：新建 `public/robots.txt`、`public/sitemap.xml`；`astro.config.mjs` 补 `site: 'https://henuws.com'`。`sitemap.xml` 中 IDE 对 XSD 命名空间提示为无害警告，不影响 SEO，保持现状。
 
 ---
 
@@ -162,27 +169,33 @@ export const site = {
 
 ---
 
-## 改动文件汇总
+## 改动文件汇总（实际落地）
 
 | 文件 | 操作 |
 |------|------|
-| `src/data/site.ts` | **新建** — 全站数据 |
-| `../src/css/nonGlobal/studioColor.css` | **新建** — Header 颜色变量 |
-| `src/layouts/StudioLayout.astro` | **修改** — 引入 studioColor.css、SEO 补全、数据化 |
-| `src/pages/studio.astro` | **修改** — title/desc 走 data |
-| `src/components/studio/Header.astro` | **修改** — 数据化 + aria-hidden + var() 替换 |
+| `src/data/site.ts` | **新建** — 全站数据（站名/描述/域名/logo/磁贴链接/sameAs） |
+| `src/css/nonGlobal/studioColor.css` | **新建** — Header 颜色变量（亮/暗两套） |
+| `src/layouts/StudioLayout.astro` | **修改** — SEO 补全（og:site_name/locale、JSON-LD logo+sameAs）、数据化 |
+| `src/pages/studio.astro` | **修改** — title/desc 走 data、修正 studioColor.css 导入路径 |
+| `src/components/studio/Header.astro` | **修改** — 数据化 + dark logo 加 aria-hidden |
+| `public/robots.txt` | **新建** — Allow all + Sitemap 指向 |
+| `public/sitemap.xml` | **新建** — 列 `https://henuws.com/studio` |
+| `astro.config.mjs` | **修改** — 补 `site: 'https://henuws.com'` |
 
-## 验证方式
+> 注：`studioColor.css` 最终位于 `src/css/nonGlobal/`（非 `src/css/` 根目录），由 `studio.astro` 导入（而非 `StudioLayout`）。
 
-- `pnpm typecheck`
-- `pnpm build`
-- `astro dev` 目测 Header 颜色无回归、磁贴链接正确、读屏单次播报 logo
+## 验证结果
+
+- `pnpm typecheck`：0 errors / 0 warnings / 0 hints
+- `pnpm build`：通过
+- SSR 输出核对：og:site_name、og:locale、og:image（PNG 绝对路径）、JSON-LD logo+sameAs、robots.txt、sitemap.xml 均正确
+- 真机/模拟器 375px、768px 断点与呼吸动画：验证通过
 
 ---
 
-## 待用户提供 / 确认
+## 待用户提供 / 确认（已全部解决）
 
-1. `og:image` 用的 **PNG/JPG 图片**
-2. **sameAs** 平台链接（微博 / B站 / 公众号等），没有就跳过
-3. **正式域名**（影响 canonical / og:url / JSON-LD 的 url）
-4. `title` 格式 `河南大学网站工作室 | HENU Web Studio` 是否保留
+1. ~~`og:image` 用的 **PNG/JPG 图片**~~ → `wswd-blue-007ACC.png`（1200×1200）✅
+2. ~~**sameAs** 平台链接~~ → B站 `https://space.bilibili.com/378145694` ✅
+3. ~~**正式域名**~~ → `henuws.com`（辅助域名 `河大网站工作室.cn` 走 301 跳转，部署层处理）✅
+4. ~~`title` 格式~~ → 保留 `河南大学网站工作室 | HENU Web Studio` ✅

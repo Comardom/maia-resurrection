@@ -14,10 +14,10 @@
 - [x] 配置 `tsconfig.json`（extends vue、paths、include）
 - [x] `pnpm build` 通过
 - [x] `pnpm typecheck` 通过（0 errors）
-- [x] `index.astro` 改为 301 重定向到 `/display/studio`
+- [x] `index.astro` 改为 301 重定向到 `/studio`
 - [x] 写入 `PROJECT-REFERENCE.md`（项目参考手册）
-- [ ] 按规范建目录结构（`src/layouts/`、`src/components/`、`src/data/` 等）
-- [ ] 从旧 `maia` 项目搬工具函数（`useThemeObserver.ts`、`eventBus.ts` 等）
+- [x] 按规范建目录结构（`src/layouts/`、`src/components/studio/`、`src/data/`、`src/css/`）
+- [x] 从旧 `maia` 项目搬工具函数（`useThemeObserver.ts`、`eventBus.ts` 等）——当前以原生 JS/CSS 方案替代，未直接搬迁
 
 ## 标准开发流程
 
@@ -32,36 +32,35 @@ astro dev                    # 前台启动（Ctrl+C 停止）
 
 ### 新建一个部门页面
 
+按当前项目实际结构（参考 `studio.astro` + `StudioLayout.astro` 的做法）：
+
 ```
-1. 创建布局:      src/layouts/display/xxxLayout.astro
-2. 创建页面:      src/pages/display/xxx.astro
+1. 创建页面:      src/pages/xxx.astro          ← 访问 https://henuws.com/xxx
+2. 复用布局:      src/layouts/StudioLayout.astro（或新建 src/layouts/xxxLayout.astro）
 3. 创建数据文件:  src/data/xxx.ts
-4. 创建样式:      src/styles/pages/xxx.css
-5. 创建组件目录:  src/components/display/xxx/
+4. 创建样式:      src/css/nonGlobal/xxx.css
+5. 创建组件目录:  src/components/xxx/
+6. 更新 sitemap:  public/sitemap.xml 补一条 <url>
 ```
 
 ### 技术规范
 
-- 遵循文档：`修改与重构-文档/09-Astro模板设计规范.md`
-- 主题系统：cookie `theme=dark|light` + `<html class="dark">`
-- CSS：纯 CSS，不用 Tailwind
-- 框架：Astro 7 + Vue 3 islands
+- 参考文档：`designing/` 下各方案文档、`ACCESSIBILITY.md`
+- 主题系统：cookie `theme=dark|light` + `<html class="dark">`（`StudioLayout.astro` 读 cookie）
+- CSS：纯 CSS，不用 Tailwind；颜色抽变量放 `src/css/nonGlobal/studioColor.css`
+- 数据层：`src/data/site.ts`（站名/描述/域名/logo/链接，改域名只改 `site.url`）
+- 框架：Astro 7 + Vue 3 islands（当前主要用原生 JS，无框架开销）
 - 构建：`pnpm run build` → `dist/client` + `dist/server`
 - 启动：`node ./dist/server/entry.mjs`
 
 ## 相关文档目录
 
 ```
-修改与重构-文档/
-├── 00-架构决策与统一规范.md
-├── 01-项目技术架构总览.md
-├── 02-studio.astro技术架构与重构方案.md
-├── 03-页面重构标准规范.md
-├── 04-完整文件清单与依赖手册.md
-├── 05-SEO优化方案.md
-├── 06-web.html分析与改造方案.md
-├── 07-网页部协作规范.md
-├── 08-Astro框架使用指南.md
-├── 09-Astro模板设计规范.md
-└── README.md
+designing/
+├── 01-顶栏重构-完整流程.md
+├── 02-顶栏移动端适配方案.md
+├── 03-数据层-SEO-样式重构计划.md
+└── 04-SSG与ServerIsland混合架构方案.md
+ACCESSIBILITY.md   ← 无障碍规范
+PROJECT-REFERENCE.md  ← 项目参考手册
 ```

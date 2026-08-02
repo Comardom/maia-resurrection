@@ -18,8 +18,28 @@ import '/src/css/fonts.css'
     <title>{title}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={Astro.url} />
+    <!-- favicon 跟随系统深浅色 -->
     <link rel="icon" type="image/svg+xml"
-          href={isDark ? site.logo.dark : site.logo.light} />
+          media="(prefers-color-scheme: dark)"
+          href={site.logo.dark} id="favicon" />
+    <link rel="icon" type="image/svg+xml"
+          media="(prefers-color-scheme: light)"
+          href={site.logo.light} />
+    <script is:inline>
+        // favicon 跟随系统深浅色实时切换
+        // 路径与 site.logo.dark / site.logo.light 保持一致
+        ;(function () {
+            const mq = window.matchMedia('(prefers-color-scheme: dark)')
+            const favicon = document.getElementById('favicon')
+            if (!favicon) return
+            const dark = '/wswd-white.svg'
+            const light = '/wswd-black.svg'
+            favicon.href = mq.matches ? dark : light
+            mq.addEventListener('change', (e) => {
+                favicon.href = e.matches ? dark : light
+            })
+        })()
+    </script>
 
     <!-- OG -->
     <meta property="og:title" content={title} />

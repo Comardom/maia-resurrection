@@ -7,8 +7,10 @@ import { site } from "@/data/site";
     <img class="photo photo-dark"  src={site.hero.dark.src}  alt="" loading="lazy" />
     <div class="content">
         <h1>{site.name}</h1>
-        <p class="text text-light">{site.hero.light.text}</p>
-        <p class="text text-dark">{site.hero.dark.text}</p>
+        <div class="poem">
+            <p class="text text-light">{site.hero.light.text}</p>
+            <p class="text text-dark">{site.hero.dark.text}</p>
+        </div>
     </div>
 </section>
 
@@ -47,6 +49,7 @@ import { site } from "@/data/site";
         flex-direction: column;
         align-items: center;
         justify-content: center;
+        gap: 1rem;
     }
     .content h1 {
         font-size: 2rem;
@@ -57,13 +60,19 @@ import { site } from "@/data/site";
         font-size: 1.125rem;
         font-family: Georgia, 'Times New Roman', serif;
         text-align: center;
-        padding: 2rem;
         margin: 0;
+        padding-inline: 2rem;
         transition: opacity 0.3s;
     }
-    /* 亮色：显示浅色文案 */
+    /* 两段文案用 grid 重叠在同一格：占位一致，深浅色间隙完全相同 */
+    .poem {
+        display: grid;
+    }
+    .poem p {
+        grid-area: 1 / 1;
+    }
     .text-light { opacity: 1; }
-    .text-dark  { opacity: 0; position: absolute; }
+    .text-dark  { opacity: 0; }
     :global(.dark) .text-light { opacity: 0; }
     :global(.dark) .text-dark  { opacity: 1; }
 </style>

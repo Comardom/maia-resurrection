@@ -2,7 +2,7 @@
 
 > 状态：**已完成** — 全部落地并通过验证（typecheck / build / SSR 输出核对）
 > 对应讨论：用户提出 4 个问题 → 已确认方向 → 已逐项实现
-> 补充：后续追加了 robots.txt / sitemap.xml 与域名决策（`henuws.com`）
+> 补充：后续追加了 robots.txt / sitemap.xml 与域名决策（`hdwzgzs.cn`）
 
 ## 背景
 
@@ -112,7 +112,7 @@ export const site = {
 | 6 | title/description 等元数据硬编码 | 全部从 `site.ts` 读取 | ✅ |
 | 7 | `title` 格式待确认 | 保留 `河南大学网站工作室 | HENU Web Studio` | ✅ |
 
-**额外落地**：新建 `public/robots.txt`、`public/sitemap.xml`；`astro.config.mjs` 补 `site: 'https://henuws.com'`。`sitemap.xml` 中 IDE 对 XSD 命名空间提示为无害警告，不影响 SEO，保持现状。
+**额外落地**：新建 `public/robots.txt`、`public/sitemap.xml`；`astro.config.mjs` 补 `site: 'https://hdwzgzs.cn'`。`sitemap.xml` 中 IDE 对 XSD 命名空间提示为无害警告，不影响 SEO，保持现状。
 
 ---
 
@@ -179,8 +179,8 @@ export const site = {
 | `src/pages/studio.astro` | **修改** — title/desc 走 data、修正 studioColor.css 导入路径 |
 | `src/components/studio/Header.astro` | **修改** — 数据化 + dark logo 加 aria-hidden |
 | `public/robots.txt` | **新建** — Allow all + Sitemap 指向 |
-| `public/sitemap.xml` | **新建** — 列 `https://henuws.com/studio` |
-| `astro.config.mjs` | **修改** — 补 `site: 'https://henuws.com'` |
+| `public/sitemap.xml` | **新建** — 列 `https://hdwzgzs.cn/studio` |
+| `astro.config.mjs` | **修改** — 补 `site: 'https://hdwzgzs.cn'` |
 
 > 注：`studioColor.css` 最终位于 `src/css/nonGlobal/`（非 `src/css/` 根目录），由 `studio.astro` 导入（而非 `StudioLayout`）。
 
@@ -197,5 +197,5 @@ export const site = {
 
 1. ~~`og:image` 用的 **PNG/JPG 图片**~~ → `wswd-blue-007ACC.png`（1200×1200）✅
 2. ~~**sameAs** 平台链接~~ → B站 `https://space.bilibili.com/378145694` ✅
-3. ~~**正式域名**~~ → `henuws.com`（辅助域名 `河大网站工作室.cn` 走 301 跳转，部署层处理）✅
+3. ~~**正式域名**~~ → `hdwzgzs.cn`（无海外 SEO 需求，未购买 henuws.com）✅
 4. ~~`title` 格式~~ → 保留 `河南大学网站工作室 | HENU Web Studio` ✅

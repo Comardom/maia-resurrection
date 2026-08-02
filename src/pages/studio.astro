@@ -2,11 +2,20 @@
 import { site } from "@/data/site";
 import StudioLayout from "@/layouts/StudioLayout.astro";
 import Header from "@/components/studio/Header.astro";
+import FullScreenPhoto from "@/components/studio/FullScreenPhoto.astro";
+import Footer from "@/components/studio/Footer.astro";
 import '/src/css/nonGlobal/studioColor.css'
+import '/src/css/nonGlobal/studio.css'
 ---
 <StudioLayout
     title={site.title}
     description={site.description}
 >
     <Header />
+    <div class="snap-section" id="Prologue" data-section="1">
+        <FullScreenPhoto />
+    </div>
+    <div class="snap-section" id="Epilogue" data-section="4">
+        <Footer />
+    </div>
 </StudioLayout>

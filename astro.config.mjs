@@ -6,7 +6,7 @@ import node from '@astrojs/node';
 // https://astro.build/config
 export default defineConfig({
     //正式域名，供 canonical、sitemap、OG 等使用
-    site: 'https://henuws.com',
+    site: 'https://hdwzgzs.cn',
     //告诉 Astro 用 SSR 模式，每次请求在服务端渲染 HTML。如果不设，默认是 static
     output: 'server',
     // 默认 Astro dev 只监听 localhost（127.0.0.1），只有本机能访问。

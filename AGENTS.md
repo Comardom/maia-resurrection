@@ -35,7 +35,7 @@ astro dev                    # 前台启动（Ctrl+C 停止）
 按当前项目实际结构（参考 `studio.astro` + `StudioLayout.astro` 的做法）：
 
 ```
-1. 创建页面:      src/pages/xxx.astro          ← 访问 https://henuws.com/xxx
+1. 创建页面:      src/pages/xxx.astro          ← 访问 https://hdwzgzs.cn/xxx
 2. 复用布局:      src/layouts/StudioLayout.astro（或新建 src/layouts/xxxLayout.astro）
 3. 创建数据文件:  src/data/xxx.ts
 4. 创建样式:      src/css/nonGlobal/xxx.css
@@ -60,7 +60,8 @@ designing/
 ├── 01-顶栏重构-完整流程.md
 ├── 02-顶栏移动端适配方案.md
 ├── 03-数据层-SEO-样式重构计划.md
-└── 04-SSG与ServerIsland混合架构方案.md
+├── 04-SSG与ServerIsland混合架构方案.md
+└── 05-全屏翻页与滚动交互排错经验.md
 ACCESSIBILITY.md   ← 无障碍规范
 PROJECT-REFERENCE.md  ← 项目参考手册
 ```

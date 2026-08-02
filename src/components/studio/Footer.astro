@@ -12,16 +12,36 @@ const currentYear = new Date().getFullYear();
                 ))
             }
         </nav>
-        <span id="placeholder-of-epilogue" />
+        <span class="placeholder-of-epilogue" />
         <p class="footer-copy">
             © 2001-{currentYear} {site.name} | {site.nameEn}. All rights reserved.
         </p>
+        <span class="placeholder-of-epilogue" />
+        <div class="busuanzi" aria-label="站点访问统计">
+            今日总访问量 <span id="busuanzi_today_pv">加载中...</span> 次
+            · 今日总访客数 <span id="busuanzi_today_uv">加载中...</span> 人
+            · 本站总访问量 <span id="busuanzi_site_pv">加载中...</span> 次
+            · 本站总访客数 <span id="busuanzi_site_uv">加载中...</span> 人
+        </div>
     </div>
 </section>
 
+<script>
+    // 不蒜子访问统计：IIFE动态注入脚本（与页面加载并行，不阻塞）
+    ;(function () {
+        const existing = document.querySelector('script[data-busuanzi]')
+        if (existing) return
+        const s = document.createElement('script')
+        s.setAttribute('data-busuanzi', '')
+        s.src = '//cdn.busuanzi.cc/busuanzi/3.6.9/busuanzi.min.js'
+        s.defer = true
+        document.body.appendChild(s)
+    })();
+</script>
+
 <style>
-    #placeholder-of-epilogue {
-        block-size: 1.25rem;
+    .placeholder-of-epilogue {
+        block-size: 1.1125rem;
     }
     .studio-footer {
         position: relative;
@@ -66,6 +86,12 @@ const currentYear = new Date().getFullYear();
         font-size: 1.15rem;
         font-family: 'PMingLiU-TW', Georgia, 'Times New Roman', serif;
     }
+    .busuanzi {
+        margin: 0;
+        font-size: 0.75rem;
+        font-family: 'PMingLiU-TW', Georgia, 'Times New Roman', serif;
+        opacity: 0.625;
+    }
 
     @media (min-width: 48rem) {
         .footer-inner {
@@ -87,7 +113,8 @@ const currentYear = new Date().getFullYear();
             gap: 1.5rem;
         }
         .footer-links a,
-        .footer-copy {
+        .footer-copy,
+        .busuanzi {
             font-size: 1rem;
             margin: 0;
             white-space: nowrap;

@@ -1,11 +1,21 @@
-/* ── 字体定义 ──────────────────────────── */
-/* 以后加入 @font-face 引用即可 */
-/* 示例：
 @font-face {
-  font-family: 'Taiwan';
-  src: url('/subset_font.woff2') format('woff2');
+  font-family: 'PMingLiU-TW';          /* 臺灣新細明體 */
+  src: url('/font/pmingliu-subset.woff2') format('woff2');
   font-weight: normal;
   font-style: normal;
   font-display: swap;
 }
-*/
+@font-face {
+  font-family: 'Huiwei-HKHei';             /* 汇文港黑 */
+  src: url('/font/hkhei-subset.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'PangMenZhengDao';             /* 庞门正道 */
+  src: url('/font/pangmenzhengdao-subset.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}

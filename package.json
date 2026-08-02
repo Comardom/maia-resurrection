@@ -10,7 +10,10 @@
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro",
-    "typecheck": "vue-tsc -b && astro check"
+    "typecheck": "vue-tsc -b && astro check",
+    "font:subset:hk": "glyphhanger ./font/all-of-words.txt --subset=./font/汇文港黑.ttf --formats=woff2 --output=./public/font && mv ./public/font/汇文港黑-subset.woff2 ./public/font/hkhei-subset.woff2",
+    "font:subset:tw": "glyphhanger ./font/all-of-words.txt --subset=./font/臺灣新細明體.ttf --formats=woff2 --output=./public/font && mv ./public/font/臺灣新細明體-subset.woff2 ./public/font/pmingliu-subset.woff2",
+    "font:subset:pmzd": "glyphhanger ./font/all-of-words.txt --subset=./font/庞门正道标题体2.0增强版.ttf --formats=woff2 --output=./public/font && mv ./public/font/庞门正道标题体2.0增强版-subset.woff2 ./public/font/pangmenzhengdao-subset.woff2"
   },
   "dependencies": {
     "@astrojs/node": "^11.0.2",
@@ -23,6 +26,7 @@
     "@astrojs/check": "^0.9.10",
     "@types/node": "^26.1.2",
     "@vue/tsconfig": "^0.9.1",
+    "glyphhanger": "^6.0.0",
     "typescript": "^6.0.0",
     "vue-tsc": "^3.3.8"
   }

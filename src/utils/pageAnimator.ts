@@ -1,9 +1,11 @@
 import { gsap } from 'gsap'
 import { Observer } from 'gsap/Observer'
+import { closeAppMenu } from '@/components/studio/headerScript'
 
 let currentIndex = 0
 let isAnimating = false
 let sections: HTMLElement[] = []
+let reducedMotion = false
 
 function sectionIndexFromHash(): number {
   const id = window.location.hash.replace('#', '')
@@ -19,8 +21,16 @@ function syncHash(index: number) {
   }
 }
 
+function dispatchSectionChange(index: number) {
+  const id = sections[index]?.id
+  window.dispatchEvent(new CustomEvent('section:change', {
+    detail: { index, id },
+  }))
+}
+
 export function initPageAnimator() {
   gsap.registerPlugin(Observer)
+  reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
   sections = gsap.utils.toArray('.snap-section')
   if (!sections.length) return
 
@@ -34,9 +44,12 @@ export function initPageAnimator() {
   // 进入页面即把当前屏写入地址栏 hash（如 /studio → /studio#Prologue）
   syncHash(currentIndex)
 
-  // 首屏入场动画：仅在首页（无 hash 或 #Prologue）播放
+  // 广播当前屏，供各区块（如 Symphony）按需启停自身动画
+  dispatchSectionChange(currentIndex)
+
+  // 首屏入场动画：仅在首页（无 hash 或 #Prologue）播放，且用户未开启减少动画
   // 注意：不动 .logo（深浅切换完全交给 CSS class，避免 gsap 内联 opacity 干扰）
-  if (currentIndex === 0) {
+  if (currentIndex === 0 && !reducedMotion) {
     const tl = gsap.timeline()
     tl.from('.title-text', {
       y: -30, opacity: 0, duration: 1, ease: 'power3.out',
@@ -54,7 +67,7 @@ export function initPageAnimator() {
   })
 
   Observer.create({
-    type: 'wheel,touch,pointer',
+    type: 'wheel,touch',
     wheelSpeed: -1,
     onUp: () => goTo(currentIndex + 1),
     onDown: () => goTo(currentIndex - 1),
@@ -66,6 +79,7 @@ export function initPageAnimator() {
 function goTo(index: number) {
   if (isAnimating || index < 0 || index >= sections.length || index === currentIndex) return
   isAnimating = true
+  closeAppMenu()
 
   const direction = index > currentIndex ? 1 : -1
   const outgoing = sections[currentIndex]
@@ -78,8 +92,9 @@ function goTo(index: number) {
       isAnimating = false
       currentIndex = index
       syncHash(index)
+      dispatchSectionChange(index)
     },
-    defaults: { duration: 1.2, ease: 'power4.inOut' },
+    defaults: { duration: reducedMotion ? 0 : 1.2, ease: 'power4.inOut' },
   })
 
   // incoming 滑入起点 + 置顶

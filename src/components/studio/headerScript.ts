@@ -7,6 +7,19 @@ export function initThemeToggle() {
   })
 }
 
+export function closeAppMenu() {
+  const menu = document.getElementById('app-menu')
+  const backdrop = document.getElementById('app-menu-backdrop')
+  const btn = document.getElementById('app-menu-toggle')
+  if (!menu?.classList.contains('open')) return
+  menu.classList.remove('open')
+  backdrop?.classList.remove('open')
+  menu.setAttribute('inert', '')
+  menu.setAttribute('aria-hidden', 'true')
+  btn?.setAttribute('aria-expanded', 'false')
+  document.body.style.overflow = ''
+}
+
 export function initAppMenu() {
   const btn = document.getElementById('app-menu-toggle')
   const close = document.getElementById('app-menu-close')

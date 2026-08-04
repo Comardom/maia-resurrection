@@ -61,7 +61,8 @@ designing/
 ├── 02-顶栏移动端适配方案.md
 ├── 03-数据层-SEO-样式重构计划.md
 ├── 04-SSG与ServerIsland混合架构方案.md
-└── 05-全屏翻页与滚动交互排错经验.md
+├── 05-全屏翻页与滚动交互排错经验.md
+└── 06-SEO优化方案汇总.md
 ACCESSIBILITY.md   ← 无障碍规范
 PROJECT-REFERENCE.md  ← 项目参考手册
 ```

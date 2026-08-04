@@ -3,6 +3,7 @@ import { site } from "@/data/site";
 import StudioLayout from "@/layouts/StudioLayout.astro";
 import Header from "@/components/studio/Header.astro";
 import FullScreenPhoto from "@/components/studio/FullScreenPhoto.astro";
+import Rainbow from "@/components/studio/Rainbow.astro";
 import Footer from "@/components/studio/Footer.astro";
 import '/src/css/nonGlobal/studioColor.css'
 import '/src/css/nonGlobal/studio.css'
@@ -14,6 +15,9 @@ import '/src/css/nonGlobal/studio.css'
     <Header />
     <div class="snap-section" id="Prologue" data-section="1">
         <FullScreenPhoto />
+    </div>
+    <div class="snap-section" id="Symphony" data-section="2">
+        <Rainbow />
     </div>
     <div class="snap-section" id="Epilogue" data-section="4">
         <Footer />

@@ -231,22 +231,29 @@ tiles.addEventListener('keydown', (e: KeyboardEvent) => {
 
 页面 `<html lang="zh-CN">` 必须与内容语言一致，否则朗读器会用错发音规则。
 
+### 5.5 新窗口链接提示
+
+`target="_blank"` 的链接加 `title="在新窗口打开"`，让屏幕阅读器/悬停用户知道会开新窗口（参考 `Footer.astro` 的 GitHub 链接）。
+
 ---
 
 ## 六、视觉与动效
 
-### 6.1 动效开关
+### 6.1 动效开关（`prefers-reduced-motion`）
 
-所有非必要动画都应受 `prefers-reduced-motion` 控制：
+所有非必要动画都受 `prefers-reduced-motion` 控制，覆盖范围如下：
 
-```css
-@media (prefers-reduced-motion: reduce) {
-  .app-menu,
-  .app-menu-backdrop {
-    transition: none;
-  }
-}
-```
+| 位置 | 动画 | reduced-motion 行为 |
+|------|------|---------------------|
+| `Header.astro` | 顶栏呼吸动画（`breathe-y`/`breathe-xy`，6s infinite） | `animation: none` 完全关闭 |
+| `Header.astro` | 图标/logo/弹窗过渡 | `transition: none` 瞬变 |
+| `Rainbow.astro` | 色块 hover 高度、Game Start 滑入、遮罩过渡 | `transition: none` 瞬变 |
+| `rainbowScript.ts` | 色块高度漂移（gsap） | 不启动（`matchMedia` 判断后直接 return） |
+| `pageAnimator.ts` | 全屏翻页滑动（gsap 1.2s） | `duration: 0` 瞬切（`section:change` 广播不受影响） |
+| `pageAnimator.ts` | 首屏入场动画 | 直接跳过 |
+| `base.css` | 主题切换全局过渡 | `transition: none` |
+
+**约定**：新增动效时对照上表——CSS 动画/过渡在 reduced-motion 下关掉，gsap 动画在脚本里先查 `matchMedia('(prefers-reduced-motion: reduce)')`。
 
 ### 6.2 颜色对比度（WCAG AA）
 
@@ -287,7 +294,8 @@ tiles.addEventListener('keydown', (e: KeyboardEvent) => {
 - [ ] 隐藏的交互元素加了 `inert`（不止 `aria-hidden`）
 - [ ] 模态弹窗有 `role="dialog"` + `aria-modal` + `aria-labelledby`
 - [ ] 支持 Esc 关闭
-- [ ] 动效受 `prefers-reduced-motion` 控制
+- [ ] 动效受 `prefers-reduced-motion` 控制（CSS 过渡 `none` / gsap 跳过）
+- [ ] 新窗口链接有 `title="在新窗口打开"`
 - [ ] 颜色对比度 ≥ 4.5:1
 - [ ] `html lang` 与内容语言一致
 - [ ] 触控目标尺寸 ≥ 44×44px

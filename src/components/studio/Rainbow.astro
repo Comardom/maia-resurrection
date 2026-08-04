@@ -1,0 +1,325 @@
+---
+import { departments } from "@/data/departments";
+
+// 彩虹七段，横向铺满整个视口
+// 每条可独立调节：width 为 flex-grow 权重（等分时全为 1），height 为占视口高度的百分比
+// 颜色为低饱和度柔和色；红色满高打底，其余纵向居中成拱形，并承载部门名
+interface RainbowBand {
+    color: { light: string; dark: string }
+    width: number
+    height: number
+}
+
+const bands: RainbowBand[] = [
+    { color: { light: 'hsl(0 45% 82%)', dark: 'hsla(0 65% 58% / 0.45)' }, width: 1.7, height: 100 },
+    { color: { light: 'hsl(25 45% 82%)', dark: 'hsla(25 65% 58% / 0.45)' }, width: 0.9, height: 56 },
+    { color: { light: 'hsl(48 45% 80%)', dark: 'hsla(48 65% 55% / 0.45)' }, width: 0.9, height: 47 },
+    { color: { light: 'hsl(150 45% 78%)', dark: 'hsla(150 55% 50% / 0.45)' }, width: 0.9, height: 24 },
+    { color: { light: 'hsl(180 45% 78%)', dark: 'hsla(180 55% 50% / 0.45)' }, width: 0.9, height: 33 },
+    { color: { light: 'hsl(215 45% 80%)', dark: 'hsla(215 60% 55% / 0.45)' }, width: 0.9, height: 77 },
+    { color: { light: 'hsl(275 45% 80%)', dark: 'hsla(275 60% 55% / 0.45)' }, width: 0.9, height: 32 },
+]
+---
+
+<section class="rainbow" aria-label="彩虹七段">
+    {
+        bands.map((band, i) => (
+            i === 0 ? (
+                <div
+                    class="rainbow-band band-red"
+                    style={`--band-width: ${band.width}; --band-height: ${band.height}%; --band-color-light: ${band.color.light}; --band-color-dark: ${band.color.dark};`}
+                >
+                    <span class="game-start">Game Start</span>
+                </div>
+            ) : (
+                departments[i - 1] && (
+                    <div
+                        class="rainbow-band"
+                        style={`--band-width: ${band.width}; --band-height: ${band.height}%; --band-color-light: ${band.color.light}; --band-color-dark: ${band.color.dark}; --switch-delay: ${((i - 1) * 0.2).toFixed(1)}s;`}
+                    >
+                        <button class="band-main" type="button">
+                            <h2 class="band-name">{departments[i - 1].title}</h2>
+                            <span class="band-short">{departments[i - 1].short}</span>
+                        </button>
+                        <a class="band-goto" href={departments[i - 1].link}
+                           aria-label={`进入${departments[i - 1].title}页面`}>
+                            <img class="goto-icon go-black" src="/go-black.svg" alt="" />
+                            <img class="goto-icon go-white" src="/go-white.svg" alt="" />
+                            <img class="goto-icon goto-black" src="/goto-black.svg" alt="" />
+                            <img class="goto-icon goto-white" src="/goto-white.svg" alt="" />
+                        </a>
+                    </div>
+                )
+            )
+        ))
+    }
+</section>
+
+<script>
+    import { initRainbowIdle, initRainbowAccordion } from './rainbowScript'
+    initRainbowIdle()
+    initRainbowAccordion()
+</script>
+
+<style>
+    .rainbow {
+        position: relative;
+        inline-size: 100lvi;
+        block-size: 100dvb;
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        overflow: hidden;
+        padding-inline: 4rem;
+        padding-top: 7svb; /* 顶栏高度：让色块在顶栏下方空间内居中 */
+        box-sizing: border-box;
+    }
+    .rainbow-band {
+        flex-grow: var(--band-width, 1);
+        flex-basis: 0;
+        block-size: var(--band-height, 100%);
+        box-sizing: border-box;
+        overflow: hidden;
+        position: relative;
+        cursor: pointer;
+        /* 玻璃拟态：高光渐变叠加在色块色上 */
+        background-color: var(--band-color-light);
+        background-image: linear-gradient(rgba(255, 255, 255, 0.12), transparent);
+        -webkit-backdrop-filter: blur(0.625rem);
+        backdrop-filter: blur(0.625rem);
+        border: 0.0625rem solid rgba(255, 255, 255, 0.1);
+        box-shadow: 0 1.5625rem 1.5625rem rgba(0, 0, 0, 0.25);
+        transition: block-size 0.4s cubic-bezier(0.34, 1.56, 0.64, 1),
+                    border-color 0.4s ease;
+    }
+    /* 部门块主体（桌面占满整块；移动端左侧可点展开） */
+    .band-main {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: none;
+        background: transparent;
+        padding: 0;
+        margin: 0;
+        color: inherit;
+        cursor: pointer;
+        font: inherit;
+    }
+    /* 覆盖全局 base.css 的 .dark button:hover：按钮在 hover/active/focus 时保持透明，
+       避免深色模式下中间区域被涂成深灰（#3E3E3E）盖住色块颜色
+       （全局规则特异性 0,2,1 高于本类，必须用 !important 压过） */
+    .band-main:hover,
+    .band-main:active,
+    .band-main:focus {
+        background-color: transparent !important;
+    }
+    /* 跳转区（桌面隐藏，移动端显示在右侧） */
+    .band-goto {
+        display: none;
+    }
+    :global(.dark) .rainbow-band {
+        background-color: var(--band-color-dark);
+        background-image: linear-gradient(rgba(255, 255, 255, 0.28), transparent);
+        /* 深色下阴影调淡：避免半透明色块透出自身黑投影（"黑图层压在彩色上"） */
+        box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+    }
+    @media (hover: hover) {
+        .rainbow-band:hover {
+            --band-height: 85% !important;
+        }
+        .band-red:hover {
+            --band-height: 100% !important;
+            border-color: rgba(0, 0, 0, 0.35);
+        }
+        .band-red:hover::after {
+            opacity: 1;
+        }
+        .band-red:hover .game-start {
+            opacity: 1;
+            transform: translateY(-50%) translateX(0);
+        }
+        /* 六部门块 hover：标题让位，short 从左侧滑入占满 */
+        .rainbow-band:not(.band-red):hover .band-short {
+            opacity: 1;
+            transform: translate(-50%, -50%);
+        }
+        .rainbow-band:not(.band-red):hover .band-name {
+            transform: translateX(220%);
+            opacity: 0;
+        }
+    }
+    .band-red {
+        position: relative;
+        overflow: hidden;
+    }
+    /* 用伪元素铺满整块作为遮罩，inset:0 覆盖整个元素（含边框） */
+    .band-red::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.45);
+        opacity: 0;
+        transition: opacity 0.5s ease;
+        pointer-events: none;
+        z-index: 1;
+    }
+    .band-red .game-start {
+        z-index: 2;
+    }
+    .game-start {
+        position: absolute;
+        top: 50%;
+        right: 1.25rem;
+        transform: translateY(-50%) translateX(140%);
+        color: #fff;
+        font-family: 'PangMenZhengDao', cursive;
+        font-size: 2rem;
+        white-space: nowrap;
+        opacity: 0;
+        transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1),
+                    opacity 0.3s ease;
+        pointer-events: none;
+    }
+    .band-name {
+        margin: 0;
+        color: var(--theme-color);
+        font-family: 'Huiwei-HKHei', -apple-system, BlinkMacSystemFont, "Segoe UI",
+        "PingFang SC", "Microsoft YaHei", "Noto Sans CJK SC", sans-serif;
+        font-size: 1.475rem;
+        font-weight: 600;
+        white-space: nowrap;
+        writing-mode: vertical-rl;
+        text-orientation: mixed;
+        transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1),
+                    opacity 0.3s ease;
+    }
+    .band-short {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-140%, -50%);
+        color: var(--theme-color);
+        font-family: 'PMingLiU-TW', Georgia, 'Times New Roman', serif;
+        font-size: 1.15rem;
+        line-height: 1.7;
+        white-space: pre-line;
+        writing-mode: vertical-rl;
+        text-orientation: mixed;
+        opacity: 0;
+        transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1),
+                    opacity 0.3s ease;
+        pointer-events: none;
+        max-block-size: calc(100% - 2rem);
+        max-inline-size: calc(100% - 2rem);
+    }    @media (prefers-reduced-motion: reduce) {
+        .rainbow-band,
+        .band-name,
+        .band-short,
+        .game-start {
+            transition: none;
+        }
+    }
+    @media (max-width: 48rem) {
+        .rainbow {
+            flex-direction: column;
+            align-items: stretch;
+            justify-content: center;
+            padding-inline: 0.75rem;
+            padding-top: 7svb; /* 避开顶栏 */
+            padding-bottom: 0;
+            gap: 0.5rem;
+        }
+        .rainbow-band {
+            flex: 0 0 auto;             /* 固定高度，不参与 grow */
+            inline-size: 100%;
+            display: flex;
+            flex-direction: row;
+            align-items: stretch;
+            /* 默认：部门条均分，block-size 百分比相对容器（100dvb - 7svb 顶栏） */
+            block-size: 12.5%;
+            transition: block-size 0.45s ease, border-color 0.4s ease;
+            /* 移动端禁用 backdrop-filter：避免动画时渲染异常（变灰） */
+            -webkit-backdrop-filter: none;
+            backdrop-filter: none;
+        }
+        /* 红色块比其他高（约 15.5% vs 12.5%） */
+        .band-red {
+            block-size: 15.5%;
+        }
+        /* 有展开时：其他非红色收缩让位 */
+        .rainbow:has(.expanded) .rainbow-band:not(.band-red):not(.expanded) {
+            block-size: 6.5%;
+        }
+        /* 展开的部门块撑大 */
+        .rainbow-band.expanded {
+            block-size: 37%;
+        }
+        /* 去掉移动端按钮点击默认灰色高亮 */
+        .band-main {
+            -webkit-tap-highlight-color: transparent;
+        }
+        /* 部门主体：占左侧大部分，点击展开 */
+        .band-main {
+            position: static;
+            flex: 1 1 auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 0.25rem;
+            padding-inline: 0.75rem;
+            text-align: center;
+        }
+        .band-name {
+            writing-mode: horizontal-tb;
+            text-orientation: mixed;
+            font-size: 0.95rem;
+        }
+        .band-short {
+            position: static;
+            transform: none;
+            writing-mode: horizontal-tb;
+            text-orientation: mixed;
+            white-space: pre-line;
+            font-size: 0.85rem;
+            line-height: 1.5;
+            opacity: 1;
+            pointer-events: none;
+            max-block-size: none;
+            max-inline-size: none;
+            display: none; /* 默认折叠，展开时显示 */
+        }
+        .rainbow-band.expanded .band-short {
+            display: block;
+        }
+        /* 跳转区：右侧固定宽，慢速切换 go/goto 图标 */
+        .band-goto {
+            display: grid;
+            place-items: center;
+            flex: 0 0 3rem;
+            border-inline-start: 1px solid rgba(128, 128, 128, 0.25);
+            text-decoration: none;
+        }
+        .goto-icon {
+            grid-area: 1 / 1;
+            inline-size: 1.4rem;
+            block-size: 1.4rem;
+            opacity: 0;
+        }
+        /* 跑马：单箭头先显示，随后变双箭头，六块从上到下依次错开 */
+        .go-black, .goto-black { opacity: 1; }
+        /* 单箭头：先亮；双箭头：经 delay 后替换单箭头 */
+        .go-black { animation: goto-show 1.6s steps(1, end) infinite; animation-delay: var(--switch-delay, 0s); }
+        .goto-black { animation: goto-show 1.6s steps(1, end) infinite; animation-delay: calc(var(--switch-delay, 0s) + 0.8s); }
+        :global(.dark) .go-black, :global(.dark) .goto-black { opacity: 0; animation: none; }
+        :global(.dark) .go-white, :global(.dark) .goto-white { opacity: 1; }
+        :global(.dark) .go-white { animation: goto-show 1.6s steps(1, end) infinite; animation-delay: var(--switch-delay, 0s); }
+        :global(.dark) .goto-white { animation: goto-show 1.6s steps(1, end) infinite; animation-delay: calc(var(--switch-delay, 0s) + 0.8s); }
+    }
+    @keyframes goto-show {
+        0% { opacity: 1; }
+        50%, 100% { opacity: 0; }
+    }
+</style>

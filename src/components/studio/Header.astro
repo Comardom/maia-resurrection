@@ -124,7 +124,7 @@ import { site } from "@/data/site";
         font-weight: 300;
         font-size: 1.3rem;
         /*letter-spacing: 0.0125rem;*/
-        font-family: 'Huiwei-HKHei', -apple-system, BlinkMacSystemFont, "Segoe UI",
+        font-family: 'Huiwen-HKHei', -apple-system, BlinkMacSystemFont, "Segoe UI",
         "PingFang SC", "Microsoft YaHei", "Noto Sans CJK SC", sans-serif;
         /*font-family: 'PMingLiU-TW', Georgia, 'Times New Roman', serif;*/
         /*font-family: 'PangMenZhengDao', cursive;*/
@@ -154,7 +154,7 @@ import { site } from "@/data/site";
         block-size: 1.4rem;
         opacity: 0;
         /*transition: opacity 0.3s;*/
-        transform: scale(0.5) rotate(-40deg);   /* 初始：缩小+歪 */
+        transform: scale(0.5) rotate(-60deg);   /* 初始：缩小+歪 */
         transition: opacity 0.35s ease, transform 0.35s ease;
     }
 
@@ -365,8 +365,22 @@ import { site } from "@/data/site";
     /* 减少动态效果偏好 */
     @media (prefers-reduced-motion: reduce) {
         .app-menu,
-        .app-menu-backdrop {
+        .app-menu-backdrop,
+        .theme-toggle .icon,
+        .app-menu-toggle .icon,
+        .logo,
+        .top-bar,
+        .left-group,
+        .center-group,
+        .right-group,
+        .app-menu-close .icon {
             transition: none;
+        }
+        .top-bar,
+        .left-group,
+        .center-group,
+        .right-group {
+            animation: none;
         }
     }
 </style>

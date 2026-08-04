@@ -6,7 +6,7 @@
   font-display: swap;
 }
 @font-face {
-  font-family: 'Huiwei-HKHei';             /* 汇文港黑 */
+  font-family: 'Huiwen-HKHei';             /* 汇文港黑 */
   src: url('/font/hkhei-subset.woff2') format('woff2');
   font-weight: normal;
   font-style: normal;

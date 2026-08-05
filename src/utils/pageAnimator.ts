@@ -6,6 +6,11 @@ let currentIndex = 0
 let isAnimating = false
 let sections: HTMLElement[] = []
 let reducedMotion = false
+let navLocked = false
+
+export function lockNavigation(locked: boolean) {
+  navLocked = locked
+}
 
 function sectionIndexFromHash(): number {
   const id = window.location.hash.replace('#', '')
@@ -77,7 +82,7 @@ export function initPageAnimator() {
 }
 
 function goTo(index: number) {
-  if (isAnimating || index < 0 || index >= sections.length || index === currentIndex) return
+  if (navLocked || isAnimating || index < 0 || index >= sections.length || index === currentIndex) return
   isAnimating = true
   closeAppMenu()
 

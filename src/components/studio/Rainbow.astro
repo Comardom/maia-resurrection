@@ -11,13 +11,13 @@ interface RainbowBand {
 }
 
 const bands: RainbowBand[] = [
-    { color: { light: 'hsl(0 45% 82%)', dark: 'hsla(0 65% 58% / 0.45)' }, width: 1.7, height: 100 },
-    { color: { light: 'hsl(25 45% 82%)', dark: 'hsla(25 65% 58% / 0.45)' }, width: 0.9, height: 56 },
-    { color: { light: 'hsl(48 45% 80%)', dark: 'hsla(48 65% 55% / 0.45)' }, width: 0.9, height: 47 },
-    { color: { light: 'hsl(150 45% 78%)', dark: 'hsla(150 55% 50% / 0.45)' }, width: 0.9, height: 24 },
-    { color: { light: 'hsl(180 45% 78%)', dark: 'hsla(180 55% 50% / 0.45)' }, width: 0.9, height: 33 },
-    { color: { light: 'hsl(215 45% 80%)', dark: 'hsla(215 60% 55% / 0.45)' }, width: 0.9, height: 77 },
-    { color: { light: 'hsl(275 45% 80%)', dark: 'hsla(275 60% 55% / 0.45)' }, width: 0.9, height: 32 },
+    { color: { light: 'hsla(0 45% 82% / 0.8)', dark: 'hsla(0 65% 58% / 0.4)' }, width: 1.7, height: 100 },
+    { color: { light: 'hsla(25 45% 82% / 0.8)', dark: 'hsla(25 65% 58% / 0.4)' }, width: 0.9, height: 56 },
+    { color: { light: 'hsla(48 45% 80% / 0.8)', dark: 'hsla(48 65% 55% / 0.4)' }, width: 0.9, height: 47 },
+    { color: { light: 'hsla(150 45% 78% / 0.8)', dark: 'hsla(150 55% 50% / 0.4)' }, width: 0.9, height: 24 },
+    { color: { light: 'hsla(180 45% 78% / 0.8)', dark: 'hsla(180 55% 50% / 0.4)' }, width: 0.9, height: 33 },
+    { color: { light: 'hsla(215 45% 80% / 0.8)', dark: 'hsla(215 60% 55% / 0.4)' }, width: 0.9, height: 77 },
+    { color: { light: 'hsla(275 45% 80% / 0.8)', dark: 'hsla(275 60% 55% / 0.4)' }, width: 0.9, height: 32 },
 ]
 ---
 
@@ -55,10 +55,20 @@ const bands: RainbowBand[] = [
     }
 </section>
 
+<div id="game-overlay" class="game-overlay" role="dialog" aria-modal="true" aria-labelledby="game-title">
+    <button id="game-exit" class="game-exit" aria-label="退出游戏">
+        <img class="exit-icon exit-black" src="/exit-black.svg" alt="" />
+        <img class="exit-icon exit-white" src="/exit-white.svg" alt="" />
+    </button>
+    <p id="game-title" class="game-title">游戏开发中…</p>
+</div>
+
 <script>
     import { initRainbowIdle, initRainbowAccordion } from './rainbowScript'
+    import { initRedTransition } from './redTransitionScript'
     initRainbowIdle()
     initRainbowAccordion()
+    initRedTransition()
 </script>
 
 <style>
@@ -91,6 +101,16 @@ const bands: RainbowBand[] = [
         box-shadow: 0 1.5625rem 1.5625rem rgba(0, 0, 0, 0.25);
         transition: block-size 0.4s cubic-bezier(0.34, 1.56, 0.64, 1),
                     border-color 0.4s ease;
+    }
+    /* 红色块全屏过渡：.transitioning 期间禁用 hover 高度干扰与 Game Start 滑入
+       （absolute 定位完全由 JS 捕获后 gsap.set 控制，CSS 不再改布局） */
+    .rainbow.transitioning .rainbow-band,
+    .rainbow.transitioning .rainbow-band:hover {
+        --band-height: initial !important;
+    }
+    .rainbow.transitioning .band-red .game-start {
+        opacity: 0 !important;
+        transform: translateY(-50%) translateX(140%) !important;
     }
     /* 部门块主体（桌面占满整块；移动端左侧可点展开） */
     .band-main {
@@ -321,5 +341,66 @@ const bands: RainbowBand[] = [
     @keyframes goto-show {
         0% { opacity: 1; }
         50%, 100% { opacity: 0; }
+    }
+
+    /* ── 游戏占位容器 ─────────────────── */
+    .game-overlay {
+        position: fixed;
+        inset: 0;
+        z-index: 1100;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: rgba(0, 0, 0, 0.6);
+        opacity: 0;
+        pointer-events: none;
+    }
+    .game-title {
+        margin: 0;
+        color: #fff;
+        font-family: 'PangMenZhengDao', cursive;
+        font-size: 2rem;
+        text-shadow: 0 0.125rem 0.5rem rgba(0, 0, 0, 0.5);
+    }
+    /* 返回按钮：外观同主题切换按钮 */
+    .game-exit {
+        position: absolute;
+        top: 1rem;
+        right: 1rem;
+        padding: 0;
+        font-size: 1rem;
+        background: transparent;
+        inline-size: 2.5rem;
+        block-size: 2.5rem;
+        border: 0.15rem solid var(--studio-ring);
+        border-radius: 50%;
+        cursor: pointer;
+        color: inherit;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        -webkit-tap-highlight-color: transparent;
+    }
+    .game-exit .exit-icon {
+        position: absolute;
+        inline-size: 1.4rem;
+        block-size: 1.4rem;
+        opacity: 0;
+        transition: opacity 0.3s;
+    }
+    .game-exit .exit-black { opacity: 1; }
+    :global(.dark) .game-exit .exit-black { opacity: 0; }
+    :global(.dark) .game-exit .exit-white { opacity: 1; }
+    @media (hover: hover) {
+        .game-exit:hover {
+            background-color: var(--studio-hover-bg);
+        }
+    }
+    @media (pointer: coarse) {
+        .game-exit {
+            inline-size: 2.75rem;
+            block-size: 2.75rem;
+        }
     }
 </style>

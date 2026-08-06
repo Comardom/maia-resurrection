@@ -60,7 +60,7 @@ const bands: RainbowBand[] = [
         <img class="exit-icon exit-black" src="/exit-black.svg" alt="" />
         <img class="exit-icon exit-white" src="/exit-white.svg" alt="" />
     </button>
-    <p id="game-title" class="game-title">游戏开发中…</p>
+    <p id="game-title" class="game-title">游戏制作中…</p>
 </div>
 
 <script>
@@ -351,9 +351,12 @@ const bands: RainbowBand[] = [
         display: flex;
         align-items: center;
         justify-content: center;
-        background: rgba(0, 0, 0, 0.6);
+        background: rgba(255, 255, 255, 0.75);
         opacity: 0;
         pointer-events: none;
+    }
+    :global(.dark) .game-overlay {
+        background: rgba(0, 0, 0, 0.6);
     }
     .game-title {
         margin: 0;
@@ -362,11 +365,15 @@ const bands: RainbowBand[] = [
         font-size: 2rem;
         text-shadow: 0 0.125rem 0.5rem rgba(0, 0, 0, 0.5);
     }
+    :global(.dark) .game-title {
+        color: #fff;
+    }
     /* 返回按钮：外观同主题切换按钮 */
     .game-exit {
         position: absolute;
         top: 1rem;
         right: 1rem;
+        z-index: 5; /* 盖在游戏 canvas 之上 */
         padding: 0;
         font-size: 1rem;
         background: transparent;

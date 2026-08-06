@@ -27,7 +27,7 @@ export function initRedTransition() {
   exitBtn?.addEventListener('click', exitGame)
 }
 
-/* ── 进入游戏 ─────────────────────────── */
+/* ── 进入游戏（当前为占位：全屏过渡 + 显示"游戏制作中"） ── */
 function enterGame() {
   const rainbow = document.querySelector<HTMLElement>('.rainbow')
   const red = document.querySelector<HTMLElement>('.band-red')
@@ -36,6 +36,9 @@ function enterGame() {
   if (!rainbow || !red || !overlay) return
 
   lockNavigation(true)
+  document.documentElement.classList.add('game-mode')
+  // 顶栏向上收起（平滑过渡）
+  gsap.to('.top-bar', { yPercent: -110, duration: 0.6, ease: 'power2.inOut' })
 
   // ① 先在 flex 布局下一次性捕获所有位置（必须在转 absolute 之前）
   const allEls: HTMLElement[] = [red, ...bands]
@@ -97,7 +100,7 @@ function enterGame() {
   timeline = tl
 }
 
-/* ── 显示占位容器 ────────────────────── */
+/* ── 显示占位容器（"游戏制作中"） ─────────── */
 function showOverlay(overlay: HTMLElement) {
   overlay.style.pointerEvents = 'auto'
   gsap.to(overlay, { opacity: 1, duration: 0.4, ease: 'power2.out' })
@@ -144,5 +147,17 @@ function finishReverse() {
   const gs = red.querySelector<HTMLElement>('.game-start')
   if (gs) gsap.set(gs, { clearProps: 'opacity,transform' })
   rainbow.classList.remove('transitioning')
+  // 顶栏滑回：必须在 game-mode 仍生效（呼吸动画被停）时播放 gsap，
+  // 否则 animation: breathe-y 的 transform 优先级高于 gsap 内联样式，会覆盖动画
+  gsap.to('.top-bar', {
+    yPercent: 0,
+    duration: 0.6,
+    ease: 'power2.inOut',
+    onComplete: () => {
+      // 动画播完后再恢复呼吸动画，并清除 gsap 内联 transform
+      document.documentElement.classList.remove('game-mode')
+      gsap.set('.top-bar', { clearProps: 'transform' })
+    },
+  })
   lockNavigation(false)
 }

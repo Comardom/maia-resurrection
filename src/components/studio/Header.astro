@@ -57,6 +57,11 @@ import { site } from "@/data/site";
         animation: breathe-y 6s ease-in-out infinite;
     }
 
+    /* 游戏模式：停掉呼吸动画（位移由 gsap 控制，带平滑过渡） */
+    :global(.game-mode) .top-bar {
+        animation: none;
+    }
+
     /* 亮色 */
     .top-bar {
         background: var(--studio-topbar-bg);

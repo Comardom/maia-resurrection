@@ -1,0 +1,381 @@
+---
+import { timelineEvents } from "@/data/timeline";
+---
+
+<section class="timeline-player" aria-label="部门大事">
+    <!-- 左右分界分割线：贯穿整页（含顶栏区域） -->
+    <div class="page-divider" aria-hidden="true"></div>
+    <!-- 大图区/控制区分界线：横向贯穿整页宽度 -->
+    <div class="page-hline" aria-hidden="true"></div>
+    <div class="player-zone player-left">
+        <div class="player-stage">
+            <img id="stage-image" class="stage-image" src="/wswd-black.svg" alt="" />
+        </div>
+        <div class="player-controls">
+            <button id="ctrl-prev" class="ctrl-btn" aria-label="上一首">
+                <img class="ctrl-icon icon-prev-black" src="/next-black.svg" alt="" />
+                <img class="ctrl-icon icon-prev-white" src="/next-white.svg" alt="" />
+            </button>
+            <button id="ctrl-play" class="ctrl-btn ctrl-play" aria-label="播放">
+                <img class="ctrl-icon icon-play-black" src="/play-black.svg" alt="" />
+                <img class="ctrl-icon icon-play-white" src="/play-white.svg" alt="" />
+                <img class="ctrl-icon icon-pause-black" src="/pause-black.svg" alt="" />
+                <img class="ctrl-icon icon-pause-white" src="/pause-white.svg" alt="" />
+            </button>
+            <button id="ctrl-next" class="ctrl-btn" aria-label="下一首">
+                <img class="ctrl-icon icon-next-black" src="/next-black.svg" alt="" />
+                <img class="ctrl-icon icon-next-white" src="/next-white.svg" alt="" />
+            </button>
+        </div>
+    </div>
+    <div class="player-zone player-sidebar">
+        <ol id="event-list" class="event-list">
+            {
+                timelineEvents.map((ev, i) => (
+                    <li data-index={i}>
+                        <div class="event-item">
+                            <div class="event-title-row">
+                                <span class="event-year">{ev.year}</span>
+                                <span class="event-title">{ev.title}</span>
+                            </div>
+                            <p class="event-desc">{ev.description}</p>
+                            <span class="event-progress" aria-hidden="true"></span>
+                        </div>
+                    </li>
+                ))
+            }
+        </ol>
+    </div>
+</section>
+
+<style>
+    .timeline-player {
+        position: relative;
+        inline-size: 100dvi;
+        block-size: 100dvb;
+        box-sizing: border-box;
+    }
+    .player-zone {
+        position: absolute;
+        top: calc(7svb + 1rem);
+        bottom: 1rem;
+        pointer-events: none;
+    }
+    /* 左右分界分割线：2/3 处，贯穿整页（顶栏顶部到页面底部） */
+    .page-divider {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: calc(1rem + (100% - 2rem) * 2 / 3);
+        inline-size: 0.125rem;
+        background: var(--theme-color);
+        opacity: 0.15;
+        pointer-events: none;
+    }
+    /* 大图区/控制区分界线：横向贯穿左侧区域（到 2/3 分界处为止） */
+    .page-hline {
+        position: absolute;
+        left: 0;
+        right: calc(1rem + (100% - 2rem) / 3);
+        top: calc(7svb + 1rem + (100dvb - 7svb - 2rem) * 4 / 5);
+        block-size: 0.125rem;
+        background: var(--theme-color);
+        opacity: 0.15;
+        pointer-events: none;
+    }
+    /* 左 2/3：上下两块，上 2/3 大图、下 1/3 控制区（无缝贴合） */
+    .player-left {
+        left: 1rem;
+        width: calc((100% - 2rem) * 2 / 3);
+        display: flex;
+        flex-direction: column;
+    }
+    .player-stage {
+        flex: 4;
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+        /* 图片四周留空隙 */
+        padding: 1rem;
+        box-sizing: border-box;
+    }
+    /* 原比例大图：铺满 stage，contain 保持宽高比并居中（flex 居中） */
+    .stage-image {
+        inline-size: 100%;
+        block-size: 100%;
+        object-fit: contain;
+        object-position: center;
+        opacity: 0;
+        transition: opacity 0.4s ease;
+    }
+    .stage-image.visible {
+        opacity: 1;
+    }
+    .player-controls {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 2rem;
+        pointer-events: auto;
+    }
+    /* 控制按钮：方形磁贴，玻璃拟态（参考 tasKapsule CalendarBody）
+       浅色模式：蓝色 */
+    .ctrl-btn {
+        position: relative;
+        inline-size: 4rem;
+        block-size: 4rem;
+        padding: 0;
+        border: 0;
+        border-radius: 0;
+        background: linear-gradient(to bottom,
+            color-mix(in srgb, rgb(113 152 240) 55%, transparent),
+            color-mix(in srgb, rgb(98 140 237) 55%, transparent),
+            color-mix(in srgb, rgb(78 120 232) 55%, transparent));
+        box-shadow:
+            inset 0 0.1875rem 0.4rem 0.15rem rgba(0, 0, 0, 0.3),
+            inset 0 -0.0625rem 0.15rem 0.05rem rgba(255, 255, 255, 0.05);
+        cursor: pointer;
+        display: grid;
+        place-items: center;
+    }
+    /* 暗色模式：粉色渐变 */
+    :global(.dark) .ctrl-btn {
+        background: linear-gradient(to bottom,
+            color-mix(in srgb, rgb(244 114 182) 55%, transparent),
+            color-mix(in srgb, rgb(236 72 153) 55%, transparent),
+            color-mix(in srgb, rgb(219 39 119) 55%, transparent));
+        box-shadow:
+            inset 0 0.1875rem 0.4rem 0.15rem rgba(0, 0, 0, 0.3),
+            inset 0 -0.0625rem 0.15rem 0.05rem rgba(255, 255, 255, 0.05);
+    }
+    /* 播放/暂停按钮略大，视觉主轴 */
+    .ctrl-play {
+        inline-size: 5rem;
+        block-size: 5rem;
+    }
+    /* 图标：grid 叠放；浅色显示黑、深色显示白（按类名控制，避免 nth-child 冲突） */
+    .ctrl-icon {
+        grid-area: 1 / 1;
+        inline-size: 2rem;
+        block-size: 2rem;
+        opacity: 0;
+    }
+    .ctrl-play .ctrl-icon {
+        inline-size: 2.5rem;
+        block-size: 2.5rem;
+    }
+    /* 浅色：黑图标显示 */
+    .icon-play-black, .icon-pause-black, .icon-prev-black, .icon-next-black { opacity: 1; }
+    .icon-play-white, .icon-pause-white, .icon-prev-white, .icon-next-white { opacity: 0; }
+    /* 深色：白图标显示 */
+    :global(.dark) .icon-play-black, :global(.dark) .icon-pause-black,
+    :global(.dark) .icon-prev-black, :global(.dark) .icon-next-black { opacity: 0; }
+    :global(.dark) .icon-play-white, :global(.dark) .icon-pause-white,
+    :global(.dark) .icon-prev-white, :global(.dark) .icon-next-white { opacity: 1; }
+    /* 播放/暂停切换：弹性缩放 + 旋转淡入淡出（图标"翻身"效果） */
+    .ctrl-play .ctrl-icon {
+        transition: opacity 0.25s ease, transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    /* play 常态：显示、正常 */
+    .ctrl-play .icon-play-black, .ctrl-play .icon-play-white {
+        opacity: 1;
+        transform: scale(1) rotate(0deg);
+    }
+    /* pause 常态：隐藏、缩小 + 旋转 30°（待翻转出现） */
+    .ctrl-play .icon-pause-black, .ctrl-play .icon-pause-white {
+        opacity: 0;
+        transform: scale(0.25) rotate(35deg);
+    }
+    /* 播放中：play 翻转消失，pause 翻转出现 */
+    .ctrl-play.is-playing .icon-play-black, .ctrl-play.is-playing .icon-play-white {
+        opacity: 0;
+        transform: scale(0.25) rotate(-35deg);
+    }
+    .ctrl-play.is-playing .icon-pause-black, .ctrl-play.is-playing .icon-pause-white {
+        opacity: 1;
+        transform: scale(1) rotate(0deg);
+    }
+    /* 上一首：旋转 180° */
+    #ctrl-prev .ctrl-icon {
+        transform: rotate(180deg);
+    }
+    /* 右 1/3：事件标题列表，每屏显示 10.5 行，磁贴卡片风格 */
+    .player-sidebar {
+        right: 1rem;
+        width: calc((100% - 2rem) / 3);
+        display: flex;
+        flex-direction: column;
+        pointer-events: auto; /* 允许点击列表项切换 */
+        /* 列表上下两端分界线（与 page-divider 同风格：主题色 15% 透明） */
+        border-block: 0.125rem solid color-mix(in srgb, var(--theme-color) 15%, transparent);
+        box-sizing: border-box;
+    }
+    .event-list {
+        flex: 1;
+        margin: 0;
+        /* 顶部/底部留白：第一张与最后一张卡片都不贴边 */
+        padding: 0.35rem 0 0.75rem;
+        list-style: none;
+        display: flex;
+        flex-direction: column;
+        /* 禁滚轮滚动：仅由 JS 定位；overflow hidden 下 scrollTop 仍可编程设置 */
+        overflow: hidden;
+    }
+    /* 行：保留 10.5 行/屏的节奏，四周留出磁贴间隙；非线性缓动 */
+    .event-list li {
+        flex: 0 0 calc(100% / 10.5);
+        display: grid;
+        grid-template-rows: 1fr;
+        transition: flex-basis 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+        box-sizing: border-box;
+        padding: 0.35rem;
+        min-inline-size: 0; /* 固定横向：防止小窗口下内容撑破 */
+        cursor: pointer;
+    }
+    /* 当前项展开：高度自适应内容（描述完整显示） */
+    .event-list li.active {
+        flex-basis: auto;
+    }
+    /* 磁贴卡片本体：玻璃拟态（参考 tasKapsule CalendarBody：color-mix 渐变 + 内阴影）
+       浅色模式：粉色 */
+    .event-item {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        gap: 0.25rem;
+        padding: 0.4rem 0.75rem;
+        min-inline-size: 0;
+        min-block-size: 0;
+        box-sizing: border-box;
+        overflow: hidden;
+        background: linear-gradient(to bottom,
+            color-mix(in srgb, rgb(244 114 182) 25%, transparent),
+            color-mix(in srgb, rgb(236 72 153) 25%, transparent),
+            color-mix(in srgb, rgb(219 39 119) 25%, transparent));
+        box-shadow:
+            inset 0 0.1875rem 0.4rem 0.15rem rgba(0, 0, 0, 0.3),
+            inset 0 -0.0625rem 0.15rem 0.05rem rgba(255, 255, 255, 0.05);
+        font-family: 'Huiwei-HKHei', -apple-system, BlinkMacSystemFont, "Segoe UI",
+        "PingFang SC", "Microsoft YaHei", "Noto Sans CJK SC", sans-serif;
+    }
+    /* 暗色模式：蓝色 */
+    :global(.dark) .event-item {
+        background: linear-gradient(to bottom,
+            color-mix(in srgb, rgb(113 152 240) 25%, transparent),
+            color-mix(in srgb, rgb(98 140 237) 25%, transparent),
+            color-mix(in srgb, rgb(78 120 232) 25%, transparent));
+        box-shadow:
+            inset 0 0.1875rem 0.4rem 0.15rem rgba(0, 0, 0, 0.3),
+            inset 0 -0.0625rem 0.15rem 0.05rem rgba(255, 255, 255, 0.05);
+    }
+    .event-year {
+        flex-shrink: 0;
+        font-weight: 700;
+        font-size: 0.95rem;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI",
+        "PingFang SC", "Microsoft YaHei", "Noto Sans CJK SC", sans-serif;
+        color: rgb(219 39 119 / 0.75); /* 浅色模式：淡粉 */
+    }
+    :global(.dark) .event-year {
+        color: rgb(113 152 240 / 0.75); /* 暗色模式：淡蓝 */
+    }
+    /* 标题行：年份 + 标题横向排 */
+    .event-title-row {
+        display: flex;
+        align-items: baseline;
+        gap: 0.5rem;
+        min-inline-size: 0;
+    }
+    /* 标题：普通黑体，超宽时自动滚动（marquee），不再出现滚动条 */
+    .event-title {
+        flex: 1;
+        min-inline-size: 0;
+        font-size: 1.05rem;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI",
+        "PingFang SC", "Microsoft YaHei", "Noto Sans CJK SC", sans-serif;
+        color: var(--theme-color);
+        white-space: nowrap;
+        overflow: hidden;
+    }
+    .event-title.marquee {
+        animation: title-scroll var(--title-duration, 6s) linear infinite alternate;
+    }
+    @keyframes title-scroll {
+        from { transform: translateX(0); }
+        to { transform: translateX(calc(-1 * var(--title-overflow, 0px))); }
+    }
+    /* 描述：普通黑体，默认收起（高度 0），当前项（li.active）展开完整显示
+       高度用 JS 实测的 --desc-h，过渡贴合内容无停顿 */
+    .event-desc {
+        margin: 0;
+        max-block-size: 0;
+        overflow: hidden;
+        opacity: 0;
+        font-size: 0.95rem;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI",
+        "PingFang SC", "Microsoft YaHei", "Noto Sans CJK SC", sans-serif;
+        line-height: 1.5;
+        color: var(--theme-color);
+        transition: max-block-size 0.55s cubic-bezier(0.22, 1, 0.36, 1),
+                    opacity 0.4s ease 0.1s;
+    }
+    .event-list li.active .event-desc {
+        max-block-size: var(--desc-h, 15rem);
+        opacity: 0.8;
+    }
+    /* 高光进度：半透明层从底部往上覆盖整卡（渐变淡出，不挡阅读），JS 控制高度 */
+    .event-progress {
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        block-size: 0%;
+        background: linear-gradient(to top,
+            rgb(236 72 153 / 0.18),
+            rgb(219 39 119 / 0.1) 55%,
+            transparent);
+        pointer-events: none;
+        z-index: 1;
+    }
+    /* 深色模式：偏青绿色调 */
+    :global(.dark) .event-progress {
+        background: linear-gradient(to top,
+            rgb(64 224 208 / 0.2),
+            rgb(32 178 170 / 0.1) 55%,
+            transparent);
+    }
+    /* 文字在高光层之上，保持可读 */
+    .event-item > .event-title-row,
+    .event-item > .event-desc {
+        position: relative;
+        z-index: 2;
+    }
+
+    /* 小屏（与 Rainbow 同边界）：取消右侧列表，左侧占满 */
+    @media (max-width: 48rem) {
+        .player-sidebar {
+            display: none;
+        }
+        .page-divider {
+            display: none;
+        }
+        .player-left {
+            left: 1rem;
+            right: 1rem;
+            width: auto;
+        }
+        .page-hline {
+            left: 0;
+            right: 0;
+        }
+    }
+</style>
+
+<script>
+    import { initTimelinePlayer } from './timelinePlayerScript'
+    initTimelinePlayer()
+</script>

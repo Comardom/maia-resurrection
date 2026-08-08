@@ -116,11 +116,16 @@ export function initTimelinePlayer() {
   }
 
   function updateProgress() {
-    // 清空所有条目的高光层，只保留当前项（从底部往上覆盖整卡）
+    // 清空所有条目的高光层，只保留当前项（从左往右覆盖整卡）
     items.forEach((li, i) => {
       const bar = li.querySelector<HTMLElement>('.event-progress')
-      if (bar) bar.style.blockSize = i === index ? `${Math.min(100, (elapsed / DURATION) * 100)}%` : '0%'
+      if (bar) bar.style.inlineSize = i === index ? `${Math.min(100, (elapsed / DURATION) * 100)}%` : '0%'
     })
+    // 移动端分割线进度高光
+    const stageProgress = document.getElementById('stage-progress')
+    if (stageProgress) {
+      stageProgress.style.inlineSize = `${Math.min(100, (elapsed / DURATION) * 100)}%`
+    }
   }
 
   function setPlaying(p: boolean) {
@@ -135,7 +140,13 @@ export function initTimelinePlayer() {
     const next = ((i % len) + len) % len
     index = next
     elapsed = 0
-    setStageImage(timelineEvents[next])
+    const ev = timelineEvents[next]
+    setStageImage(ev)
+    // 同步移动端标题/描述
+    const title = document.getElementById('stage-title')
+    const desc = document.getElementById('stage-desc')
+    if (title) title.textContent = `${ev.year} · ${ev.title}`
+    if (desc) desc.textContent = ev.description
     setActive(next)
     updateProgress()
   }

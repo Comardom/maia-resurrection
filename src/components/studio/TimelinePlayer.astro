@@ -7,9 +7,13 @@ import { timelineEvents } from "@/data/timeline";
     <div class="page-divider" aria-hidden="true"></div>
     <!-- 大图区/控制区分界线：横向贯穿整页宽度 -->
     <div class="page-hline" aria-hidden="true"></div>
+    <!-- 移动端进度高光：跑在分割线上 -->
+    <div id="stage-progress" class="stage-progress" aria-hidden="true"></div>
     <div class="player-zone player-left">
         <div class="player-stage">
+            <h3 id="stage-title" class="stage-title"></h3>
             <img id="stage-image" class="stage-image" src="/wswd-black.svg" alt="" />
+            <p id="stage-desc" class="stage-desc"></p>
         </div>
         <div class="player-controls">
             <button id="ctrl-prev" class="ctrl-btn" aria-label="上一首">
@@ -83,6 +87,10 @@ import { timelineEvents } from "@/data/timeline";
         opacity: 0.15;
         pointer-events: none;
     }
+    /* 移动端进度高光：细条跑在分割线位置（桌面隐藏） */
+    .stage-progress {
+        display: none;
+    }
     /* 左 2/3：上下两块，上 2/3 大图、下 1/3 控制区（无缝贴合） */
     .player-left {
         left: 1rem;
@@ -100,6 +108,11 @@ import { timelineEvents } from "@/data/timeline";
         /* 图片四周留空隙 */
         padding: 1rem;
         box-sizing: border-box;
+    }
+    /* 标题/描述：桌面隐藏（仅移动端显示） */
+    .stage-title,
+    .stage-desc {
+        display: none;
     }
     /* 原比例大图：铺满 stage，contain 保持宽高比并居中（flex 居中） */
     .stage-image {
@@ -175,29 +188,29 @@ import { timelineEvents } from "@/data/timeline";
     :global(.dark) .icon-prev-black, :global(.dark) .icon-next-black { opacity: 0; }
     :global(.dark) .icon-play-white, :global(.dark) .icon-pause-white,
     :global(.dark) .icon-prev-white, :global(.dark) .icon-next-white { opacity: 1; }
-    /* 播放/暂停切换：弹性缩放 + 旋转淡入淡出（图标"翻身"效果） */
+    /* 播放/暂停切换：弹性缩放 + 旋转淡入淡出（图标"翻身"效果）
+       显示逻辑与主题分离：浅色只显示黑、深色只显示白 */
     .ctrl-play .ctrl-icon {
         transition: opacity 0.25s ease, transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
     }
-    /* play 常态：显示、正常 */
-    .ctrl-play .icon-play-black, .ctrl-play .icon-play-white {
-        opacity: 1;
-        transform: scale(1) rotate(0deg);
-    }
+    /* 非播放：显示 play 三角（浅色黑 / 深色白） */
+    .ctrl-play .icon-play-black { opacity: 1; transform: scale(1) rotate(0deg); }
+    :global(.dark) .ctrl-play .icon-play-black { opacity: 0; }
+    :global(.dark) .ctrl-play .icon-play-white { opacity: 1; }
     /* pause 常态：隐藏、缩小 + 旋转 30°（待翻转出现） */
     .ctrl-play .icon-pause-black, .ctrl-play .icon-pause-white {
         opacity: 0;
         transform: scale(0.25) rotate(35deg);
     }
-    /* 播放中：play 翻转消失，pause 翻转出现 */
+    /* 播放中：play 翻转消失 */
     .ctrl-play.is-playing .icon-play-black, .ctrl-play.is-playing .icon-play-white {
         opacity: 0;
         transform: scale(0.25) rotate(-35deg);
     }
-    .ctrl-play.is-playing .icon-pause-black, .ctrl-play.is-playing .icon-pause-white {
-        opacity: 1;
-        transform: scale(1) rotate(0deg);
-    }
+    /* 播放中：pause 显示（浅色黑 / 深色白） */
+    .ctrl-play.is-playing .icon-pause-black { opacity: 1; transform: scale(1) rotate(0deg); }
+    :global(.dark) .ctrl-play.is-playing .icon-pause-black { opacity: 0; }
+    :global(.dark) .ctrl-play.is-playing .icon-pause-white { opacity: 1; transform: scale(1) rotate(0deg); }
     /* 上一首：旋转 180° */
     #ctrl-prev .ctrl-icon {
         transform: rotate(180deg);
@@ -327,26 +340,26 @@ import { timelineEvents } from "@/data/timeline";
         max-block-size: var(--desc-h, 15rem);
         opacity: 0.8;
     }
-    /* 高光进度：半透明层从底部往上覆盖整卡（渐变淡出，不挡阅读），JS 控制高度 */
+    /* 高光进度：半透明层从左往右覆盖整卡（渐变淡出，不挡阅读），JS 控制宽度 */
     .event-progress {
         position: absolute;
         left: 0;
-        right: 0;
+        top: 0;
         bottom: 0;
-        block-size: 0%;
-        background: linear-gradient(to top,
-            rgb(236 72 153 / 0.18),
-            rgb(219 39 119 / 0.1) 55%,
-            transparent);
+        inline-size: 0%;
+        background: linear-gradient(to right,
+            rgb(236 72 153 / 0.2),
+            rgb(219 39 119 / 0.16) 60%,
+            rgb(219 39 119 / 0.08));
         pointer-events: none;
         z-index: 1;
     }
     /* 深色模式：偏青绿色调 */
     :global(.dark) .event-progress {
-        background: linear-gradient(to top,
-            rgb(64 224 208 / 0.2),
-            rgb(32 178 170 / 0.1) 55%,
-            transparent);
+        background: linear-gradient(to right,
+            rgb(64 224 208 / 0.22),
+            rgb(32 178 170 / 0.18) 60%,
+            rgb(32 178 170 / 0.08));
     }
     /* 文字在高光层之上，保持可读 */
     .event-item > .event-title-row,
@@ -371,6 +384,74 @@ import { timelineEvents } from "@/data/timeline";
         .page-hline {
             left: 0;
             right: 0;
+        }
+        /* 移动端进度高光：细条覆盖在分割线上 */
+        .stage-progress {
+            display: block;
+            position: absolute;
+            left: 0;
+            right: 0;
+            top: calc(7svb + 1rem + (100dvb - 7svb - 2rem) * 4 / 5 - 0.0625rem);
+            block-size: 0.25rem;
+            inline-size: 0%;
+            background: linear-gradient(to right,
+                rgb(236 72 153 / 0.7),
+                rgb(219 39 119 / 0.9));
+            box-shadow: 0 0 0.5rem rgb(219 39 119 / 0.5);
+            pointer-events: none;
+            z-index: 2;
+        }
+        :global(.dark) .stage-progress {
+            background: linear-gradient(to right,
+                rgb(64 224 208 / 0.7),
+                rgb(32 178 170 / 0.9));
+            box-shadow: 0 0 0.5rem rgb(32 178 170 / 0.5);
+        }
+        /* 移动端 stage：标题在上、图片中、描述在下 */
+        .player-stage {
+            flex-direction: column;
+            gap: 0.5rem;
+            padding: 0.75rem;
+        }
+        .stage-title,
+        .stage-desc {
+            display: block;
+            width: 100%;
+            text-align: center;
+            margin: 0;
+            color: var(--theme-color);
+        }
+        /* 标题：最多两行 */
+        .stage-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI",
+            "PingFang SC", "Microsoft YaHei", "Noto Sans CJK SC", sans-serif;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        /* 描述：固定高度区域，多行内容完整显示（切换时图片区不跳动） */
+        .stage-desc {
+            font-size: 0.9rem;
+            line-height: 1.5;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI",
+            "PingFang SC", "Microsoft YaHei", "Noto Sans CJK SC", sans-serif;
+            opacity: 0.85;
+            block-size: 6.75rem; /* 约 5 行，固定高度 */
+            overflow-y: auto;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+        .stage-desc::-webkit-scrollbar {
+            display: none;
+        }
+        /* 图片：按自然比例显示（不强制拉伸占满），整体三块居中 */
+        .stage-image {
+            flex: 0 1 auto;
+            min-block-size: 0;
+            max-block-size: 60%;
         }
     }
 </style>

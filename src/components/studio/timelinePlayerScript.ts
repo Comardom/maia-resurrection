@@ -62,18 +62,30 @@ export function initTimelinePlayer() {
   }
 
   function setStageImage(ev: (typeof timelineEvents)[number]) {
-    // 淡出 → 换图 → 淡入
+    // 淡出 → 换图 → 淡入；有 dark 版本时按主题选图
     stage.classList.remove('visible')
     setTimeout(() => {
-      stage.src = ev.image?.src ?? logoFallback()
-      stage.alt = ev.image?.alt ?? ev.title
+      if (ev.image) {
+        stage.src = ev.image.dark && isDark() ? ev.image.dark : ev.image.src
+        stage.alt = ev.image.alt
+      } else {
+        stage.src = logoFallback()
+        stage.alt = ev.title
+      }
       stage.classList.add('visible')
     }, 200)
   }
 
-  // 主题切换：当前事件无图时刷新 logo（黑/白跟随主题）
+  // 主题切换：当前事件无图时刷新 logo；有 dark 版本图时切换黑白图
   const themeObserver = new MutationObserver(() => {
-    if (!timelineEvents[index].image) {
+    const ev = timelineEvents[index]
+    if (ev.image?.dark) {
+      stage.classList.remove('visible')
+      setTimeout(() => {
+        stage.src = isDark() ? ev.image!.dark! : ev.image!.src!
+        stage.classList.add('visible')
+      }, 150)
+    } else if (!ev.image) {
       stage.classList.remove('visible')
       setTimeout(() => {
         stage.src = logoFallback()
@@ -201,15 +213,16 @@ export function initTimelinePlayer() {
     const id = (e as CustomEvent).detail?.id
     if (id === 'Timeline') {
       inView = true
+      // 尊重减少动画偏好：不自动播放（用户手动点播放）
+      const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches
       if (!initialized) {
         initialized = true
-        // 首次进入：从头开始自动轮播
         goto(0)
-        setPlaying(true)
+        if (!reduce) setPlaying(true)
       } else if (saved) {
-        // 再次进入：从保存进度继续
+        // 再次进入：从保存进度继续（reduced-motion 下保持暂停）
         lastTs = 0
-        setPlaying(true)
+        if (!reduce) setPlaying(true)
       }
     } else {
       inView = false

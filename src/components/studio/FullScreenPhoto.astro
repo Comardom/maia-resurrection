@@ -6,14 +6,84 @@ import { site } from "@/data/site";
     <img class="photo photo-light" src={site.hero.light.src} alt="" loading="eager" />
     <img class="photo photo-dark"  src={site.hero.dark.src}  alt="" loading="eager" />
     <div class="content">
-        <h1>{site.name}</h1>
+        <h1 class="title-anim" aria-label={site.name}>
+            <span class="title-base">{site.name}</span>
+            <span class="title-scan" aria-hidden="true"></span>
+            <span class="scan-bar" aria-hidden="true"></span>
+        </h1>
         <span id="placeholder-of-prologue" />
         <div class="poem">
-            <p class="text text-light">{site.hero.light.text}</p>
-            <p class="text text-dark">{site.hero.dark.text}</p>
+            <!-- 桌面文案 -->
+            <p class="text text-light desktop-text">{site.hero.light.text}</p>
+            <p class="text text-dark desktop-text">{site.hero.dark.text}</p>
+            <!-- 移动端文案 -->
+            <p class="text text-light mobile-text">{site.hero.mobile.light}</p>
+            <p class="text text-dark mobile-text">{site.hero.mobile.dark}</p>
         </div>
     </div>
 </section>
+
+<script>
+    import { gsap } from 'gsap'
+
+    // 四种字体状态 A B C D（A 与 D 循环）
+    // 思路：固定尺寸容器，扫描变量 --scan 从 0→100%，
+    //   上层(新字)右侧裁剪 = 已扫过部分显现；下层(旧字)左侧裁剪 = 已扫过部分隐藏
+    //   同一个变量驱动两侧，辉光带路径固定
+    const titleStates = [
+        { text: '河南大学网站工作室', font: "'PMingLiU-TW', Georgia, 'Times New Roman', serif" },
+        { text: '河南大学网站工作室', font: "'Unifont', cursive" },
+        { text: '河南大学网站工作室', font: "'PangMenZhengDao', cursive" },
+        { text: '河南大學網站工作室', font: "'cwTeXMing', 'PMingLiU-TW', serif" },
+    ]
+
+    const titleEl = document.querySelector<HTMLElement>('.title-anim')
+    const baseEl = document.querySelector<HTMLElement>('.title-base')
+    const scanEl = document.querySelector<HTMLElement>('.title-scan')
+    const barEl = document.querySelector<HTMLElement>('.scan-bar')
+    if (titleEl && baseEl && scanEl && barEl) {
+        const title: HTMLElement = titleEl
+        const base: HTMLElement = baseEl
+        const scan: HTMLElement = scanEl
+        const bar: HTMLElement = barEl
+        let current = 0
+        base.textContent = titleStates[0].text
+        base.style.fontFamily = titleStates[0].font
+
+        function doScan() {
+            const next = titleStates[(current + 1) % titleStates.length]
+            // 新字进上层（旧字留在下层）
+            scan.textContent = next.text
+            scan.style.fontFamily = next.font
+            // 同一变量驱动：上层左侧显现新字，下层左侧隐藏旧字，辉光带同步
+            gsap.fromTo(title, { '--scan': '0%' }, {
+                '--scan': '100%',
+                duration: 0.9,
+                ease: 'power2.inOut',
+                onComplete: () => {
+                    // 扫描完成：下层接管新字，上层复位
+                    base.textContent = next.text
+                    base.style.fontFamily = next.font
+                    scan.textContent = ''
+                    gsap.set(title, { '--scan': '0%' })
+                    current = (current + 1) % titleStates.length
+                },
+            })
+            // 辉光带：固定路径从左扫到右
+            gsap.fromTo(bar, { left: 0, opacity: 1 }, {
+                left: '100%',
+                opacity: 0,
+                duration: 0.9,
+                ease: 'power2.inOut',
+            })
+        }
+
+        // 尊重减少动画偏好：不循环，固定显示首态
+        if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+            setInterval(doScan, 4000)
+        }
+    }
+</script>
 
 <style>
     .fullscreen-photo {
@@ -52,10 +122,56 @@ import { site } from "@/data/site";
         justify-content: center;
         gap: 1rem;
     }
-    .content h1 {
-        font-size: 2.125rem;
-        font-family: 'PMingLiU-TW', Georgia, 'Times New Roman', serif;
+    /* 固定尺寸容器：inline/block 固定，文字居中，辉光带路径固定 */
+    .title-anim {
+        --scan: 0%;
+        position: relative;
+        inline-size: 13em;
+        block-size: 1.6em;
+        overflow: hidden;
         margin: 0;
+        font-size: 2.3rem;
+        white-space: nowrap;
+    }
+    /* 两层都绝对定位铺满容器，文字居中；颜色跟随主题（浅色深字、深色白字） */
+    .title-base,
+    .title-scan {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        white-space: nowrap;
+        color: #222;
+    }
+    :global(.dark) .title-base,
+    :global(.dark) .title-scan {
+        color: #fff;
+    }
+    /* 下层（旧字）：左侧被扫过部分隐藏（clip 左侧 var(--scan)） */
+    .title-base {
+        clip-path: inset(0 0 0 var(--scan, 0%));
+    }
+    /* 上层（新字）：左侧已扫过部分显现（clip 右侧 100%-var(--scan)） */
+    .title-scan {
+        clip-path: inset(0 calc(100% - var(--scan, 0%)) 0 0);
+    }
+    /* 辉光带：垂直亮线（主题色：浅色粉、深色青），固定路径从左到右扫过容器 */
+    .scan-bar {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        width: 0.4em;
+        background: linear-gradient(to right, transparent, rgb(236 72 153 / 0.9), transparent);
+        box-shadow: 0 0 1.5em rgb(236 72 153 / 0.8);
+        border-radius: 0.2em;
+        opacity: 0;
+        pointer-events: none;
+    }
+    :global(.dark) .scan-bar {
+        background: linear-gradient(to right, transparent, rgb(64 224 208 / 0.9), transparent);
+        box-shadow: 0 0 1.5em rgb(64 224 208 / 0.8);
     }
     .content p {
         font-size: 1.25rem;
@@ -65,15 +181,27 @@ import { site } from "@/data/site";
         padding-inline: 2rem;
         transition: opacity 0.3s;
     }
-    /* 两段文案用 grid 重叠在同一格：占位一致，深浅色间隙完全相同 */
+    /* 文案：桌面与移动端各一对，深浅色重叠占位一致 */
     .poem {
         display: grid;
     }
-    .poem p {
+    .poem .desktop-text,
+    .poem .mobile-text {
         grid-area: 1 / 1;
     }
+    /* 桌面：显示桌面文案，隐藏移动文案 */
+    .mobile-text { display: none; }
     .text-light { opacity: 1; }
     .text-dark  { opacity: 0; }
     :global(.dark) .text-light { opacity: 0; }
     :global(.dark) .text-dark  { opacity: 1; }
+    /* 移动端：显示移动文案，隐藏桌面文案 */
+    @media (max-width: 48rem) {
+        .desktop-text { display: none; }
+        .mobile-text  { display: block; }
+        /* 特异性需高于 .content p (0,1,1) */
+        .poem .mobile-text {
+            font-size: 1.125rem;
+        }
+    }
 </style>

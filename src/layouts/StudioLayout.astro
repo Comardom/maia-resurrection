@@ -68,7 +68,8 @@ import '/src/css/fonts.css'
             block-size: 100dvb;
             inline-size: 100dvi;
             overflow: hidden;
-            touch-action: pan-y;
+            /* 允许双指缩放，同时保留垂直平移（翻页手势） */
+            touch-action: pan-y pinch-zoom;
             scrollbar-width: none;
         }
         body::-webkit-scrollbar {

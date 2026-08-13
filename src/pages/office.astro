@@ -1,0 +1,31 @@
+---
+import { tmp } from "@/data/tmp";
+import StudioLayout from "@/layouts/StudioLayout.astro";
+import Header from "@/components/studio/Header.astro";
+import '/src/css/nonGlobal/studioColor.css'
+import '/src/css/nonGlobal/studio.css'
+---
+<StudioLayout
+        title={tmp.title}
+        description={tmp.description}
+>
+    <Header />
+    <div class="tmp">
+        <span>监修中</span>
+    </div>
+</StudioLayout>
+
+<style>
+    .tmp{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-block-size: 100dvb;
+        padding-top: 7svb;
+        box-sizing: border-box;
+    }
+    .tmp span{
+        font-family: Huiwen-HKHei, cursive;
+        font-size: 7.5rem;
+    }
+</style>

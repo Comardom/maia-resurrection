@@ -1,5 +1,12 @@
 ---
 import { timelineEvents } from "@/data/timeline";
+
+// SSR 预渲染首条内容（SEO）：无图事件 fallback logo
+const first = timelineEvents[0];
+const firstLogo = '/wswd-black.svg';
+const firstTitle = `${first.year} · ${first.title}`;
+const firstImage = first.image?.src ?? firstLogo;
+const firstAlt = first.image?.alt ?? `${first.year} ${first.title}`;
 ---
 
 <section class="timeline-player" aria-label="部门大事">
@@ -11,9 +18,9 @@ import { timelineEvents } from "@/data/timeline";
     <div id="stage-progress" class="stage-progress" aria-hidden="true"></div>
     <div class="player-zone player-left">
         <div class="player-stage">
-            <h3 id="stage-title" class="stage-title"></h3>
-            <img id="stage-image" class="stage-image" src="/wswd-black.svg" alt="" />
-            <p id="stage-desc" class="stage-desc"></p>
+            <h3 id="stage-title" class="stage-title" aria-live="polite">{firstTitle}</h3>
+            <img id="stage-image" class="stage-image" src={firstImage} alt={firstAlt} />
+            <p id="stage-desc" class="stage-desc">{first.description}</p>
         </div>
         <div class="player-controls">
             <button id="ctrl-prev" class="ctrl-btn" aria-label="上一首">
@@ -37,14 +44,14 @@ import { timelineEvents } from "@/data/timeline";
             {
                 timelineEvents.map((ev, i) => (
                     <li data-index={i}>
-                        <div class="event-item">
+                        <button type="button" class="event-item">
                             <div class="event-title-row">
                                 <span class="event-year">{ev.year}</span>
                                 <span class="event-title">{ev.title}</span>
                             </div>
                             <p class="event-desc">{ev.description}</p>
                             <span class="event-progress" aria-hidden="true"></span>
-                        </div>
+                        </button>
                     </li>
                 ))
             }
@@ -253,7 +260,7 @@ import { timelineEvents } from "@/data/timeline";
         flex-basis: auto;
     }
     /* 磁贴卡片本体：玻璃拟态（参考 tasKapsule CalendarBody：color-mix 渐变 + 内阴影）
-       浅色模式：粉色 */
+       浅色模式：粉色；button 需重置默认样式 */
     .event-item {
         position: relative;
         display: flex;
@@ -265,6 +272,12 @@ import { timelineEvents } from "@/data/timeline";
         min-block-size: 0;
         box-sizing: border-box;
         overflow: hidden;
+        border: none;
+        margin: 0;
+        font: inherit;
+        color: inherit;
+        text-align: left;
+        cursor: pointer;
         background: linear-gradient(to bottom,
             color-mix(in srgb, rgb(244 114 182) 25%, transparent),
             color-mix(in srgb, rgb(236 72 153) 25%, transparent),
@@ -272,8 +285,16 @@ import { timelineEvents } from "@/data/timeline";
         box-shadow:
             inset 0 0.1875rem 0.4rem 0.15rem rgba(0, 0, 0, 0.3),
             inset 0 -0.0625rem 0.15rem 0.05rem rgba(255, 255, 255, 0.05);
-        font-family: 'Huiwei-HKHei', -apple-system, BlinkMacSystemFont, "Segoe UI",
+        font-family: 'Huiwen-HKHei', -apple-system, BlinkMacSystemFont, "Segoe UI",
         "PingFang SC", "Microsoft YaHei", "Noto Sans CJK SC", sans-serif;
+    }
+    /* 键盘焦点可见性 */
+    .event-item:focus-visible {
+        outline: 0.125rem solid rgb(113 152 240);
+        outline-offset: -0.125rem;
+    }
+    :global(.dark) .event-item:focus-visible {
+        outline-color: rgb(244 114 182);
     }
     /* 暗色模式：蓝色 */
     :global(.dark) .event-item {

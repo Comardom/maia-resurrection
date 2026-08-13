@@ -1,5 +1,6 @@
 ---
 import { departments } from "@/data/departments";
+import { site } from "@/data/site";
 
 // 彩虹七段，横向铺满整个视口
 // 每条可独立调节：width 为 flex-grow 权重（等分时全为 1），height 为占视口高度的百分比
@@ -27,22 +28,39 @@ const bands: RainbowBand[] = [
             i === 0 ? (
                 <div
                     class="rainbow-band band-red"
-                    style={`--band-width: ${band.width}; --band-height: ${band.height}%; --band-color-light: ${band.color.light}; --band-color-dark: ${band.color.dark};`}
+                    style={
+                        `--band-width: ${band.width}; 
+                        --band-height: ${band.height}%; 
+                        --band-color-light: ${band.color.light}; 
+                        --band-color-dark: ${band.color.dark};`
+                    }
                 >
-                    <span class="game-start">Game Start</span>
+                    <span class="game-start">Let's Rock!</span>
+                    <span class="band-name band-red-name">
+                        {[...site.name].map((ch, ci) => <span key={ci}>{ch}</span>)}
+                    </span>
                 </div>
             ) : (
                 departments[i - 1] && (
                     <div
                         class="rainbow-band"
-                        style={`--band-width: ${band.width}; --band-height: ${band.height}%; --band-color-light: ${band.color.light}; --band-color-dark: ${band.color.dark}; --switch-delay: ${((i - 1) * 0.2).toFixed(1)}s;`}
+                        style={
+                            `--band-width: ${band.width}; 
+                            --band-height: ${band.height}%; 
+                            --band-color-light: ${band.color.light}; 
+                            --band-color-dark: ${band.color.dark}; 
+                            --switch-delay: ${((i - 1) * 0.2).toFixed(1)}s;`
+                        }
                     >
                         <button class="band-main" type="button">
                             <h2 class="band-name">{departments[i - 1].title}</h2>
                             <span class="band-short">{departments[i - 1].short}</span>
                         </button>
-                        <a class="band-goto" href={departments[i - 1].link}
-                           aria-label={`进入${departments[i - 1].title}页面`}>
+                        <a class="band-goto"
+                           href={departments[i - 1].link}
+                           target="_blank"
+                           aria-label={`进入${departments[i - 1].title}页面`}
+                        >
                             <img class="goto-icon go-black" src="/go-black.svg" alt="" />
                             <img class="goto-icon go-white" src="/go-white.svg" alt="" />
                             <img class="goto-icon goto-black" src="/goto-black.svg" alt="" />
@@ -56,11 +74,11 @@ const bands: RainbowBand[] = [
 </section>
 
 <div id="game-overlay" class="game-overlay" role="dialog" aria-modal="true" aria-labelledby="game-title">
-    <button id="game-exit" class="game-exit" aria-label="退出游戏">
+    <button id="game-exit" class="game-exit" aria-label="退出">
         <img class="exit-icon exit-black" src="/exit-black.svg" alt="" />
         <img class="exit-icon exit-white" src="/exit-white.svg" alt="" />
     </button>
-    <p id="game-title" class="game-title">游戏制作中…</p>
+    <p id="game-title" class="game-title">此页面正在制作中…</p>
 </div>
 
 <script>
@@ -135,8 +153,15 @@ const bands: RainbowBand[] = [
     .band-main:focus {
         background-color: transparent !important;
     }
-    /* 跳转区（桌面隐藏，移动端显示在右侧） */
+    /* 跳转区：桌面端铺满整块作为链接层，点击色块任意处跳转部门页面（箭头图标隐藏）；
+       移动端 @media 中覆盖回右侧小箭头样式 */
     .band-goto {
+        display: block;
+        position: absolute;
+        inset: 0;
+        z-index: 2;
+    }
+    .band-goto .goto-icon {
         display: none;
     }
     :global(.dark) .rainbow-band {
@@ -174,6 +199,10 @@ const bands: RainbowBand[] = [
         position: relative;
         overflow: hidden;
     }
+    /* 红色块上的站名：桌面隐藏（只露 Let's Rock!），移动端显示 */
+    .band-red .band-red-name {
+        display: none;
+    }
     /* 用伪元素铺满整块作为遮罩，inset:0 覆盖整个元素（含边框） */
     .band-red::after {
         content: "";
@@ -205,7 +234,7 @@ const bands: RainbowBand[] = [
     .band-name {
         margin: 0;
         color: var(--theme-color);
-        font-family: 'Huiwei-HKHei', -apple-system, BlinkMacSystemFont, "Segoe UI",
+        font-family: 'Huiwen-HKHei', -apple-system, BlinkMacSystemFont, "Segoe UI",
         "PingFang SC", "Microsoft YaHei", "Noto Sans CJK SC", sans-serif;
         font-size: 1.475rem;
         font-weight: 600;
@@ -268,6 +297,15 @@ const bands: RainbowBand[] = [
         .band-red {
             block-size: 15.5%;
         }
+        /* 红色块上的站名：移动端显示，参数继承 .band-name 全部样式；
+           字符级横向铺满整块，左右对齐，留一点边距 */
+        .band-red .band-red-name {
+            display: flex;
+            flex: 1;
+            align-items: center;
+            justify-content: space-between;
+            padding-inline: 1rem;
+        }
         /* 有展开时：其他非红色收缩让位 */
         .rainbow:has(.expanded) .rainbow-band:not(.band-red):not(.expanded) {
             block-size: 6.5%;
@@ -314,13 +352,20 @@ const bands: RainbowBand[] = [
         .rainbow-band.expanded .band-short {
             display: block;
         }
-        /* 跳转区：右侧固定宽，慢速切换 go/goto 图标 */
+        /* 跳转区：右侧固定宽，慢速切换 go/goto 图标（覆盖桌面端全块链接层） */
         .band-goto {
             display: grid;
             place-items: center;
             flex: 0 0 3rem;
             border-inline-start: 1px solid rgba(128, 128, 128, 0.25);
             text-decoration: none;
+            position: static;
+            inset: auto;
+            z-index: auto;
+        }
+        /* 覆盖桌面端 .band-goto .goto-icon 的 display:none，恢复箭头可见 */
+        .band-goto .goto-icon {
+            display: block;
         }
         .goto-icon {
             grid-area: 1 / 1;
@@ -360,7 +405,7 @@ const bands: RainbowBand[] = [
     }
     .game-title {
         margin: 0;
-        color: #fff;
+        color: #000;
         font-family: 'PangMenZhengDao', cursive;
         font-size: 2rem;
         text-shadow: 0 0.125rem 0.5rem rgba(0, 0, 0, 0.5);
@@ -370,7 +415,7 @@ const bands: RainbowBand[] = [
     }
     /* 返回按钮：外观同主题切换按钮 */
     .game-exit {
-        position: absolute;
+        position: relative;
         top: 1rem;
         right: 1rem;
         z-index: 5; /* 盖在游戏 canvas 之上 */
@@ -386,7 +431,6 @@ const bands: RainbowBand[] = [
         display: flex;
         align-items: center;
         justify-content: center;
-        position: relative;
         -webkit-tap-highlight-color: transparent;
     }
     .game-exit .exit-icon {

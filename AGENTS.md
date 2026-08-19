@@ -48,7 +48,7 @@ astro dev                    # 前台启动（Ctrl+C 停止）
 - 参考文档：`designing/` 下各方案文档、`ACCESSIBILITY.md`
 - 主题系统：cookie `theme=dark|light` + `<html class="dark">`（`StudioLayout.astro` 读 cookie）
 - CSS：纯 CSS，不用 Tailwind；颜色抽变量放 `src/css/nonGlobal/studioColor.css`
-- 数据层：`src/data/site.ts`（站名/描述/域名/logo/链接，改域名只改 `site.url`）
+- 数据层：`src/data/studio.ts`（站名/描述/域名/logo/链接，改域名只改 `site.url`）
 - 框架：Astro 7 + Vue 3 islands（当前主要用原生 JS，无框架开销）
 - 构建：`pnpm run build` → `dist/client` + `dist/server`
 - 启动：`node ./dist/server/entry.mjs`

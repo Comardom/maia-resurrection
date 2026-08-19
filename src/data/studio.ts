@@ -1,4 +1,4 @@
-export const site = {
+export const studio = {
     name: '河南大学网站工作室',
     nameTw: '河南大學網站工作室',
     nameEn: 'HENU Web Studio',
@@ -13,6 +13,11 @@ export const site = {
     links: {
         exam: 'https://exam.hdwzgzs.cn/',
         erp: 'https://erp.hdwzgzs.cn/',
+        qq: {
+            groupNumber: '1064452781',
+            joinUrl: 'https://qm.qq.com/q/8Mrp3PlqlU',
+            qr: '/qq-group.png',
+        },
     },
     footerLinks: [
         { label: '河南大学官网', href: 'https://www.henu.edu.cn' },

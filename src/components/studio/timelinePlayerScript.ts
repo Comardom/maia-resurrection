@@ -22,6 +22,24 @@ function isDark() {
   return document.documentElement.classList.contains('dark')
 }
 
+const imageCache = new Set<string>()
+
+function preloadImage(src: string) {
+  if (!src || imageCache.has(src)) return
+  imageCache.add(src)
+  const img = new Image()
+  img.src = src
+}
+
+function preloadTimelineImages() {
+  timelineEvents.forEach((ev) => {
+    if (ev.image) {
+      preloadImage(ev.image.src)
+      if (ev.image.dark) preloadImage(ev.image.dark)
+    }
+  })
+}
+
 export function initTimelinePlayer() {
   if (typeof window === 'undefined') return
 
@@ -212,6 +230,7 @@ export function initTimelinePlayer() {
   window.addEventListener('section:change', (e) => {
     const id = (e as CustomEvent).detail?.id
     if (id === 'Timeline') {
+      preloadTimelineImages()
       inView = true
       // 尊重减少动画偏好：不自动播放（用户手动点播放）
       const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches

@@ -21,14 +21,14 @@
 
 | 议题 | 决策 |
 |------|------|
-| 数据抽取边界 | **全站级 data**：建 `src/data/site.ts`，统一放站名、描述、logo、链接、磁贴、SEO 元数据 |
+| 数据抽取边界 | **全站级 data**：建 `../src/data/studio.ts`，统一放站名、描述、logo、链接、磁贴、SEO 元数据 |
 | 双 logo 重复读屏 | 第二个 `<img>`（dark）加 `aria-hidden="true"` |
 | 颜色提取方式 | 单独建一个 **`studioColor.css`**，Header 颜色全部引用其 CSS 变量 |
 | SEO 处理程度 | **layout 补全 + 数据化**（补 og:site_name / og:locale / JSON-LD logo 等，并把 title/desc 收进 data） |
 
 ---
 
-## 1. 数据层：新建 `src/data/site.ts`
+## 1. 数据层：新建 `../src/data/studio.ts`
 
 ### 现状问题
 
@@ -40,8 +40,8 @@
 ### 目标结构
 
 ```ts
-// src/data/site.ts
-export const site = {
+// src/data/studio.ts
+export const studio = {
   name: '河南大学网站工作室',
   nameEn: 'HENU Web Studio',
   description: '河南大学网站工作室成立于2001年，隶属河南大学党委宣传部，'
@@ -109,7 +109,7 @@ export const site = {
 | 3 | 缺 `og:locale` | 补 `zh_CN` | ✅ |
 | 4 | JSON-LD Organization 缺 logo | 补 `"logo"`（`site.url + site.logo.og`） | ✅ |
 | 5 | JSON-LD 缺 `sameAs` | 补 B站 `https://space.bilibili.com/378145694` | ✅ |
-| 6 | title/description 等元数据硬编码 | 全部从 `site.ts` 读取 | ✅ |
+| 6 | title/description 等元数据硬编码 | 全部从 `studio.ts` 读取 | ✅ |
 | 7 | `title` 格式待确认 | 保留 `河南大学网站工作室 | HENU Web Studio` | ✅ |
 
 **额外落地**：新建 `public/robots.txt`、`public/sitemap.xml`；`astro.config.mjs` 补 `site: 'https://hdwzgzs.cn'`。`sitemap.xml` 中 IDE 对 XSD 命名空间提示为无害警告，不影响 SEO，保持现状。
@@ -173,7 +173,7 @@ export const site = {
 
 | 文件 | 操作 |
 |------|------|
-| `src/data/site.ts` | **新建** — 全站数据（站名/描述/域名/logo/磁贴链接/sameAs） |
+| `../src/data/studio.ts` | **新建** — 全站数据（站名/描述/域名/logo/磁贴链接/sameAs） |
 | `src/css/nonGlobal/studioColor.css` | **新建** — Header 颜色变量（亮/暗两套） |
 | `src/layouts/StudioLayout.astro` | **修改** — SEO 补全（og:site_name/locale、JSON-LD logo+sameAs）、数据化 |
 | `src/pages/studio.astro` | **修改** — title/desc 走 data、修正 studioColor.css 导入路径 |

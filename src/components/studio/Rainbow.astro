@@ -1,6 +1,6 @@
 ---
 import { departments } from "@/data/departments";
-import { site } from "@/data/site";
+import { studio } from "@/data/studio.ts";
 
 // 彩虹七段，横向铺满整个视口
 // 每条可独立调节：width 为 flex-grow 权重（等分时全为 1），height 为占视口高度的百分比
@@ -37,7 +37,7 @@ const bands: RainbowBand[] = [
                 >
                     <span class="game-start">Let's Rock!</span>
                     <span class="band-name band-red-name">
-                        {[...site.name].map((ch, ci) => <span key={ci}>{ch}</span>)}
+                        {[...studio.name].map((ch, ci) => <span>{ch}</span>)}
                     </span>
                 </div>
             ) : (

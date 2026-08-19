@@ -1,9 +1,9 @@
 ---
-import { site } from "@/data/site";
+import { studio } from "@/data/studio.ts";
 const themeCookie = Astro.cookies.get('theme');
 const isDark = themeCookie?.value === 'dark';
-const title = Astro.props.title ?? site.title;
-const description = Astro.props.description ?? site.description;
+const title = Astro.props.title ?? studio.title;
+const description = Astro.props.description ?? studio.description;
 
 import '/src/css/reset.css'
 import '/src/css/theme.css'
@@ -21,10 +21,10 @@ import '/src/css/fonts.css'
     <!-- favicon 跟随系统深浅色 -->
     <link rel="icon" type="image/svg+xml"
           media="(prefers-color-scheme: dark)"
-          href={site.logo.dark} id="favicon" />
+          href={studio.logo.dark} id="favicon" />
     <link rel="icon" type="image/svg+xml"
           media="(prefers-color-scheme: light)"
-          href={site.logo.light} />
+          href={studio.logo.light} />
     <script is:inline>
         // favicon 跟随系统深浅色实时切换
         // 路径与 site.logo.dark / site.logo.light 保持一致
@@ -44,50 +44,26 @@ import '/src/css/fonts.css'
     <!-- OG -->
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
-    <meta property="og:type" content="website" /><!--如果是文章用 article，视频用 video-->
-    <meta property="og:site_name" content={site.name} />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={studio.name} />
     <meta property="og:locale" content="zh_CN" />
     <meta property="og:url" content={Astro.url} />
-    <meta property="og:image" content={site.url + site.logo.og} />
+    <meta property="og:image" content={studio.url + studio.logo.og} />
     <meta name="twitter:card" content="summary_large_image" />
 
     <!-- JSON-LD -->
     <script is:inline type="application/ld+json" set:html={JSON.stringify({
         "@context": "https://schema.org",
         "@type": "Organization",
-        "name": site.name,
-        "url": site.url,
-        "logo": site.url + site.logo.og,
-        "sameAs": site.social,
+        "name": studio.name,
+        "url": studio.url,
+        "logo": studio.url + studio.logo.og,
+        "sameAs": studio.social,
     })} />
 
     <slot name="head" />
-    <style>
-        /* ── 布局专属样式 ────────────── */
-        html, body {
-            block-size: 100dvb;
-            inline-size: 100dvi;
-            overflow: hidden;
-            /* 允许双指缩放，同时保留垂直平移（翻页手势） */
-            touch-action: pan-y pinch-zoom;
-            scrollbar-width: none;
-        }
-        body::-webkit-scrollbar {
-            display: none;
-        }
-
-        /* 全屏翻页：所有 section 堆叠在视口内 */
-        .snap-section {
-            position: absolute;
-            inset: 0;
-        }
-    </style>
 </head>
 <body>
 <slot />
-<script>
-import { initPageAnimator } from '@/utils/pageAnimator'
-initPageAnimator()
-</script>
 </body>
 </html>

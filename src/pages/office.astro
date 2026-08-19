@@ -1,19 +1,23 @@
 ---
 import { tmp } from "@/data/tmp";
-import StudioLayout from "@/layouts/StudioLayout.astro";
-import Header from "@/components/studio/Header.astro";
+import ScrollablePageLayout from "@/layouts/ScrollablePageLayout.astro";
+import OfficeMasthead from "@/components/office/OfficeMasthead.astro";
+import OfficeSectionNav from "@/components/office/OfficeSectionNav.astro";
 import '/src/css/nonGlobal/studioColor.css'
-import '/src/css/nonGlobal/studio.css'
+import '/src/css/nonGlobal/officeHeader.css'
 ---
-<StudioLayout
+<ScrollablePageLayout
         title={tmp.title}
         description={tmp.description}
 >
-    <Header />
-    <div class="tmp">
-        <span>监修中</span>
-    </div>
-</StudioLayout>
+    <OfficeMasthead />
+    <OfficeSectionNav />
+    <main class="office-page">
+        <section id="home" class="tmp">
+            <span>监修中</span>
+        </section>
+    </main>
+</ScrollablePageLayout>
 
 <style>
     .tmp{
@@ -21,7 +25,6 @@ import '/src/css/nonGlobal/studio.css'
         align-items: center;
         justify-content: center;
         min-block-size: 100dvb;
-        padding-top: 7svb;
         box-sizing: border-box;
     }
     .tmp span{

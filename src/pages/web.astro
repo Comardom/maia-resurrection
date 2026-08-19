@@ -1,11 +1,11 @@
 ---
 import { tmp } from "@/data/tmp";
-import StudioLayout from "@/layouts/StudioLayout.astro";
+import FullScreenPagingLayout from "@/layouts/FullScreenPagingLayout.astro";
 import Header from "@/components/studio/Header.astro";
 import '/src/css/nonGlobal/studioColor.css'
 import '/src/css/nonGlobal/studio.css'
 ---
-<StudioLayout
+<FullScreenPagingLayout
         title={tmp.title}
         description={tmp.description}
 >
@@ -13,7 +13,7 @@ import '/src/css/nonGlobal/studio.css'
     <div class="tmp">
         <span>监修中</span>
     </div>
-</StudioLayout>
+</FullScreenPagingLayout>
 
 <style>
     .tmp{

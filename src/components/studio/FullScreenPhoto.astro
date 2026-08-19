@@ -1,24 +1,24 @@
 ---
-import { site } from "@/data/site";
+import { studio } from "@/data/studio.ts";
 ---
 
 <section class="fullscreen-photo">
-    <img class="photo photo-light" src={site.hero.light.src} alt="" loading="eager" />
-    <img class="photo photo-dark"  src={site.hero.dark.src}  alt="" loading="eager" />
+    <img class="photo photo-light" src={studio.hero.light.src} alt="" loading="eager" />
+    <img class="photo photo-dark" src={studio.hero.dark.src} alt="" loading="eager" />
     <div class="content">
-        <h1 class="title-anim" aria-label={site.name}>
-            <span class="title-base">{site.name}</span>
+        <h1 class="title-anim" aria-label={studio.name}>
+            <span class="title-base">{studio.name}</span>
             <span class="title-scan" aria-hidden="true"></span>
             <span class="scan-bar" aria-hidden="true"></span>
         </h1>
         <span id="placeholder-of-prologue" />
         <div class="poem">
             <!-- 桌面文案 -->
-            <p class="text text-light desktop-text">{site.hero.light.text}</p>
-            <p class="text text-dark desktop-text">{site.hero.dark.text}</p>
+            <p class="text text-light desktop-text">{studio.hero.light.text}</p>
+            <p class="text text-dark desktop-text">{studio.hero.dark.text}</p>
             <!-- 移动端文案 -->
-            <p class="text text-light mobile-text">{site.hero.mobile.light}</p>
-            <p class="text text-dark mobile-text">{site.hero.mobile.dark}</p>
+            <p class="text text-light mobile-text">{studio.hero.mobile.light}</p>
+            <p class="text text-dark mobile-text">{studio.hero.mobile.dark}</p>
         </div>
     </div>
 </section>

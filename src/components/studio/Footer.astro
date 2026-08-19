@@ -1,5 +1,5 @@
 ---
-import { site } from "@/data/site";
+import { studio } from "@/data/studio.ts";
 const currentYear = new Date().getFullYear();
 ---
 
@@ -7,14 +7,14 @@ const currentYear = new Date().getFullYear();
     <div class="footer-inner">
         <nav class="footer-links" aria-label="相关链接">
             {
-                site.footerLinks.map((link) => (
+                studio.footerLinks.map((link) => (
                     <a href={link.href} target="_blank" rel="noopener noreferrer">{link.label}</a>
                 ))
             }
         </nav>
         <span class="placeholder-of-epilogue" />
         <p class="footer-copy">
-            © 2001-{currentYear} {site.name} | {site.nameEn}. All rights reserved.
+            © 2001-{currentYear} {studio.name} | {studio.nameEn}. All rights reserved.
         </p>
         <p class="footer-made">
             由 <a href="https://github.com/Comardom" target="_blank" rel="noopener noreferrer" title="在新窗口打开">Comardom</a> 制作并维护

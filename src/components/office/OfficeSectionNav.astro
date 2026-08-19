@@ -1,0 +1,67 @@
+---
+import { officePage } from '@/data/office.ts';
+---
+
+<nav class="office-section-nav" aria-label="办公室页面导航">
+    <div class="office-section-nav__inner">
+        <div class="office-section-nav__links">
+            {
+                officePage.navigation.map((item) => (
+                    <>
+                        {
+                            officePage.navigation.indexOf(item) > 0 && (
+                                <span
+                                    class="office-section-nav__separator"
+                                    data-office-section-separator
+                                    data-left-id={officePage.navigation[officePage.navigation.indexOf(item) - 1].id}
+                                    data-right-id={item.id}
+                                    aria-hidden="true"
+                                >
+                                    <span class="dot dot--outer"></span>
+                                    <span class="dot dot--middle"></span>
+                                    <span class="dot dot--inner"></span>
+                                </span>
+                            )
+                        }
+                        <a
+                            href={`#${item.id}`}
+                            class:list={[
+                                'office-section-nav__link',
+                                { 'is-active': item.id === 'home' },
+                            ]}
+                            data-office-section-link={item.id}
+                            aria-current={item.id === 'home' ? 'page' : undefined}
+                        >
+                            <span class="office-section-nav__label">{item.label}</span>
+                        </a>
+                    </>
+                ))
+            }
+        </div>
+
+        <div class="office-theme-controls" aria-label="主题模式">
+            <button type="button" class="office-theme-controls__option"
+                    data-theme-control="light" aria-pressed="false">
+                浅色模式
+            </button>
+            <span class="office-theme-controls__separator"
+                  data-office-theme-separator
+                  data-left-theme="light"
+                  data-right-theme="dark"
+                  aria-hidden="true">
+                <span class="dot dot--outer"></span>
+                <span class="dot dot--middle"></span>
+                <span class="dot dot--inner"></span>
+            </span>
+            <button type="button" class="office-theme-controls__option"
+                    data-theme-control="dark" aria-pressed="false">
+                深色模式
+            </button>
+        </div>
+    </div>
+</nav>
+
+<script>
+    import { initOfficeHeader } from './officeHeaderScript'
+    initOfficeHeader()
+</script>

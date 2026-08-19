@@ -1,5 +1,5 @@
 ---
-import { site } from "@/data/site";
+import { studio } from "@/data/studio.ts";
 ---
 
 <header>
@@ -12,10 +12,10 @@ import { site } from "@/data/site";
         </div>
         <div class="center-group">
             <a href="/" class="logo-wrapper">
-                <img src={site.logo.light} class="logo logo-light" alt={site.name} />
-                <img src={site.logo.dark} class="logo logo-dark" alt={site.name} aria-hidden="true" />
+                <img src={studio.logo.light} class="logo logo-light" alt={studio.name} />
+                <img src={studio.logo.dark} class="logo logo-dark" alt={studio.name} aria-hidden="true" />
             </a>
-            <span class="title-text">{site.name}</span>
+            <span class="title-text">{studio.name}</span>
         </div>
         <div class="right-group">
             <button id="app-menu-toggle" class="app-menu-toggle" aria-label="打开应用中心"
@@ -30,8 +30,15 @@ import { site } from "@/data/site";
         aria-labelledby="app-menu-title" aria-hidden="true" inert>
         <h2 id="app-menu-title" class="sr-only">应用中心</h2>
         <div class="app-menu-tiles">
-            <a href={site.links.exam} class="tile"><span>考试系统</span></a>
-            <a href={site.links.erp} class="tile"><span>管理系统</span></a>
+            <a href={studio.links.exam} class="tile"><span>考试系统</span></a>
+            <a href={studio.links.erp} class="tile"><span>管理系统</span></a>
+            <a href={studio.links.qq.joinUrl}
+               target="_blank"
+               rel="noopener noreferrer"
+               class="tile tile--qq">
+                <span class="tile--qq__label">QQ迎新群</span>
+                <span class="tile--qq__number">群号：{studio.links.qq.groupNumber}</span>
+            </a>
         </div>
         <button id="app-menu-close" class="app-menu-close" aria-label="关闭应用中心">
             <img src="/close-black.svg" class="icon icon-close-black" alt="" />
@@ -39,8 +46,28 @@ import { site } from "@/data/site";
         </button>
     </div>
     <div id="app-menu-backdrop" class="app-menu-backdrop"></div>
+
+    <div class="qq-popup" aria-hidden="true">
+        <div class="qq-popup__glass">
+            <div class="qq-popup__qr-area">
+                {
+                    Array.from({ length: 5 }).map((_, i) => (
+                        <div
+                            class="qq-popup__slice"
+                            style={`--band-top: ${i * 20}%; --band-bottom: ${100 - (i + 1) * 20}%; background-image: url(${studio.links.qq.qr});`}
+                        />
+                    ))
+                }
+            </div>
+        </div>
+    </div>
 </header>
 <style>
+    header {
+        position: relative;
+        z-index: 1000;
+    }
+
     .top-bar {
         position: fixed;
         top: 0; left: 0;
@@ -297,9 +324,9 @@ import { site } from "@/data/site";
     /* 磁贴区：占剩余宽度，内部滚动 */
     .app-menu-tiles {
         flex: 1;
-        overflow-y: auto;
+        overflow: visible;
         display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(6rem, 1fr));
+        grid-template-columns: repeat(auto-fill, minmax(8rem, 1fr));
         gap: 1rem;
         padding: 3rem;
         min-inline-size: 0;
@@ -317,6 +344,75 @@ import { site } from "@/data/site";
         transition: background-color 0.2s;
     }
     .tile:hover { background: var(--studio-tile-hover); }
+
+    .tile--qq {
+        position: relative;
+        background: linear-gradient(135deg, var(--studio-tile), var(--studio-tile-hover));
+        flex-direction: column;
+        gap: 0.25rem;
+    }
+
+    .tile--qq:hover {
+        background: linear-gradient(135deg, var(--studio-tile), var(--studio-tile-hover));
+    }
+
+    .tile--qq__label {
+        font-size: 1.1rem;
+    }
+
+    .tile--qq__number {
+        font-size: 0.9rem;
+        opacity: 0.85;
+    }
+
+    .qq-popup {
+        position: fixed;
+        inset: 0;
+        z-index: 1005;
+        display: grid;
+        place-items: center;
+        pointer-events: none;
+        visibility: hidden;
+        opacity: 0;
+    }
+
+    .qq-popup__glass {
+        position: relative;
+        display: grid;
+        place-items: center;
+        inline-size: min(26rem, 62svb);
+        block-size: min(26rem, 62svb);
+        box-sizing: border-box;
+        pointer-events: none;
+        background-color: color-mix(in srgb, var(--studio-panel-bg) 50%, transparent);
+        background-image: linear-gradient(rgba(255, 255, 255, 0.12), transparent);
+        -webkit-backdrop-filter: blur(0.625rem);
+        backdrop-filter: blur(0.625rem);
+        border: 0.0625rem solid var(--studio-panel-border);
+        box-shadow: 0 1rem 2rem rgba(0, 0, 0, 0.3);
+    }
+
+    .qq-popup__qr-area {
+        position: relative;
+        inline-size: 78.62%;
+        block-size: 78.62%;
+    }
+
+    .qq-popup__slice {
+        position: absolute;
+        inset: 0;
+        background-size: cover;
+        background-position: center;
+        clip-path: inset(var(--band-top) 0 var(--band-bottom) 0);
+        transform-origin: 50% 50%;
+        will-change: transform;
+    }
+
+    @media (hover: none) {
+        .qq-popup {
+            display: none !important;
+        }
+    }
 
     /* 屏幕阅读器专用隐藏标题 */
     .sr-only {
@@ -363,7 +459,7 @@ import { site } from "@/data/site";
         }
         .app-menu-tiles {
             padding: 1rem;
-            grid-template-columns: repeat(auto-fill, minmax(4.5rem, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(6rem, 1fr));
         }
     }
 
@@ -391,6 +487,8 @@ import { site } from "@/data/site";
 </style>
 <script>
     import { initThemeToggle, initAppMenu } from './headerScript'
+    import { initQqPopupGenie } from '@/utils/qqPopupGenie'
     initThemeToggle()
     initAppMenu()
+    initQqPopupGenie()
 </script>

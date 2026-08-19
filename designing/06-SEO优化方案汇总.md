@@ -1,7 +1,7 @@
 # SEO 优化方案汇总（06）
 
 > 汇总本项目（`maia-resurrection`）涉及到的**全部 SEO 优化措施**，按「配置 → 头部 meta → 数据结构 → 抓取控制 → 交互兼容 → 语义规范」分层整理。
-> 依据：`src/layouts/StudioLayout.astro`、`src/data/site.ts`、`public/robots.txt`、`public/sitemap.xml`、`astro.config.mjs`、`src/pages/index.astro`、`Header.astro`、`FullScreenPhoto.astro`，以及 `designing/03`、`designing/05` 等文档。
+> 依据：`src/layouts/StudioLayout.astro`、`../src/data/studio.ts`、`public/robots.txt`、`public/sitemap.xml`、`astro.config.mjs`、`src/pages/index.astro`、`Header.astro`、`FullScreenPhoto.astro`，以及 `designing/03`、`designing/05` 等文档。
 
 ## 一、总览
 
@@ -9,13 +9,13 @@
 |---|--------|------|------|
 | 1 | 正式域名 + `astro.config.mjs` 的 `site` | `astro.config.mjs:9` | ✅ 已落地 |
 | 2 | `<html lang="zh-CN">` | `StudioLayout.astro:14` | ✅ |
-| 3 | `<title>` / `<meta name="description">` | `StudioLayout.astro:18-19`（数据源 `site.ts`） | ✅ |
+| 3 | `<title>` / `<meta name="description">` | `StudioLayout.astro:18-19`（数据源 `studio.ts`） | ✅ |
 | 4 | `<link rel="canonical">`（服务端 URL，不含 hash） | `StudioLayout.astro:20` | ✅ |
 | 5 | favicon 跟随系统深浅色 | `StudioLayout.astro:22-42` | ✅ |
 | 6 | Open Graph 全套（含 site_name / locale / PNG image） | `StudioLayout.astro:44-52` | ✅ |
 | 7 | Twitter Card | `StudioLayout.astro:52` | ✅ |
 | 8 | JSON-LD Organization（logo + sameAs） | `StudioLayout.astro:55-62` | ✅ |
-| 9 | SEO 元数据全部数据化，单点维护 | `src/data/site.ts` | ✅ |
+| 9 | SEO 元数据全部数据化，单点维护 | `../src/data/studio.ts` | ✅ |
 | 10 | `robots.txt`（Allow all + Sitemap 指向） | `public/robots.txt` | ✅ |
 | 11 | `sitemap.xml`（干净路径，不含 hash） | `public/sitemap.xml` | ✅ |
 | 12 | 根路径 301 → `/studio` | `src/pages/index.astro` | ✅ |
@@ -34,13 +34,13 @@
 
 - 主域名：`https://hdwzgzs.cn`（新加坡服务器，**无海外 SEO 需求，未购买 `henuws.com`**）
 - `.cn` 辅助域名：计划配置 301 跳转到主域名（未落地）
-- 域名统一维护在 `src/data/site.ts` 的 `site.url`，**换域名只改这一处**
+- 域名统一维护在 `../src/data/studio.ts` 的 `site.url`，**换域名只改这一处**
 
 ### 2.2 `astro.config.mjs` 的 `site`
 
 ```js
 // astro.config.mjs:9
-site: 'https://hdwzgzs.cn',
+studio: 'https://hdwzgzs.cn',
 ```
 
 这是 canonical、sitemap、OG 等**绝对 URL 拼接的基准**，必须与正式域名一致。
@@ -68,8 +68,8 @@ site: 'https://hdwzgzs.cn',
 ### 3.2 favicon 跟随系统深浅色
 
 ```html
-<link rel="icon" type="image/svg+xml" media="(prefers-color-scheme: dark)" href={site.logo.dark} id="favicon" />
-<link rel="icon" type="image/svg+xml" media="(prefers-color-scheme: light)" href={site.logo.light} />
+<link rel="icon" type="image/svg+xml" media="(prefers-color-scheme: dark)" href={studio.logo.dark} id="favicon" />
+<link rel="icon" type="image/svg+xml" media="(prefers-color-scheme: light)" href={studio.logo.light} />
 ```
 
 - 双 `<link media=...>` 按系统偏好加载白/黑 logo
@@ -82,10 +82,10 @@ site: 'https://hdwzgzs.cn',
 <meta property="og:title" content={title} />
 <meta property="og:description" content={description} />
 <meta property="og:type" content="website" />
-<meta property="og:site_name" content={site.name} />
+<meta property="og:site_name" content={studio.name} />
 <meta property="og:locale" content="zh_CN" />
 <meta property="og:url" content={Astro.url} />
-<meta property="og:image" content={site.url + site.logo.og} />
+<meta property="og:image" content={studio.url + studio.logo.og} />
 ```
 
 | 字段 | 值 | 说明 |
@@ -108,16 +108,16 @@ site: 'https://hdwzgzs.cn',
 <script type="application/ld+json" set:html={JSON.stringify({
   "@context": "https://schema.org",
   "@type": "Organization",
-  "name": site.name,
-  "url": site.url,
-  "logo": site.url + site.logo.og,
-  "sameAs": site.social,
+  "name": studio.name,
+  "url": studio.url,
+  "logo": studio.url + studio.logo.og,
+  "sameAs": studio.social,
 })} />
 ```
 
 - `@type: Organization`：声明机构实体，利于知识图谱展示
 - `logo`：绝对 URL 指向 PNG
-- `sameAs`：B站 `https://space.bilibili.com/378145694`（来自 `site.social`，数据驱动，可扩展）
+- `sameAs`：B站 `https://space.bilibili.com/378145694`（来自 `studio.social`，数据驱动，可扩展）
 - 用 `set:html` 输出 JSON，避免花括号被 Astro 当作表达式
 
 ### 3.6 可扩展点
@@ -130,7 +130,7 @@ site: 'https://hdwzgzs.cn',
 
 ---
 
-## 四、数据层：SEO 元数据单点维护（`src/data/site.ts`）
+## 四、数据层：SEO 元数据单点维护（`../src/data/studio.ts`）
 
 原先 title/description/JSON-LD/OG 全部硬编码在组件里，改为统一数据文件：
 
@@ -224,7 +224,7 @@ return Astro.redirect('/studio', 301)
 ### 8.1 首屏图片加载策略（LCP）
 
 ```html
-<img class="photo photo-light" src={site.hero.light.src} alt="" loading="eager" />
+<img class="photo photo-light" src={studio.hero.light.src} alt="" loading="eager" />
 ```
 
 首屏两张照片均 `loading="eager"`（不懒加载），确保 LCP 快速；懒加载只应给首屏以下的内容。

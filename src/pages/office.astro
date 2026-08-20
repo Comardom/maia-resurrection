@@ -1,16 +1,15 @@
 ---
 import { tmp } from "@/data/tmp";
 import ScrollablePageLayout from "@/layouts/ScrollablePageLayout.astro";
-import OfficeMasthead from "@/components/office/OfficeMasthead.astro";
+import Header from "@/components/header/Header.astro";
 import OfficeSectionNav from "@/components/office/OfficeSectionNav.astro";
 import '/src/css/nonGlobal/studioColor.css'
-import '/src/css/nonGlobal/officeHeader.css'
 ---
 <ScrollablePageLayout
         title={tmp.title}
         description={tmp.description}
 >
-    <OfficeMasthead />
+    <Header canMove />
     <OfficeSectionNav />
     <main class="office-page">
         <section id="home" class="tmp">
@@ -20,6 +19,10 @@ import '/src/css/nonGlobal/officeHeader.css'
 </ScrollablePageLayout>
 
 <style>
+    .office-page [id] {
+        scroll-margin-block-start: calc(var(--office-section-nav-height) + 1rem);
+    }
+
     .tmp{
         display: flex;
         align-items: center;
@@ -30,5 +33,17 @@ import '/src/css/nonGlobal/officeHeader.css'
     .tmp span{
         font-family: Huiwen-HKHei, cursive;
         font-size: 7.5rem;
+    }
+
+    @media (max-width: 48rem) {
+        .office-page {
+            padding-block-start: calc(var(--office-masthead-height) + var(--office-section-nav-height));
+        }
+
+        .office-page [id] {
+            scroll-margin-block-start: calc(
+                var(--office-masthead-height) + var(--office-section-nav-height) + 1rem
+            );
+        }
     }
 </style>

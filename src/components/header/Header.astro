@@ -1,0 +1,44 @@
+---
+import ThemeToggle from './ThemeToggle.astro'
+import LogoUndName from './LogoUndName.astro'
+import AppCenter from './AppCenter.astro'
+import QqPopup from './QqPopup.astro'
+import './header.css'
+
+interface Props {
+    canMove?: boolean
+}
+
+const { canMove = false } = Astro.props
+---
+
+<header data-header data-can-move={canMove ? '' : undefined}>
+    <div class="top-bar">
+        <div class="left-group">
+            <ThemeToggle />
+        </div>
+
+        <div class="center-group">
+            <LogoUndName />
+        </div>
+
+        <div class="right-group">
+            <button id="app-menu-toggle" class="app-menu-toggle" aria-label="打开应用中心"
+                aria-expanded="false" aria-controls="app-menu">
+                <img src="/more-black.svg" class="icon icon-more-black" alt="" />
+                <img src="/more-white.svg" class="icon icon-more-white" alt="" />
+            </button>
+        </div>
+    </div>
+
+    <AppCenter />
+    <QqPopup />
+</header>
+
+<script>
+    import { initThemeToggle, initAppMenu } from './headerScript'
+    import { initQqPopupGenie } from './qqPopupGenie'
+    initThemeToggle()
+    initAppMenu()
+    initQqPopupGenie()
+</script>

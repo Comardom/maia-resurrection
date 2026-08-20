@@ -1,0 +1,25 @@
+---
+import { studio } from '@/data/studio.ts';
+---
+
+<div id="app-menu" class="app-menu" role="dialog" aria-modal="true"
+    aria-labelledby="app-menu-title" aria-hidden="true" inert>
+    <h2 id="app-menu-title" class="sr-only">应用中心</h2>
+    <div class="app-menu-tiles">
+        <a href={studio.links.exam} class="tile"><span>考试系统</span></a>
+        <a href={studio.links.erp} class="tile"><span>管理系统</span></a>
+        <a href={studio.links.qq.joinUrl}
+           target="_blank"
+           rel="noopener noreferrer"
+           class="tile tile--qq">
+            <span class="tile--qq__label">QQ迎新群</span>
+            <span class="tile--qq__number">群号：{studio.links.qq.groupNumber}</span>
+        </a>
+    </div>
+    <button id="app-menu-close" class="app-menu-close" aria-label="关闭应用中心">
+        <img src="/close-black.svg" class="icon icon-close-black" alt="" />
+        <img src="/close-white.svg" class="icon icon-close-white" alt="" />
+    </button>
+</div>
+
+<div id="app-menu-backdrop" class="app-menu-backdrop"></div>

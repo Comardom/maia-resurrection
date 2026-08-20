@@ -1,0 +1,513 @@
+/* ============================================================
+ * src/components/header/header.css
+ * 顶栏 + 应用中心 + QQ 神灯 —— 统一组件样式
+ *
+ * 组织（模仿 tasKapsule globalCSS 的变量集中模式）：
+ *   ① 变量段   —— :root 定义 studio 基准；header[data-can-move] 覆盖 office 变体
+ *   ② 共享规则 —— 只引用变量，不散落写死值
+ *   ③ 变体段   —— 仅做变量赋值
+ *
+ * 语义：
+ *   <Header />          默认 = studio 基准（fixed + 呼吸 + 主题钮可见）
+ *   <Header canMove />  office 变体（relative + 无动画 + 主题钮隐藏，随页滑动）
+ * ============================================================ */
+
+/* ── ① 变量段 ─────────────────────────────────────────── */
+:root {
+    /* studio 基准（默认） */
+    --header-position: fixed;
+    --header-animation-topbar: header-breathe-y 6s ease-in-out infinite;
+    --header-animation-group: header-breathe-xy 6s ease-in-out infinite;
+    --header-show-theme-toggle: flex;
+    --header-top-height: 7svb;
+    --header-padding-inline: 2rem;
+    --header-logo-height: 3rem;
+
+    /* office SectionNav 独立使用的页面高度变量（与 Header 无耦合，仅共用） */
+    --office-masthead-height: 4.5rem;
+    --office-section-nav-height: 3.25rem;
+    --office-header-color: var(--studio-topbar-color);
+    --office-header-bg: var(--studio-topbar-bg);
+    --office-header-border: var(--studio-topbar-border);
+    --office-header-muted: color-mix(in srgb, var(--studio-topbar-color) 55%, transparent);
+    --office-header-active: var(--studio-topbar-color);
+    --office-header-dot: var(--studio-topbar-color);
+}
+
+/* office 变体：顶栏随页面滑动、无动画、隐藏主题钮 */
+header[data-can-move] {
+    --header-position: relative;
+    --header-animation-topbar: none;
+    --header-animation-group: none;
+    --header-show-theme-toggle: none;
+    --header-top-height: 4.5rem;
+}
+
+@keyframes header-breathe-y {
+    0%, 100% { transform: scaleY(1); }
+    50%      { transform: scaleY(1.03); }
+}
+
+@keyframes header-breathe-xy {
+    0%, 100% { transform: scale(1); }
+    50%      { transform: scale(1.03); }
+}
+
+/* ── ② 共享规则 ───────────────────────────────────────── */
+header[data-header] {
+    position: relative;
+    z-index: 1000;
+    background: var(--studio-topbar-bg);
+    color: var(--studio-topbar-color);
+    border-block-end: 1px solid var(--studio-topbar-border);
+}
+
+.top-bar {
+    position: var(--header-position);
+    top: 0;
+    left: 0;
+    inline-size: 100lvi;
+    min-block-size: var(--header-top-height);
+    padding-inline: var(--header-padding-inline);
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    box-sizing: border-box;
+    z-index: 1000;
+    background: var(--studio-topbar-bg);
+    color: var(--studio-topbar-color);
+    border-block-end: 1px solid var(--studio-topbar-border);
+    transform-origin: top center;
+    animation: var(--header-animation-topbar);
+    transition: background-color 0.3s, color 0.3s;
+}
+
+/* 游戏模式：停掉呼吸动画（位移由 gsap 控制，带平滑过渡） */
+.game-mode .top-bar {
+    animation: none;
+}
+
+/* 三栏分组 */
+.left-group,
+.center-group,
+.right-group {
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+}
+
+.left-group { display: var(--header-show-theme-toggle); }
+.center-group { display: flex; }
+.right-group { display: flex; }
+
+[data-header] .left-group { transform-origin: left center; animation: var(--header-animation-group); }
+[data-header] .center-group { transform-origin: center; animation: var(--header-animation-group); }
+[data-header] .right-group { transform-origin: right center; animation: var(--header-animation-group); }
+
+/* 桌面端：品牌靠左，按钮组推向右端，主题钮紧贴应用中心左侧 */
+.center-group { order: -1; }
+.left-group   { order: 2; }
+.right-group  { order: 3; }
+
+/* 桌面专用（min-width 限定，避免漏进移动端重置 margin） */
+@media (min-width: 48rem) {
+    [data-header] .left-group { margin-inline-start: auto; }
+    header[data-can-move] .right-group { margin-inline-start: auto; }
+}
+
+/* office 顶栏随页滑动：重置 fixed 专属定位 */
+header[data-can-move] .top-bar {
+    top: auto;
+    left: auto;
+    inline-size: 100%;
+}
+
+/* 品牌（logo + 站名） */
+.logo-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    color: inherit;
+}
+
+.logo-wrapper .logo {
+    height: var(--header-logo-height);
+    width: auto;
+    transition: opacity 0.3s;
+}
+
+.logo-wrapper .logo-light { opacity: 1; }
+.logo-wrapper .logo-dark  { opacity: 0; position: absolute; }
+
+.dark .logo-wrapper .logo-light { opacity: 0; }
+.dark .logo-wrapper .logo-dark  { opacity: 1; }
+
+.title-text {
+    font-family: 'Huiwen-HKHei', -apple-system, BlinkMacSystemFont, "Segoe UI",
+        "PingFang SC", "Microsoft YaHei", "Noto Sans CJK SC", sans-serif;
+    font-size: 1.3rem;
+    font-weight: 300;
+}
+
+/* 主题切换按钮 */
+.theme-toggle {
+    padding: 0;
+    font-size: 1rem;
+    background: transparent;
+    inline-size: 2.5rem;
+    block-size: 2.5rem;
+    border: 0.15rem solid var(--studio-ring);
+    border-radius: 50%;
+    cursor: pointer;
+    color: inherit;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.theme-toggle .icon {
+    position: absolute;
+    inline-size: 1.4rem;
+    block-size: 1.4rem;
+    opacity: 0;
+    transform: scale(0.5) rotate(-60deg);
+    transition: opacity 0.35s ease, transform 0.35s ease;
+}
+
+.theme-toggle .icon-luna-black { opacity: 1; transform: scale(1) rotate(0); }
+.dark .theme-toggle .icon-luna-black { opacity: 0; transform: scale(0.5) rotate(60deg); }
+.dark .theme-toggle .icon-solar-white { opacity: 1; transform: scale(1) rotate(0); }
+
+/* 应用中心开关按钮 */
+.app-menu-toggle {
+    padding: 0;
+    font-size: 1rem;
+    background: transparent;
+    inline-size: 2.5rem;
+    block-size: 2.5rem;
+    border: 0.15rem solid var(--studio-ring);
+    border-radius: 50%;
+    cursor: pointer;
+    color: inherit;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.app-menu-toggle .icon {
+    position: absolute;
+    inline-size: 1.4rem;
+    block-size: 1.4rem;
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.app-menu-toggle .icon-more-black { opacity: 1; }
+.dark .app-menu-toggle .icon-more-black { opacity: 0; }
+.dark .app-menu-toggle .icon-more-white { opacity: 1; }
+
+/* 遮挡层 */
+.app-menu-backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 1001;
+    background: var(--studio-backdrop);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s;
+}
+
+.app-menu-backdrop.open {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+/* 弹窗：顶部滑下，盖住顶栏 */
+.app-menu {
+    position: fixed;
+    top: 0;
+    inset-inline: 0;
+    block-size: 30dvb;
+    z-index: 1002;
+    background: var(--studio-panel-bg);
+    color: var(--studio-panel-color);
+    transform: translateY(-100%);
+    visibility: hidden;
+    pointer-events: none;
+    transition: transform 0.3s ease,
+                visibility 0s linear 0.3s;
+    display: flex;
+}
+
+.app-menu.open {
+    transform: translateY(0);
+    visibility: visible;
+    pointer-events: auto;
+    transition: transform 0.3s ease, visibility 0s;
+}
+
+.dark .app-menu {
+    background: var(--studio-panel-bg);
+    color: var(--studio-panel-color);
+}
+
+/* 关闭竖条 */
+.app-menu-close {
+    inline-size: 6.5rem;
+    align-self: stretch;
+    flex-shrink: 0;
+    padding: 0;
+    border: none;
+    border-inline-start: 1px solid var(--studio-panel-border);
+    border-inline-end: 1px solid var(--studio-panel-border);
+    background: transparent;
+    cursor: pointer;
+    position: relative;
+    display: grid;
+    place-items: center;
+}
+
+.app-menu-close .icon {
+    grid-area: 1 / 1;
+    inline-size: 1.4rem;
+    block-size: 1.4rem;
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.app-menu-close .icon-close-black,
+.app-menu-close .icon-close-white {
+    padding: 0.4rem;
+    border: 0.15rem solid var(--studio-ring-close);
+    border-radius: 50%;
+    box-sizing: content-box;
+}
+
+.dark .app-menu-close .icon-close-black,
+.dark .app-menu-close .icon-close-white {
+    border-color: var(--studio-ring-close);
+}
+
+.app-menu-close .icon-close-black { opacity: 1; }
+.dark .app-menu-close .icon-close-black { opacity: 0; }
+.dark .app-menu-close .icon-close-white { opacity: 1; }
+
+.dark .app-menu-close {
+    border-inline-start-color: var(--studio-panel-border);
+    border-inline-end-color: var(--studio-panel-border);
+}
+
+/* Metro 磁贴：横向滚动（scoped），桌面/移动通用 */
+.app-menu-tiles {
+    flex: 1;
+    min-inline-size: 0;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1.5rem;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scrollbar-width: thin;
+}
+
+.tile {
+    flex: 0 0 auto;
+    inline-size: 8rem;
+    aspect-ratio: 1;
+    background: var(--studio-tile);
+    color: var(--studio-tile-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    font-size: 1rem;
+    transition: background-color 0.2s;
+}
+
+.tile:hover { background: var(--studio-tile-hover); }
+
+.tile--qq {
+    position: relative;
+    background: linear-gradient(135deg, var(--studio-tile), var(--studio-tile-hover));
+    flex-direction: column;
+    gap: 0.25rem;
+    touch-action: manipulation;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    user-select: none;
+}
+
+.tile--qq:hover {
+    background: linear-gradient(135deg, var(--studio-tile), var(--studio-tile-hover));
+}
+
+.tile--qq__label {
+    font-size: 1.1rem;
+}
+
+.tile--qq__number {
+    font-size: 0.9rem;
+    opacity: 0.85;
+}
+
+/* QQ 神灯 */
+.qq-popup {
+    position: fixed;
+    inset: 0;
+    z-index: 1005;
+    display: grid;
+    place-items: center;
+    pointer-events: none;
+    visibility: hidden;
+    opacity: 0;
+}
+
+.qq-popup__glass {
+    position: relative;
+    display: grid;
+    place-items: center;
+    inline-size: min(26rem, 62svb);
+    block-size: min(26rem, 62svb);
+    box-sizing: border-box;
+    pointer-events: none;
+    background-color: color-mix(in srgb, var(--studio-panel-bg) 50%, transparent);
+    background-image: linear-gradient(rgba(255, 255, 255, 0.12), transparent);
+    -webkit-backdrop-filter: blur(0.625rem);
+    backdrop-filter: blur(0.625rem);
+    border: 0.0625rem solid var(--studio-panel-border);
+    box-shadow: 0 1rem 2rem rgba(0, 0, 0, 0.3);
+}
+
+.qq-popup__qr-area {
+    position: relative;
+    inline-size: 78.62%;
+    block-size: 78.62%;
+}
+
+.qq-popup__slice {
+    position: absolute;
+    inset: 0;
+    background-size: cover;
+    background-position: center;
+    clip-path: inset(var(--band-top) 0 var(--band-bottom) 0);
+    transform-origin: 50% 50%;
+    will-change: transform;
+}
+
+@media (hover: none) {
+    .qq-popup__glass {
+        pointer-events: auto;
+    }
+}
+
+/* 屏幕阅读器专用隐藏标题 */
+.sr-only {
+    position: absolute;
+    inline-size: 1px;
+    block-size: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+/* 触控设备：按钮放大到 WCAG 44px 目标，保持正圆 */
+@media (pointer: coarse) {
+    .theme-toggle,
+    .app-menu-toggle {
+        inline-size: 2.75rem;
+        block-size: 2.75rem;
+        border-radius: 50%;
+    }
+}
+
+/* 悬停态 */
+@media (hover: hover) {
+    .theme-toggle:hover,
+    .app-menu-toggle:hover,
+    .app-menu-close:hover {
+        background-color: var(--studio-hover-bg);
+    }
+}
+
+/* ── ③ 变体段（桌面差异：仅变量赋值，见顶部 header[data-can-move]）── */
+
+/* ── 移动端：grid 三栏，logo 居中，全站一致 ───────────── */
+@media (max-width: 48rem) {
+    :root {
+        --office-masthead-height: 3.75rem;
+        --office-section-nav-height: 2.75rem;
+    }
+
+    header,
+    header[data-can-move] {
+        --header-top-height: 3.75rem;
+    }
+
+    /* office 顶栏移动端固定 */
+    header[data-can-move] .top-bar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        inset-inline: 0;
+        inline-size: 100%;
+    }
+
+    .top-bar {
+        display: grid;
+        grid-template-columns: 1fr auto 1fr;
+        gap: 0;
+    }
+
+    .left-group   { grid-column: 1; justify-self: start;  order: 0; margin-inline: 0; display: flex; }
+    .center-group { grid-column: 2; justify-self: center; order: 0; }
+    .right-group  { grid-column: 3; justify-self: end;    order: 0; margin-inline: 0; }
+
+    .title-text { display: none; }
+
+    /* 弹窗适配 */
+    .app-menu {
+        block-size: 40dvb;
+    }
+
+    .app-menu-close {
+        inline-size: 4rem;
+        margin-inline-end: 1.375rem;
+    }
+
+    .app-menu-tiles {
+        padding: 1rem;
+    }
+
+    .tile {
+        inline-size: 6rem;
+    }
+}
+
+/* 减少动态效果偏好 */
+@media (prefers-reduced-motion: reduce) {
+    .app-menu,
+    .app-menu-backdrop,
+    .theme-toggle .icon,
+    .app-menu-toggle .icon,
+    .logo,
+    .top-bar,
+    .left-group,
+    .center-group,
+    .right-group,
+    .app-menu-close .icon {
+        transition: none;
+    }
+
+    .top-bar,
+    .left-group,
+    .center-group,
+    .right-group {
+        animation: none;
+    }
+}

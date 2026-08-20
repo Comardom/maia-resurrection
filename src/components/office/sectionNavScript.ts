@@ -1,56 +1,4 @@
-type Theme = 'light' | 'dark'
-
-function currentTheme(): Theme {
-  return document.documentElement.classList.contains('dark') ? 'dark' : 'light'
-}
-
-function updateThemeControls(theme: Theme) {
-  document.querySelectorAll<HTMLElement>('[data-theme-control]').forEach((control) => {
-    const mode = control.dataset.themeControl
-
-    if (mode === 'light' || mode === 'dark') {
-      const active = mode === theme
-      control.classList.toggle('is-active', active)
-      control.setAttribute('aria-pressed', String(active))
-    }
-
-    if (mode === 'toggle') {
-      control.setAttribute(
-        'aria-label',
-        theme === 'dark' ? '切换到浅色模式' : '切换到深色模式',
-      )
-    }
-  })
-}
-
-function setTheme(theme: Theme) {
-  document.documentElement.classList.toggle('dark', theme === 'dark')
-  document.documentElement.style.colorScheme = theme
-  document.cookie = `theme=${theme}; path=/; max-age=31536000`
-  updateThemeControls(theme)
-  window.dispatchEvent(new CustomEvent('theme:change', { detail: { theme } }))
-}
-
-function initOfficeThemeControls() {
-  const controls = document.querySelectorAll<HTMLElement>('[data-theme-control]')
-  if (!controls.length) return
-
-  controls.forEach((control) => {
-    if (control.dataset.officeThemeBound === 'true') return
-    control.dataset.officeThemeBound = 'true'
-
-    control.addEventListener('click', () => {
-      const mode = control.dataset.themeControl
-      const theme = currentTheme()
-      const nextTheme: Theme = mode === 'light' || mode === 'dark'
-        ? mode
-        : theme === 'dark' ? 'light' : 'dark'
-      setTheme(nextTheme)
-    })
-  })
-
-  updateThemeControls(currentTheme())
-}
+import { currentTheme } from '../header/headerScript'
 
 function setActiveLink(
   links: HTMLAnchorElement[],
@@ -85,9 +33,7 @@ function setActiveThemeSeparator(separators: HTMLElement[], theme: 'light' | 'da
   })
 }
 
-export function initOfficeHeader() {
-  initOfficeThemeControls()
-
+export function initSectionNav() {
   const themeSeparators = Array.from(
     document.querySelectorAll<HTMLElement>('[data-office-theme-separator]'),
   )

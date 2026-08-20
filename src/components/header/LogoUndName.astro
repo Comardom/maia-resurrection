@@ -1,0 +1,9 @@
+---
+import { studio } from '@/data/studio.ts';
+---
+
+<a href="/" class="logo-wrapper">
+    <img src={studio.logo.light} class="logo logo-light" alt={studio.name} />
+    <img src={studio.logo.dark} class="logo logo-dark" alt={studio.name} aria-hidden="true" />
+    <span class="title-text">{studio.name}</span>
+</a>

@@ -1,6 +1,6 @@
 import { gsap } from 'gsap'
 import { Observer } from 'gsap/Observer'
-import { closeAppMenu } from '@/components/studio/headerScript'
+import { closeAppMenu } from '@/components/header/headerScript'
 
 let currentIndex = 0
 let isAnimating = false

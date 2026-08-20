@@ -205,6 +205,10 @@ import { studio } from '@/data/studio.ts';
         background: linear-gradient(135deg, var(--studio-tile), var(--studio-tile-hover));
         flex-direction: column;
         gap: 0.25rem;
+        touch-action: manipulation;
+        -webkit-touch-callout: none;
+        -webkit-user-select: none;
+        user-select: none;
     }
 
     .tile--qq:hover {
@@ -264,8 +268,8 @@ import { studio } from '@/data/studio.ts';
     }
 
     @media (hover: none) {
-        .qq-popup {
-            display: none !important;
+        .qq-popup__glass {
+            pointer-events: auto;
         }
     }
 
@@ -298,7 +302,7 @@ import { studio } from '@/data/studio.ts';
 
     @media (max-width: 48rem) {
         .app-menu {
-            block-size: 22dvb;
+            block-size: 75dvb;
         }
 
         .app-menu-close {

@@ -299,6 +299,7 @@
     .office-masthead .application-center {
         grid-column: 3;
         justify-self: end;
+        margin-inline-end: 1rem;
     }
 
     .office-section-nav {

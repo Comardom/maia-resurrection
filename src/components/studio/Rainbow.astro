@@ -37,7 +37,7 @@ const bands: RainbowBand[] = [
                     >
                         <span class="game-start">Let's Rock!</span>
                         <span class="band-name band-red-name">
-                        {[...studio.name].map((ch, ci) => <span>{ch}</span>)}
+                        {[...studio.name].map((ch, _) => <span>{ch}</span>)}
                     </span>
                     </div>
             ) : (
@@ -53,7 +53,7 @@ const bands: RainbowBand[] = [
                                 }
                         >
                             <button class="band-main" type="button">
-                                <h2 class="band-name">{departments[i - 1].title}</h2>
+                                <span class="band-name">{departments[i - 1].title}</span>
                                 <span class="band-short">{departments[i - 1].short}</span>
                             </button>
                             <a class="band-goto"

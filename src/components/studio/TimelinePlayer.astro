@@ -44,14 +44,16 @@ const firstAlt = first.image?.alt ?? `${first.year} ${first.title}`;
             {
                 timelineEvents.map((ev, i) => (
                         <li data-index={i}>
-                            <button type="button" class="event-item">
+                            <div class="event-item">
+                                <button type="button" class="event-item__hit"
+                                        aria-label={`${ev.year} ${ev.title}`}></button>
                                 <div class="event-title-row">
                                     <span class="event-year">{ev.year}</span>
                                     <span class="event-title">{ev.title}</span>
                                 </div>
                                 <p class="event-desc">{ev.description}</p>
                                 <span class="event-progress" aria-hidden="true"></span>
-                            </button>
+                            </div>
                         </li>
                 ))
             }
@@ -277,7 +279,6 @@ const firstAlt = first.image?.alt ?? `${first.year} ${first.title}`;
         font: inherit;
         color: inherit;
         text-align: left;
-        cursor: pointer;
         background: linear-gradient(to bottom,
         color-mix(in srgb, rgb(244 114 182) 25%, transparent),
         color-mix(in srgb, rgb(236 72 153) 25%, transparent),
@@ -288,12 +289,24 @@ const firstAlt = first.image?.alt ?? `${first.year} ${first.title}`;
         font-family: 'Huiwen-HKHei', -apple-system, BlinkMacSystemFont, "Segoe UI",
         "PingFang SC", "Microsoft YaHei", "Noto Sans CJK SC", sans-serif;
     }
+    /* 不可见按钮覆盖层：整卡可点击，键盘可达，避免按钮内嵌流内容（div/p）违规 */
+    .event-item__hit {
+        position: absolute;
+        inset: 0;
+        z-index: 1;
+        border: none;
+        background: transparent;
+        padding: 0;
+        margin: 0;
+        cursor: pointer;
+        border-radius: inherit;
+    }
     /* 键盘焦点可见性 */
-    .event-item:focus-visible {
+    .event-item__hit:focus-visible {
         outline: 0.125rem solid rgb(113 152 240);
         outline-offset: -0.125rem;
     }
-    :global(.dark) .event-item:focus-visible {
+    :global(.dark) .event-item__hit:focus-visible {
         outline-color: rgb(244 114 182);
     }
     /* 暗色模式：蓝色 */
@@ -367,7 +380,7 @@ const firstAlt = first.image?.alt ?? `${first.year} ${first.title}`;
         left: 0;
         top: 0;
         bottom: 0;
-        inline-size: 0%;
+        inline-size: 0;
         background: linear-gradient(to right,
         rgb(236 72 153 / 0.2),
         rgb(219 39 119 / 0.16) 60%,
@@ -414,7 +427,7 @@ const firstAlt = first.image?.alt ?? `${first.year} ${first.title}`;
             right: 0;
             top: calc(7svb + 1rem + (100dvb - 7svb - 2rem) * 4 / 5 - 0.0625rem);
             block-size: 0.25rem;
-            inline-size: 0%;
+            inline-size: 0;
             background: linear-gradient(to right,
             rgb(236 72 153 / 0.7),
             rgb(219 39 119 / 0.9));

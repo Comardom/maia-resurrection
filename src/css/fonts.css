@@ -1,35 +1,35 @@
 @font-face {
-  font-family: 'PMingLiU-TW';          /* 臺灣新細明體 */
-  src: url('/font/pmingliu-subset.woff2') format('woff2');
-  font-weight: normal;
-  font-style: normal;
-  font-display: swap;
+    font-family: 'PMingLiU-TW';          /* 臺灣新細明體 */
+    src: url('/font/pmingliu-subset.woff2') format('woff2');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
 }
 @font-face {
-  font-family: 'Huiwen-HKHei';             /* 汇文港黑 */
-  src: url('/font/hkhei-subset.woff2') format('woff2');
-  font-weight: normal;
-  font-style: normal;
-  font-display: swap;
+    font-family: 'Huiwen-HKHei';             /* 汇文港黑 */
+    src: url('/font/hkhei-subset.woff2') format('woff2');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
 }
 @font-face {
-  font-family: 'PangMenZhengDao';             /* 庞门正道 */
-  src: url('/font/pangmenzhengdao-subset.woff2') format('woff2');
-  font-weight: normal;
-  font-style: normal;
-  font-display: swap;
+    font-family: 'PangMenZhengDao';             /* 庞门正道 */
+    src: url('/font/pangmenzhengdao-subset.woff2') format('woff2');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
 }
 @font-face {
-  font-family: 'cwTeXMing';                   /* cwTeX 明体 */
-  src: url('/font/cwtexming-subset.woff2') format('woff2');
-  font-weight: normal;
-  font-style: normal;
-  font-display: swap;
+    font-family: 'cwTeXMing';                   /* cwTeX 明体 */
+    src: url('/font/cwtexming-subset.woff2') format('woff2');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
 }
 @font-face {
-  font-family: 'Unifont';                     /* Unifont 全字符字体 */
-  src: url('/font/unifont-subset.woff2') format('woff2');
-  font-weight: normal;
-  font-style: normal;
-  font-display: swap;
+    font-family: 'Unifont';                     /* Unifont 全字符字体 */
+    src: url('/font/unifont-subset.woff2') format('woff2');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
 }

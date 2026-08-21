@@ -26,47 +26,47 @@ const bands: RainbowBand[] = [
     {
         bands.map((band, i) => (
             i === 0 ? (
-                <div
-                    class="rainbow-band band-red"
-                    style={
-                        `--band-width: ${band.width}; 
+                    <div
+                            class="rainbow-band band-red"
+                            style={
+                                `--band-width: ${band.width}; 
                         --band-height: ${band.height}%; 
                         --band-color-light: ${band.color.light}; 
                         --band-color-dark: ${band.color.dark};`
-                    }
-                >
-                    <span class="game-start">Let's Rock!</span>
-                    <span class="band-name band-red-name">
+                            }
+                    >
+                        <span class="game-start">Let's Rock!</span>
+                        <span class="band-name band-red-name">
                         {[...studio.name].map((ch, ci) => <span>{ch}</span>)}
                     </span>
-                </div>
+                    </div>
             ) : (
                 departments[i - 1] && (
-                    <div
-                        class="rainbow-band"
-                        style={
-                            `--band-width: ${band.width}; 
+                        <div
+                                class="rainbow-band"
+                                style={
+                                    `--band-width: ${band.width}; 
                             --band-height: ${band.height}%; 
                             --band-color-light: ${band.color.light}; 
                             --band-color-dark: ${band.color.dark}; 
                             --switch-delay: ${((i - 1) * 0.2).toFixed(1)}s;`
-                        }
-                    >
-                        <button class="band-main" type="button">
-                            <h2 class="band-name">{departments[i - 1].title}</h2>
-                            <span class="band-short">{departments[i - 1].short}</span>
-                        </button>
-                        <a class="band-goto"
-                           href={departments[i - 1].link}
-                           target="_blank"
-                           aria-label={`进入${departments[i - 1].title}页面`}
+                                }
                         >
-                            <img class="goto-icon go-black" src="/go-black.svg" alt="" />
-                            <img class="goto-icon go-white" src="/go-white.svg" alt="" />
-                            <img class="goto-icon goto-black" src="/goto-black.svg" alt="" />
-                            <img class="goto-icon goto-white" src="/goto-white.svg" alt="" />
-                        </a>
-                    </div>
+                            <button class="band-main" type="button">
+                                <h2 class="band-name">{departments[i - 1].title}</h2>
+                                <span class="band-short">{departments[i - 1].short}</span>
+                            </button>
+                            <a class="band-goto"
+                               href={departments[i - 1].link}
+                               target="_blank"
+                               aria-label={`进入${departments[i - 1].title}页面`}
+                            >
+                                <img class="goto-icon go-black" src="/go-black.svg" alt="" />
+                                <img class="goto-icon go-white" src="/go-white.svg" alt="" />
+                                <img class="goto-icon goto-black" src="/goto-black.svg" alt="" />
+                                <img class="goto-icon goto-white" src="/goto-white.svg" alt="" />
+                            </a>
+                        </div>
                 )
             )
         ))
@@ -118,7 +118,7 @@ const bands: RainbowBand[] = [
         border: 0.0625rem solid rgba(255, 255, 255, 0.1);
         box-shadow: 0 1.5625rem 1.5625rem rgba(0, 0, 0, 0.25);
         transition: block-size 0.4s cubic-bezier(0.34, 1.56, 0.64, 1),
-                    border-color 0.4s ease;
+        border-color 0.4s ease;
     }
     /* 红色块全屏过渡：.transitioning 期间禁用 hover 高度干扰与 Game Start 滑入
        （absolute 定位完全由 JS 捕获后 gsap.set 控制，CSS 不再改布局） */
@@ -228,7 +228,7 @@ const bands: RainbowBand[] = [
         white-space: nowrap;
         opacity: 0;
         transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1),
-                    opacity 0.3s ease;
+        opacity 0.3s ease;
         pointer-events: none;
     }
     .band-name {
@@ -242,7 +242,7 @@ const bands: RainbowBand[] = [
         writing-mode: vertical-rl;
         text-orientation: mixed;
         transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1),
-                    opacity 0.3s ease;
+        opacity 0.3s ease;
     }
     .band-short {
         position: absolute;
@@ -258,7 +258,7 @@ const bands: RainbowBand[] = [
         text-orientation: mixed;
         opacity: 0;
         transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1),
-                    opacity 0.3s ease;
+        opacity 0.3s ease;
         pointer-events: none;
         max-block-size: calc(100% - 2rem);
         max-inline-size: calc(100% - 2rem);

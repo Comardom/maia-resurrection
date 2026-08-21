@@ -7,34 +7,34 @@ import { officePage } from '@/data/office.ts';
         <div class="office-section-nav__links">
             {
                 officePage.navigation.map((item) => (
-                    <>
-                        {
-                            officePage.navigation.indexOf(item) > 0 && (
-                                <span
-                                    class="office-section-nav__separator"
-                                    data-office-section-separator
-                                    data-left-id={officePage.navigation[officePage.navigation.indexOf(item) - 1].id}
-                                    data-right-id={item.id}
-                                    aria-hidden="true"
-                                >
+                        <>
+                            {
+                                officePage.navigation.indexOf(item) > 0 && (
+                                            <span
+                                                    class="office-section-nav__separator"
+                                                    data-office-section-separator
+                                                    data-left-id={officePage.navigation[officePage.navigation.indexOf(item) - 1].id}
+                                                    data-right-id={item.id}
+                                                    aria-hidden="true"
+                                            >
                                     <span class="dot dot--outer"></span>
                                     <span class="dot dot--middle"></span>
                                     <span class="dot dot--inner"></span>
                                 </span>
-                            )
-                        }
-                        <a
-                            href={`#${item.id}`}
-                            class:list={[
-                                'office-section-nav__link',
-                                { 'is-active': item.id === 'home' },
-                            ]}
-                            data-office-section-link={item.id}
-                            aria-current={item.id === 'home' ? 'page' : undefined}
-                        >
-                            <span class="office-section-nav__label">{item.label}</span>
-                        </a>
-                    </>
+                                )
+                            }
+                            <a
+                                    href={`#${item.id}`}
+                                    class:list={[
+                                        'office-section-nav__link',
+                                        { 'is-active': item.id === 'home' },
+                                    ]}
+                                    data-office-section-link={item.id}
+                                    aria-current={item.id === 'home' ? 'page' : undefined}
+                            >
+                                <span class="office-section-nav__label">{item.label}</span>
+                            </a>
+                        </>
                 ))
             }
         </div>

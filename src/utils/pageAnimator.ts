@@ -9,114 +9,114 @@ let reducedMotion = false
 let navLocked = false
 
 export function lockNavigation(locked: boolean) {
-  navLocked = locked
+    navLocked = locked
 }
 
 function sectionIndexFromHash(): number {
-  const id = window.location.hash.replace('#', '')
-  if (!id) return 0
-  const idx = sections.findIndex((el) => el.id === id)
-  return idx >= 0 ? idx : 0
+    const id = window.location.hash.replace('#', '')
+    if (!id) return 0
+    const idx = sections.findIndex((el) => el.id === id)
+    return idx >= 0 ? idx : 0
 }
 
 function syncHash(index: number) {
-  const id = sections[index]?.id
-  if (id) {
-    window.history.replaceState(null, '', `#${id}`)
-  }
+    const id = sections[index]?.id
+    if (id) {
+        window.history.replaceState(null, '', `#${id}`)
+    }
 }
 
 function dispatchSectionChange(index: number) {
-  const id = sections[index]?.id
-  window.dispatchEvent(new CustomEvent('section:change', {
-    detail: { index, id },
-  }))
+    const id = sections[index]?.id
+    window.dispatchEvent(new CustomEvent('section:change', {
+        detail: { index, id },
+    }))
 }
 
 export function initPageAnimator() {
-  gsap.registerPlugin(Observer)
-  reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
-  sections = gsap.utils.toArray('.snap-section')
-  if (!sections.length) return
+    gsap.registerPlugin(Observer)
+    reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    sections = gsap.utils.toArray('.snap-section')
+    if (!sections.length) return
 
-  // 初始状态：按 URL hash 定位当前屏，其余隐藏
-  currentIndex = sectionIndexFromHash()
-  sections.forEach((el) => {
-    gsap.set(el, { yPercent: 0, autoAlpha: 0, pointerEvents: 'none' })
-  })
-  gsap.set(sections[currentIndex], { autoAlpha: 1, zIndex: 1, pointerEvents: 'auto' })
-
-  // 进入页面即把当前屏写入地址栏 hash（如 /studio → /studio#Prologue）
-  syncHash(currentIndex)
-
-  // 广播当前屏，供各区块（如 Symphony）按需启停自身动画
-  dispatchSectionChange(currentIndex)
-
-  // 首屏入场动画：仅在首页（无 hash 或 #Prologue）播放，且用户未开启减少动画
-  // 注意：不动 .logo（深浅切换完全交给 CSS class，避免 gsap 内联 opacity 干扰）
-  if (currentIndex === 0 && !reducedMotion) {
-    const tl = gsap.timeline()
-    tl.from('.title-text', {
-      y: -30, opacity: 0, duration: 1, ease: 'power3.out',
+    // 初始状态：按 URL hash 定位当前屏，其余隐藏
+    currentIndex = sectionIndexFromHash()
+    sections.forEach((el) => {
+        gsap.set(el, { yPercent: 0, autoAlpha: 0, pointerEvents: 'none' })
     })
-    tl.from(
-      sections[0].querySelector('.fullscreen-photo'),
-      { opacity: 0, scale: 1.05, duration: 1.2, ease: 'power3.out' },
-      '-=0.5'
-    )
-  }
+    gsap.set(sections[currentIndex], { autoAlpha: 1, zIndex: 1, pointerEvents: 'auto' })
 
-  // 支持浏览器前进/后退与手动改 hash
-  window.addEventListener('hashchange', () => {
-    goTo(sectionIndexFromHash())
-  })
+    // 进入页面即把当前屏写入地址栏 hash（如 /studio → /studio#Prologue）
+    syncHash(currentIndex)
 
-  Observer.create({
-    type: 'wheel,touch',
-    wheelSpeed: -1,
-    onUp: () => goTo(currentIndex + 1),
-    onDown: () => goTo(currentIndex - 1),
-    tolerance: 10,
-    preventDefault: true,
-  })
+    // 广播当前屏，供各区块（如 Symphony）按需启停自身动画
+    dispatchSectionChange(currentIndex)
 
-  // 键盘翻页：PageDown/PageUp（不占用方向键，避免干扰 Tab 焦点移动）
-  document.addEventListener('keydown', (e: KeyboardEvent) => {
-    if (e.key === 'PageDown') {
-      e.preventDefault()
-      goTo(currentIndex + 1)
-    } else if (e.key === 'PageUp') {
-      e.preventDefault()
-      goTo(currentIndex - 1)
+    // 首屏入场动画：仅在首页（无 hash 或 #Prologue）播放，且用户未开启减少动画
+    // 注意：不动 .logo（深浅切换完全交给 CSS class，避免 gsap 内联 opacity 干扰）
+    if (currentIndex === 0 && !reducedMotion) {
+        const tl = gsap.timeline()
+        tl.from('.title-text', {
+            y: -30, opacity: 0, duration: 1, ease: 'power3.out',
+        })
+        tl.from(
+            sections[0].querySelector('.fullscreen-photo'),
+            { opacity: 0, scale: 1.05, duration: 1.2, ease: 'power3.out' },
+            '-=0.5'
+        )
     }
-  })
+
+    // 支持浏览器前进/后退与手动改 hash
+    window.addEventListener('hashchange', () => {
+        goTo(sectionIndexFromHash())
+    })
+
+    Observer.create({
+        type: 'wheel,touch',
+        wheelSpeed: -1,
+        onUp: () => goTo(currentIndex + 1),
+        onDown: () => goTo(currentIndex - 1),
+        tolerance: 10,
+        preventDefault: true,
+    })
+
+    // 键盘翻页：PageDown/PageUp（不占用方向键，避免干扰 Tab 焦点移动）
+    document.addEventListener('keydown', (e: KeyboardEvent) => {
+        if (e.key === 'PageDown') {
+            e.preventDefault()
+            goTo(currentIndex + 1)
+        } else if (e.key === 'PageUp') {
+            e.preventDefault()
+            goTo(currentIndex - 1)
+        }
+    })
 }
 
 function goTo(index: number) {
-  if (navLocked || isAnimating || index < 0 || index >= sections.length || index === currentIndex) return
-  isAnimating = true
-  closeAppMenu()
+    if (navLocked || isAnimating || index < 0 || index >= sections.length || index === currentIndex) return
+    isAnimating = true
+    closeAppMenu()
 
-  const direction = index > currentIndex ? 1 : -1
-  const outgoing = sections[currentIndex]
-  const incoming = sections[index]
+    const direction = index > currentIndex ? 1 : -1
+    const outgoing = sections[currentIndex]
+    const incoming = sections[index]
 
-  const tl = gsap.timeline({
-    onComplete: () => {
-      gsap.set(outgoing, { autoAlpha: 0, zIndex: 0, pointerEvents: 'none' })
-      gsap.set(incoming, { yPercent: 0, zIndex: 1, pointerEvents: 'auto' })
-      isAnimating = false
-      currentIndex = index
-      syncHash(index)
-      dispatchSectionChange(index)
-    },
-    defaults: { duration: reducedMotion ? 0 : 1.2, ease: 'power4.inOut' },
-  })
+    const tl = gsap.timeline({
+        onComplete: () => {
+            gsap.set(outgoing, { autoAlpha: 0, zIndex: 0, pointerEvents: 'none' })
+            gsap.set(incoming, { yPercent: 0, zIndex: 1, pointerEvents: 'auto' })
+            isAnimating = false
+            currentIndex = index
+            syncHash(index)
+            dispatchSectionChange(index)
+        },
+        defaults: { duration: reducedMotion ? 0 : 1.2, ease: 'power4.inOut' },
+    })
 
-  // incoming 滑入起点 + 置顶
-  gsap.set(incoming, { yPercent: 100 * direction, autoAlpha: 1, zIndex: 2, pointerEvents: 'none' })
+    // incoming 滑入起点 + 置顶
+    gsap.set(incoming, { yPercent: 100 * direction, autoAlpha: 1, zIndex: 2, pointerEvents: 'none' })
 
-  // 旧屏滑出，新屏同时滑入（交叠过渡）
-  tl.to(outgoing, { yPercent: -100 * direction })
-  tl.to(incoming, { yPercent: 0 }, '<')
+    // 旧屏滑出，新屏同时滑入（交叠过渡）
+    tl.to(outgoing, { yPercent: -100 * direction })
+    tl.to(incoming, { yPercent: 0 }, '<')
 }

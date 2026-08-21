@@ -7,10 +7,10 @@ import { studio } from '@/data/studio.ts';
         <div class="qq-popup__qr-area">
             {
                 Array.from({ length: 5 }).map((_, i) => (
-                    <div
-                        class="qq-popup__slice"
-                        style={`--band-top: ${i * 20}%; --band-bottom: ${100 - (i + 1) * 20}%; background-image: url(${studio.links.qq.qr});`}
-                    />
+                        <div
+                                class="qq-popup__slice"
+                                style={`--band-top: ${i * 20}%; --band-bottom: ${100 - (i + 1) * 20}%; background-image: url(${studio.links.qq.qr});`}
+                        />
                 ))
             }
         </div>

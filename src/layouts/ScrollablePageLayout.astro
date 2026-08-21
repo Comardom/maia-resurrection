@@ -25,21 +25,19 @@ import '/src/css/fonts.css'
     <link rel="icon" type="image/svg+xml"
           media="(prefers-color-scheme: light)"
           href={studio.logo.light} />
-    <script is:inline>
-        // favicon 跟随系统深浅色实时切换
-        // 路径与 site.logo.dark / site.logo.light 保持一致
+    <script is:inline set:html={`
         ;(function () {
             const mq = window.matchMedia('(prefers-color-scheme: dark)')
             const favicon = document.getElementById('favicon')
             if (!favicon) return
-            const dark = '/wswd-white.svg'
-            const light = '/wswd-black.svg'
+            const dark = '${studio.logo.dark}'
+            const light = '${studio.logo.light}'
             favicon.href = mq.matches ? dark : light
             mq.addEventListener('change', (e) => {
                 favicon.href = e.matches ? dark : light
             })
         })()
-    </script>
+    `} />
 
     <!-- OG -->
     <meta property="og:title" content={title} />

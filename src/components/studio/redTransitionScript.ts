@@ -65,7 +65,8 @@ function enterGame() {
   const gsStart = red.querySelector<HTMLElement>('.game-start')
   if (gsStart) gsap.set(gsStart, { clearProps: 'opacity,transform' })
 
-  if (prefersReduced()) {
+  if (prefersReduced() || bands.length < 6 || !rects[1]) {
+    // 减少动画偏好，或色带数量不足（某部门未渲染）时：走简化满屏接管，避免 rects[i+1] 越界崩溃
     gsap.set(red, { left: 0, top: 0, width: '100%', height: '100%', opacity: 0.2 })
     gsap.set(bands, { x: window.innerWidth })
     showOverlay(overlay)

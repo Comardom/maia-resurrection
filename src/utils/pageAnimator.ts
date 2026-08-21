@@ -79,6 +79,17 @@ export function initPageAnimator() {
     tolerance: 10,
     preventDefault: true,
   })
+
+  // 键盘翻页：PageDown/PageUp（不占用方向键，避免干扰 Tab 焦点移动）
+  document.addEventListener('keydown', (e: KeyboardEvent) => {
+    if (e.key === 'PageDown') {
+      e.preventDefault()
+      goTo(currentIndex + 1)
+    } else if (e.key === 'PageUp') {
+      e.preventDefault()
+      goTo(currentIndex - 1)
+    }
+  })
 }
 
 function goTo(index: number) {

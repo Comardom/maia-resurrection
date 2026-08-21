@@ -105,12 +105,11 @@ header[data-header] {
 [data-header] .right-group { transform-origin: right center; animation: var(--header-animation-group); }
 
 /* 桌面端：品牌靠左，按钮组推向右端，主题钮紧贴应用中心左侧 */
-.center-group { order: -1; }
-.left-group   { order: 2; }
-.right-group  { order: 3; }
-
-/* 桌面专用（min-width 限定，避免漏进移动端重置 margin） */
 @media (min-width: 48rem) {
+    .center-group { order: -1; }
+    .left-group   { order: 2; }
+    .right-group  { order: 3; }
+
     [data-header] .left-group { margin-inline-start: auto; }
     header[data-can-move] .right-group { margin-inline-start: auto; }
 }

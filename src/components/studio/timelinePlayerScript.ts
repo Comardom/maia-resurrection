@@ -241,6 +241,8 @@ export function initTimelinePlayer() {
       } else if (saved) {
         // 再次进入：从保存进度继续（reduced-motion 下保持暂停）
         lastTs = 0
+        // 若离开时已播完（进度达时长但未触发翻到下一项），恢复播放前先归零从头播
+        if (elapsed >= DURATION) goto(0)
         if (!reduce) setPlaying(true)
       }
     } else {

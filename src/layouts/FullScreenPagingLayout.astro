@@ -25,6 +25,7 @@ import '/src/css/fonts.css'
     <link rel="icon" type="image/svg+xml"
           media="(prefers-color-scheme: light)"
           href={studio.logo.light} />
+    <link rel="icon" type="image/png" href="/favicon.png" />
     <script is:inline set:html={`
         ;(function () {
             const mq = window.matchMedia('(prefers-color-scheme: dark)')
@@ -78,6 +79,10 @@ import '/src/css/fonts.css'
         .snap-section {
             position: absolute;
             inset: 0;
+        }
+
+        .snap-section:not(:first-child) {
+            visibility: hidden;
         }
     </style>
 </head>

@@ -2,9 +2,13 @@
 import { defineConfig } from 'astro/config';
 import vue from '@astrojs/vue';
 import node from '@astrojs/node';
+import sitemap from '@astrojs/sitemap'
 
 // https://astro.build/config
 export default defineConfig({
+    build: {
+        inlineStylesheets: 'always',
+    },
     //正式域名，供 canonical、sitemap、OG 等使用
     site: 'https://hdwzgzs.cn',
     //告诉 Astro 用 SSR 模式，每次请求在服务端渲染 HTML。如果不设，默认是 static
@@ -20,7 +24,10 @@ export default defineConfig({
     adapter: node({ mode: 'standalone' }),
     //注册 Vue 集成，这样 .vue 文件才能在 Astro 中被识别和编译
     integrations: [
-        vue()
+        vue(),
+        sitemap({
+            lastmod: new Date(),
+        })
     ],
     //设置vite行为
     vite: {

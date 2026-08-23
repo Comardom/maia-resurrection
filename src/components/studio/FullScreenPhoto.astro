@@ -3,8 +3,8 @@ import { studio } from "@/data/studio.ts";
 ---
 
 <section class="fullscreen-photo">
-    <img class="photo photo-light" src={studio.hero.light.src} alt="" loading="eager" />
-    <img class="photo photo-dark" src={studio.hero.dark.src} alt="" loading="eager" />
+    <img class="photo photo-light" src={studio.hero.light.src} alt="" loading="eager" width="1080" height="810" />
+    <img class="photo photo-dark" src={studio.hero.dark.src} alt="" loading="eager" width="1920" height="1440" />
     <div class="content">
         <h1 class="title-anim" aria-label={studio.name}>
             <span class="title-base">{studio.name}</span>

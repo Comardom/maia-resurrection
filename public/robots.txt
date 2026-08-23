@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://hdwzgzs.cn/sitemap.xml
+Sitemap: https://hdwzgzs.cn/sitemap-index.xml

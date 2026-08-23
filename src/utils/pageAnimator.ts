@@ -61,7 +61,7 @@ export function initPageAnimator() {
         })
         tl.from(
             sections[0].querySelector('.fullscreen-photo'),
-            { opacity: 0, scale: 1.05, duration: 1.2, ease: 'power3.out' },
+            { scale: 1.08, duration: 1.2, ease: 'power3.out' },
             '-=0.5'
         )
     }

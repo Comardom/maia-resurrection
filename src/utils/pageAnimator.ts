@@ -59,11 +59,14 @@ export function initPageAnimator() {
         tl.from('.title-text', {
             y: -30, opacity: 0, duration: 1, ease: 'power3.out',
         })
-        tl.from(
-            sections[0].querySelector('.fullscreen-photo'),
-            { scale: 1.08, duration: 1.2, ease: 'power3.out' },
-            '-=0.5'
-        )
+        const hero = sections[0].querySelector('.fullscreen-photo')
+        if (hero) {
+            tl.from(
+                hero,
+                { scale: 1.08, duration: 1.2, ease: 'power3.out' },
+                '-=0.5'
+            )
+        }
     }
 
     // 支持浏览器前进/后退与手动改 hash

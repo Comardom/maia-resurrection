@@ -1,31 +1,27 @@
 ---
-import { tmp } from "@/data/tmp";
-import FullScreenPagingLayout from "@/layouts/FullScreenPagingLayout.astro";
-import Header from "@/components/header/Header.astro";
-import '/src/css/nonGlobal/studioColor.css'
-import '/src/css/nonGlobal/studio.css'
+import Header from '@/components/header/Header.astro'
+import VideoCapabilities from '@/components/video/VideoCapabilities.astro'
+import VideoEpilogue from '@/components/video/VideoEpilogue.astro'
+import VideoHero from '@/components/video/VideoHero.astro'
+import VideoSectionNav from '@/components/video/VideoSectionNav.astro'
+import { videoPage } from '@/data/video'
+import FullScreenPagingLayout from '@/layouts/FullScreenPagingLayout.astro'
+
+import '@/css/nonGlobal/studioColor.css'
+import '@/css/nonGlobal/studio.css'
+import '@/css/nonGlobal/videoColor.css'
+import '@/css/nonGlobal/video.css'
 ---
+
 <FullScreenPagingLayout
-        title={tmp.title}
-        description={tmp.description}
+    title={videoPage.seo.title}
+    description={videoPage.seo.description}
 >
     <Header />
-    <div class="tmp">
-        <span>监修中</span>
-    </div>
+    <main class="video-page">
+        <VideoHero />
+        <VideoCapabilities />
+        <VideoEpilogue />
+    </main>
+    <VideoSectionNav />
 </FullScreenPagingLayout>
-
-<style>
-    .tmp{
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        min-block-size: 100dvb;
-        padding-top: 7svb;
-        box-sizing: border-box;
-    }
-    .tmp span{
-        font-family: Huiwen-HKHei, cursive;
-        font-size: 7.5rem;
-    }
-</style>

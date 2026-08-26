@@ -1,0 +1,26 @@
+<nav class="video-section-nav" aria-label="视频部页面章节">
+    <a href="#Prologue"><span>01</span><b>片头</b></a>
+    <a href="#Capabilities"><span>02</span><b>职能</b></a>
+    <a href="#Epilogue"><span>03</span><b>片尾</b></a>
+</nav>
+
+<script>
+    const nav = document.querySelector<HTMLElement>('.video-section-nav')
+    if (nav) {
+        const links = Array.from(nav.querySelectorAll<HTMLAnchorElement>('a'))
+        const updateCurrent = (id: string) => {
+            links.forEach((link) => {
+                const current = link.hash === `#${id}`
+                link.classList.toggle('is-current', current)
+                if (current) link.setAttribute('aria-current', 'location')
+                else link.removeAttribute('aria-current')
+            })
+        }
+
+        updateCurrent(window.location.hash.slice(1) || 'Prologue')
+        window.addEventListener('section:change', (event) => {
+            const id = (event as CustomEvent<{ id?: string }>).detail?.id
+            if (id) updateCurrent(id)
+        })
+    }
+</script>

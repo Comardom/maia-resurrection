@@ -15,7 +15,7 @@ a {
 button, input, textarea {
     background-color: var(--theme-bg-button);
     color: var(--theme-color-button);
-    border: 1px solid var(--theme-border-button);
+    border: 0.0625rem solid var(--theme-border-button);
     transition: background-color 0.3s ease, color 0.3s ease, border 0.3s ease;
 }
 .dark button:hover {

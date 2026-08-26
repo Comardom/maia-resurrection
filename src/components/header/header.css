@@ -59,7 +59,7 @@ header[data-header] {
     z-index: 1000;
     background: var(--studio-topbar-bg);
     color: var(--studio-topbar-color);
-    border-block-end: 1px solid var(--studio-topbar-border);
+    border-block-end: 0.0625rem solid var(--studio-topbar-border);
 }
 
 .top-bar {
@@ -76,7 +76,7 @@ header[data-header] {
     z-index: 1000;
     background: var(--studio-topbar-bg);
     color: var(--studio-topbar-color);
-    border-block-end: 1px solid var(--studio-topbar-border);
+    border-block-end: 0.0625rem solid var(--studio-topbar-border);
     transform-origin: top center;
     animation: var(--header-animation-topbar);
     transition: background-color 0.3s, color 0.3s;
@@ -260,8 +260,8 @@ header[data-can-move] .top-bar {
     flex-shrink: 0;
     padding: 0;
     border: none;
-    border-inline-start: 1px solid var(--studio-panel-border);
-    border-inline-end: 1px solid var(--studio-panel-border);
+    border-inline-start: 0.0625rem solid var(--studio-panel-border);
+    border-inline-end: 0.0625rem solid var(--studio-panel-border);
     background: transparent;
     cursor: pointer;
     position: relative;
@@ -405,10 +405,10 @@ header[data-can-move] .top-bar {
 /* 屏幕阅读器专用隐藏标题 */
 .sr-only {
     position: absolute;
-    inline-size: 1px;
-    block-size: 1px;
+    inline-size: 0.0625rem;
+    block-size: 0.0625rem;
     padding: 0;
-    margin: -1px;
+    margin: -0.0625rem;
     overflow: hidden;
     clip: rect(0, 0, 0, 0);
     white-space: nowrap;

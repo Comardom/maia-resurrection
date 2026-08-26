@@ -1,0 +1,39 @@
+---
+import { videoPage } from '@/data/video'
+---
+
+<section
+    id="Capabilities"
+    class="snap-section video-section video-capabilities"
+    aria-labelledby="video-capabilities-title"
+>
+    <div class="video-capabilities__header">
+        <span class="video-kicker">02 / CAPABILITIES</span>
+        <h2 id="video-capabilities-title">{videoPage.capabilities.title}</h2>
+        <div class="video-playhead" aria-hidden="true">
+            <span>00:01:24:08</span>
+        </div>
+    </div>
+
+    <ol class="video-capability-grid">
+        {
+            videoPage.capabilities.items.map((item) => (
+                <li>
+                    <article class="video-capability-card">
+                        <header>
+                            <span class="video-capability-card__number">{item.label}</span>
+                            {'scope' in item && item.scope && (
+                                <span class="video-scope">{item.scope}</span>
+                            )}
+                        </header>
+                        <div class="video-capability-card__frame" aria-hidden="true">
+                            <span></span><span></span><span></span>
+                        </div>
+                        <h3>{item.title}</h3>
+                        <p>{item.description}</p>
+                    </article>
+                </li>
+            ))
+        }
+    </ol>
+</section>

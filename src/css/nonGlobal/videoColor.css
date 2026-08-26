@@ -1,0 +1,25 @@
+:root {
+    --video-background: #edf0f5;
+    --video-surface: rgba(255, 255, 255, 0.78);
+    --video-surface-solid: #f8f9fc;
+    --video-text: #111722;
+    --video-muted: rgba(17, 23, 34, 0.66);
+    --video-border: rgba(17, 23, 34, 0.20);
+    --video-grid: rgba(48, 62, 88, 0.13);
+    --video-accent: #655dcc;
+    --video-accent-soft: rgba(101, 93, 204, 0.18);
+    --video-rec: #cf344d;
+}
+
+.dark {
+    --video-background: #080b12;
+    --video-surface: rgba(17, 22, 34, 0.82);
+    --video-surface-solid: #101521;
+    --video-text: #f2f5fb;
+    --video-muted: rgba(232, 237, 248, 0.68);
+    --video-border: rgba(224, 231, 245, 0.20);
+    --video-grid: rgba(209, 219, 239, 0.10);
+    --video-accent: #a59eff;
+    --video-accent-soft: rgba(126, 117, 239, 0.18);
+    --video-rec: #ff526c;
+}

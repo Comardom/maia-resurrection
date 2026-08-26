@@ -1,0 +1,38 @@
+---
+import { videoPage } from '@/data/video'
+---
+
+<section
+    id="Prologue"
+    class="snap-section video-section video-hero"
+    aria-labelledby="video-title"
+>
+    <div class="video-viewfinder" aria-hidden="true">
+        <span class="video-corner video-corner--top-left"></span>
+        <span class="video-corner video-corner--top-right"></span>
+        <span class="video-corner video-corner--bottom-left"></span>
+        <span class="video-corner video-corner--bottom-right"></span>
+        <span class="video-viewfinder__grid"></span>
+        <span class="video-viewfinder__focus"></span>
+    </div>
+
+    <div class="video-hud video-hud--top" aria-hidden="true">
+        <span class="video-rec"><i></i> REC</span>
+        <span>4K / 25FPS</span>
+        <span>00:00:08:12</span>
+    </div>
+
+    <div class="video-hero__copy">
+        <span class="video-kicker">HENU WEB STUDIO / VIDEO</span>
+        <h1 id="video-title">{videoPage.hero.title}</h1>
+        <p class="video-hero__slogan">{videoPage.hero.slogan}</p>
+        <p class="video-hero__introduction">{videoPage.hero.introduction}</p>
+    </div>
+
+    <div class="video-hud video-hud--bottom" aria-hidden="true">
+        <span>AUTO</span>
+        <span>ISO 400</span>
+        <span>F 2.8</span>
+        <span>1/50</span>
+    </div>
+</section>

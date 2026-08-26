@@ -1,31 +1,145 @@
 ---
-import { tmp } from "@/data/tmp";
-import FullScreenPagingLayout from "@/layouts/FullScreenPagingLayout.astro";
-import Header from "@/components/header/Header.astro";
-import '/src/css/nonGlobal/studioColor.css'
-import '/src/css/nonGlobal/studio.css'
+import Header from '@/components/header/Header.astro'
+import { newMediaPage } from '@/data/newMedia'
+import ScrollablePageLayout from '@/layouts/ScrollablePageLayout.astro'
+
+import '@/css/nonGlobal/studioColor.css'
+import '@/css/nonGlobal/newMedia.css'
 ---
-<FullScreenPagingLayout
-        title={tmp.title}
-        description={tmp.description}
+
+<ScrollablePageLayout
+    title={newMediaPage.seo.title}
+    description={newMediaPage.seo.description}
 >
     <Header />
-    <div class="tmp">
-        <span>监修中</span>
-    </div>
-</FullScreenPagingLayout>
 
-<style>
-    .tmp{
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        min-block-size: 100dvb;
-        padding-top: 7svb;
-        box-sizing: border-box;
+    <main class="new-media-page">
+        <section class="new-media-hero" aria-labelledby="new-media-title">
+            <div class="new-media-hero__copy">
+                <div class="new-media-hero__text">
+                    <h1 id="new-media-title" class="new-media-hero__title">{newMediaPage.hero.title}</h1>
+                    <p class="new-media-hero__slogan">{newMediaPage.hero.slogan}</p>
+                </div>
+            </div>
+
+            <div class="new-media-hero__visual" role="button" tabindex="0" aria-expanded="false">
+                <div class="new-media-glass new-media-glass--back">
+                    <span class="new-media-glass__deco new-media-glass__topline" aria-hidden="true">
+                        <span>HENU WEB STUDIO</span>
+                        <span>NEW MEDIA / 2026</span>
+                    </span>
+                    <span class="new-media-glass__deco new-media-glass__lines" aria-hidden="true"></span>
+                    <img class="new-media-glass__logo new-media-glass__logo--light" src="/wswd-black.svg" alt="" aria-hidden="true" />
+                    <img class="new-media-glass__logo new-media-glass__logo--dark" src="/wswd-white.svg" alt="" aria-hidden="true" />
+                    <p class="new-media-glass__text">{newMediaPage.hero.back}</p>
+                </div>
+                <div class="new-media-glass new-media-glass--front">
+                    <span class="new-media-glass__deco new-media-glass__topline" aria-hidden="true">
+                        <span>HENU WEB STUDIO</span>
+                        <span>NEW MEDIA / 2026</span>
+                    </span>
+                    <span class="new-media-glass__deco new-media-glass__lines" aria-hidden="true"></span>
+                    <img class="new-media-glass__logo new-media-glass__logo--light" src="/wswd-black.svg" alt="" aria-hidden="true" />
+                    <img class="new-media-glass__logo new-media-glass__logo--dark" src="/wswd-white.svg" alt="" aria-hidden="true" />
+                    <p class="new-media-glass__text">{newMediaPage.hero.front}</p>
+                </div>
+                <span class="new-media-glass__hint" aria-hidden="true">轻触展开</span>
+            </div>
+        </section>
+
+        <section class="new-media-section new-media-about" aria-labelledby="new-media-about-title">
+            <header class="new-media-section__header">
+                <div>
+                    <span class="new-media-section__index">01 / ABOUT</span>
+                    <h2 id="new-media-about-title" class="new-media-section__title">
+                        {newMediaPage.about.title}
+                    </h2>
+                </div>
+            </header>
+
+            <div class="new-media-about__paragraphs">
+                {newMediaPage.about.paragraphs.map((paragraph) => <p>{paragraph}</p>)}
+            </div>
+        </section>
+
+        <section class="new-media-section new-media-operations" aria-labelledby="new-media-operations-title">
+            <header class="new-media-section__header">
+                <div>
+                    <span class="new-media-section__index">02 / OPERATIONS</span>
+                    <h2 id="new-media-operations-title" class="new-media-section__title">
+                        {newMediaPage.operations.title}
+                    </h2>
+                </div>
+                <p class="new-media-section__lead">{newMediaPage.operations.description}</p>
+            </header>
+
+            <ol class="new-media-operation-list">
+                {
+                    newMediaPage.operations.items.map((item) => (
+                        <li>
+                            <article class="new-media-card">
+                                <span class="new-media-card__index">{item.label}</span>
+                                <h3>{item.title}</h3>
+                                <p>{item.description}</p>
+                            </article>
+                        </li>
+                    ))
+                }
+            </ol>
+        </section>
+
+        <section class="new-media-section new-media-leaders" aria-labelledby="new-media-leaders-title">
+            <header class="new-media-section__header">
+                <div>
+                    <span class="new-media-section__index">03 / PEOPLE</span>
+                    <h2 id="new-media-leaders-title" class="new-media-section__title">
+                        {newMediaPage.leaders.title}
+                    </h2>
+                </div>
+            </header>
+
+            <ol class="new-media-leader-list">
+                {
+                    newMediaPage.leaders.items.map((leader, index) => (
+                        <li>
+                            <article class="new-media-card new-media-leader">
+                                <span class="new-media-card__index">
+                                    {String(index + 1).padStart(2, '0')}
+                                </span>
+                                <h3>{leader.name}</h3>
+                                <div class="new-media-leader__meta">
+                                    <span>{leader.grade}</span>
+                                    <span>{leader.major}</span>
+                                </div>
+                                {
+                                    'qq' in leader && leader.qq && (
+                                        <p class="new-media-leader__qq">QQ：{leader.qq}</p>
+                                    )
+                                }
+                            </article>
+                        </li>
+                    ))
+                }
+            </ol>
+        </section>
+    </main>
+</ScrollablePageLayout>
+
+<script>
+    // 首页双玻璃：点击 / 键盘切换「分开 / 贴近」；桌面 hover 由 CSS 处理
+    const visual = document.querySelector<HTMLElement>('.new-media-hero__visual')
+    if (visual) {
+        const toggle = () => {
+            const separated = visual.classList.toggle('is-separated')
+            visual.setAttribute('aria-expanded', String(separated))
+            visual.classList.add('has-interacted')
+        }
+        visual.addEventListener('click', toggle)
+        visual.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault()
+                toggle()
+            }
+        })
     }
-    .tmp span{
-        font-family: Huiwen-HKHei, cursive;
-        font-size: 7.5rem;
-    }
-</style>
+</script>

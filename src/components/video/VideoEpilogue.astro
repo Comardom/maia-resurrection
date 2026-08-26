@@ -1,0 +1,24 @@
+---
+import { videoPage } from '@/data/video'
+---
+
+<section
+    id="Epilogue"
+    class="snap-section video-section video-epilogue"
+    aria-labelledby="video-epilogue-title"
+>
+    <div class="video-end-card">
+        <span class="video-kicker">03 / END CREDITS</span>
+        <h2 id="video-epilogue-title">一同启程</h2>
+        <div class="video-epilogue__copy">
+            {videoPage.epilogue.paragraphs.map((paragraph) => <p>{paragraph}</p>)}
+        </div>
+        <a class="video-back-link" href="/studio">返回工作室首页</a>
+    </div>
+
+    <div class="video-credit-roll" aria-hidden="true">
+        <span>KEEP RECORDING</span>
+        <span>STORY / FRAME / MEMORY</span>
+        <span>HENU WEB STUDIO · VIDEO</span>
+    </div>
+</section>

@@ -48,11 +48,62 @@
 }
 
 .new-media-hero__title {
+    display: inline-flex;
+    gap: 0.01em;
     margin: 0;
     font-size: clamp(4.5rem, 12vw, 10rem);
     font-weight: 700;
     line-height: 0.92;
     letter-spacing: -0.06em;
+}
+
+.new-media-hero__char {
+    display: inline-block;
+}
+
+/* ── 首屏入场动画 ─────────────────────────────────── */
+@keyframes new-media-rise {
+    from { opacity: 0; transform: translateY(1.25rem); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes new-media-drop {
+    from { opacity: 0; transform: translateY(-1.5rem); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes new-media-draw {
+    from { transform: scaleX(0); }
+    to   { transform: scaleX(1); }
+}
+
+@keyframes new-media-fade {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
+.new-media-hero__char {
+    opacity: 0;
+    animation: new-media-drop 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+.new-media-hero__char:nth-child(1) { animation-delay: 0s; }
+.new-media-hero__char:nth-child(2) { animation-delay: 0.15s; }
+.new-media-hero__char:nth-child(3) { animation-delay: 0.3s; }
+
+.new-media-hero__slogan {
+    opacity: 0;
+    animation: new-media-rise 0.7s cubic-bezier(0.22, 1, 0.36, 1) 0.45s forwards;
+}
+
+.new-media-hero__slogan::before {
+    transform-origin: center;
+    animation: new-media-draw 0.6s cubic-bezier(0.22, 1, 0.36, 1) 0.55s backwards;
+}
+
+.new-media-hero__visual {
+    opacity: 0;
+    animation: new-media-fade 0.8s ease 0.7s forwards;
 }
 
 /* 口号：直线排列 */
@@ -285,6 +336,43 @@
     margin-block-start: 0.9rem;
 }
 
+/* ── 滚动浮现（js 门控，渐进增强） ─────────────────── */
+.js .new-media-statement,
+.js .new-media-panel,
+.js .new-media-leaders-panel,
+.js .new-media-leader-grid li {
+    opacity: 0;
+    transform: translateY(1.5rem);
+    transition: opacity 0.6s cubic-bezier(0.22, 1, 0.36, 1),
+                transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.js .new-media-section.is-in-view .new-media-statement,
+.js .new-media-section.is-in-view .new-media-panel,
+.js .new-media-section.is-in-view .new-media-leaders-panel,
+.js .new-media-section.is-in-view .new-media-leader-grid li {
+    opacity: 1;
+    transform: none;
+}
+
+.js .new-media-panel {
+    transition-delay: 0.15s;
+}
+
+.js .new-media-section.is-in-view .new-media-leader-grid li:nth-child(2) { transition-delay: 0.12s; }
+.js .new-media-section.is-in-view .new-media-leader-grid li:nth-child(3) { transition-delay: 0.24s; }
+
+/* 短横线：居中横向展开 */
+.js .new-media-statement::after {
+    transform: scaleX(0);
+    transform-origin: center;
+    transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1) 0.15s;
+}
+
+.js .new-media-section.is-in-view .new-media-statement::after {
+    transform: scaleX(1);
+}
+
 /* 领航：整块玻璃面板（横向顶格）+ 十三等分布局（左右各 2 份，中间三人各 3 份） */
 .new-media-leaders-panel {
     margin-block-start: clamp(2.5rem, 6vw, 4rem);
@@ -457,6 +545,34 @@
 @media (prefers-reduced-motion: reduce) {
     .new-media-glass,
     .new-media-glass__hint {
+        transition: none;
+    }
+
+    /* 首屏入场关闭：内容直接可见 */
+    .new-media-hero__char,
+    .new-media-hero__slogan,
+    .new-media-hero__visual {
+        opacity: 1;
+        animation: none;
+    }
+
+    .new-media-hero__slogan::before {
+        transform: none;
+        animation: none;
+    }
+
+    /* 滚动浮现关闭 */
+    .js .new-media-statement,
+    .js .new-media-panel,
+    .js .new-media-leaders-panel,
+    .js .new-media-leader-grid li {
+        opacity: 1;
+        transform: none;
+        transition: none;
+    }
+
+    .js .new-media-statement::after {
+        transform: none;
         transition: none;
     }
 }

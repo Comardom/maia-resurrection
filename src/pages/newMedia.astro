@@ -17,7 +17,13 @@ import '@/css/nonGlobal/newMedia.css'
         <section class="new-media-hero" aria-labelledby="new-media-title">
             <div class="new-media-hero__copy">
                 <div class="new-media-hero__text">
-                    <h1 id="new-media-title" class="new-media-hero__title">{newMediaPage.hero.title}</h1>
+                    <h1 id="new-media-title" class="new-media-hero__title" aria-label={newMediaPage.hero.title}>
+                        {
+                            [...newMediaPage.hero.title].map((ch) => (
+                                <span class="new-media-hero__char" aria-hidden="true">{ch}</span>
+                            ))
+                        }
+                    </h1>
                     <p class="new-media-hero__slogan">{newMediaPage.hero.slogan}</p>
                 </div>
             </div>
@@ -97,6 +103,20 @@ import '@/css/nonGlobal/newMedia.css'
 </ScrollablePageLayout>
 
 <script>
+    // js 门控：无 JS 时滚动浮现的内容保持可见（渐进增强）
+    document.documentElement.classList.add('js')
+
+    // 滚动浮现：section 进入视口后触发子元素入场动画
+    const sections = document.querySelectorAll('.new-media-section')
+    if (sections.length && 'IntersectionObserver' in window) {
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach((entry) => {
+                if (entry.isIntersecting) entry.target.classList.add('is-in-view')
+            })
+        }, { threshold: 0.18 })
+        sections.forEach((section) => observer.observe(section))
+    }
+
     // 首页双玻璃：点击 / 键盘切换「分开 / 贴近」；桌面 hover 由 CSS 处理
     const visual = document.querySelector<HTMLElement>('.new-media-hero__visual')
     if (visual) {

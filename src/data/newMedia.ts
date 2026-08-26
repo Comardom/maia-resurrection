@@ -1,9 +1,3 @@
-export interface NewMediaOperation {
-    label: string
-    title: string
-    description: string
-}
-
 export interface NewMediaLeader {
     name: string
     grade: string
@@ -27,6 +21,7 @@ export const newMediaPage = {
     },
 
     about: {
+        statement: '星星的讯息能穿透叶片',
         title: '关于新传部',
         paragraphs: [
             '新传部是投身于新闻事业的小分队，也是工作室新媒体账号运营的主平台。',
@@ -35,35 +30,14 @@ export const newMediaPage = {
     },
 
     operations: {
+        statement: '在遥远的路途上',
         title: '我们的工作',
         description:
             '新传部立足校园宣传阵地，以文字记录校园生活，用新媒体技术传递网站理念，主要负责网站新闻稿件的校对审核与工作室公众号的策划运营。我们坚守内容质量关口，细致打磨内容，把控输出规范，传递河大声音，讲好校园故事。',
-        items: [
-            {
-                label: '01',
-                title: '新闻审核',
-                description: '网站新闻稿件的校对审核',
-            },
-            {
-                label: '02',
-                title: '账号运营',
-                description: '工作室公众号的策划运营',
-            },
-            {
-                label: '03',
-                title: '内容把关',
-                description: '细致打磨内容，把控输出规范',
-            },
-            {
-                label: '04',
-                title: '校园传播',
-                description: '传递河大声音，讲好校园故事',
-            },
-        ] satisfies NewMediaOperation[],
     },
 
     leaders: {
-        title: '部门负责人',
+        title: '领航',
         items: [
             {
                 name: '张祖毓',

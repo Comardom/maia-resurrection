@@ -48,79 +48,50 @@ import '@/css/nonGlobal/newMedia.css'
         </section>
 
         <section class="new-media-section new-media-about" aria-labelledby="new-media-about-title">
-            <header class="new-media-section__header">
-                <div>
-                    <span class="new-media-section__index">01 / ABOUT</span>
-                    <h2 id="new-media-about-title" class="new-media-section__title">
-                        {newMediaPage.about.title}
-                    </h2>
-                </div>
-            </header>
-
-            <div class="new-media-about__paragraphs">
+            <h2 id="new-media-about-title" class="new-media-statement">
+                {newMediaPage.about.statement}
+            </h2>
+            <div class="new-media-panel">
                 {newMediaPage.about.paragraphs.map((paragraph) => <p>{paragraph}</p>)}
             </div>
         </section>
 
         <section class="new-media-section new-media-operations" aria-labelledby="new-media-operations-title">
-            <header class="new-media-section__header">
-                <div>
-                    <span class="new-media-section__index">02 / OPERATIONS</span>
-                    <h2 id="new-media-operations-title" class="new-media-section__title">
-                        {newMediaPage.operations.title}
-                    </h2>
-                </div>
-                <p class="new-media-section__lead">{newMediaPage.operations.description}</p>
-            </header>
-
-            <ol class="new-media-operation-list">
-                {
-                    newMediaPage.operations.items.map((item) => (
-                        <li>
-                            <article class="new-media-card">
-                                <span class="new-media-card__index">{item.label}</span>
-                                <h3>{item.title}</h3>
-                                <p>{item.description}</p>
-                            </article>
-                        </li>
-                    ))
-                }
-            </ol>
+            <h2 id="new-media-operations-title" class="new-media-statement">
+                {newMediaPage.operations.statement}
+            </h2>
+            <div class="new-media-panel">
+                <p>{newMediaPage.operations.description}</p>
+            </div>
         </section>
 
         <section class="new-media-section new-media-leaders" aria-labelledby="new-media-leaders-title">
-            <header class="new-media-section__header">
-                <div>
-                    <span class="new-media-section__index">03 / PEOPLE</span>
-                    <h2 id="new-media-leaders-title" class="new-media-section__title">
-                        {newMediaPage.leaders.title}
-                    </h2>
-                </div>
-            </header>
+            <h2 id="new-media-leaders-title" class="new-media-statement">
+                {newMediaPage.leaders.title}
+            </h2>
 
-            <ol class="new-media-leader-list">
-                {
-                    newMediaPage.leaders.items.map((leader, index) => (
-                        <li>
-                            <article class="new-media-card new-media-leader">
-                                <span class="new-media-card__index">
-                                    {String(index + 1).padStart(2, '0')}
-                                </span>
-                                <h3>{leader.name}</h3>
-                                <div class="new-media-leader__meta">
-                                    <span>{leader.grade}</span>
-                                    <span>{leader.major}</span>
-                                </div>
-                                {
-                                    'qq' in leader && leader.qq && (
-                                        <p class="new-media-leader__qq">QQ：{leader.qq}</p>
-                                    )
-                                }
-                            </article>
-                        </li>
-                    ))
-                }
-            </ol>
+            <div class="new-media-leaders-panel">
+                <ol class="new-media-leader-grid">
+                    {
+                        newMediaPage.leaders.items.map((leader) => (
+                            <li>
+                                <article class="new-media-leader">
+                                    <h3>{leader.name}</h3>
+                                    <div class="new-media-leader__meta">
+                                        <span>{leader.grade}</span>
+                                        <span>{leader.major}</span>
+                                    </div>
+                                    {
+                                        'qq' in leader && leader.qq && (
+                                            <p class="new-media-leader__qq">QQ：{leader.qq}</p>
+                                        )
+                                    }
+                                </article>
+                            </li>
+                        ))
+                    }
+                </ol>
+            </div>
         </section>
     </main>
 </ScrollablePageLayout>
@@ -129,6 +100,15 @@ import '@/css/nonGlobal/newMedia.css'
     // 首页双玻璃：点击 / 键盘切换「分开 / 贴近」；桌面 hover 由 CSS 处理
     const visual = document.querySelector<HTMLElement>('.new-media-hero__visual')
     if (visual) {
+        // 「轻触展开」提示：cookie 判断，只展示一次
+        const HINT_COOKIE = 'newMediaHintSeen'
+        const hasSeenHint = document.cookie.split('; ').some((c) => c.startsWith(HINT_COOKIE + '='))
+        if (!hasSeenHint) {
+            document.cookie = `${HINT_COOKIE}=1; path=/; max-age=31536000`
+        } else {
+            visual.classList.add('has-interacted')
+        }
+
         const toggle = () => {
             const separated = visual.classList.toggle('is-separated')
             visual.setAttribute('aria-expanded', String(separated))

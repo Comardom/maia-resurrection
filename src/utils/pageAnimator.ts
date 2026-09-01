@@ -1,6 +1,8 @@
 import { gsap } from 'gsap'
 import { Observer } from 'gsap/Observer'
 import { closeAppMenu } from '@/components/header/headerScript'
+import { scheduleStudioFontPrefetch } from '@/utils/studioFontPrefetch'
+import { studioFontManifest } from '@/data/generated/studioFontManifest'
 
 let currentIndex = 0
 let isAnimating = false
@@ -33,6 +35,28 @@ function dispatchSectionChange(index: number) {
     }))
 }
 
+function setActiveSection(index: number) {
+    sections.forEach((section, sectionIndex) => {
+        section.classList.toggle('is-active', sectionIndex === index)
+    })
+}
+
+function setEnteringSection(index: number | null) {
+    sections.forEach((section, sectionIndex) => {
+        section.classList.toggle('is-entering', sectionIndex === index)
+    })
+}
+
+function prepareSectionFonts(index: number) {
+    // CSS 中的 @font-face 声明是唯一的字体来源。这里调用 fonts.load 只是提前
+    // 加载即将显示区域的 alias，不会注册第二套 FontFace，也不会替换 CSS family。
+    const id = sections[index]?.id as keyof typeof studioFontManifest | undefined
+    if (!id || !(id in studioFontManifest)) return
+    for (const { alias, sample } of studioFontManifest[id]) {
+        document.fonts.load(`1em "${alias}"`, sample).catch(() => undefined)
+    }
+}
+
 export function initPageAnimator() {
     gsap.registerPlugin(Observer)
     reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
@@ -41,6 +65,7 @@ export function initPageAnimator() {
 
     // 初始状态：按 URL hash 定位当前屏，其余隐藏
     currentIndex = sectionIndexFromHash()
+    setActiveSection(currentIndex)
     sections.forEach((el) => {
         gsap.set(el, { yPercent: 0, autoAlpha: 0, pointerEvents: 'none' })
     })
@@ -51,6 +76,8 @@ export function initPageAnimator() {
 
     // 广播当前屏，供各区块（如 Symphony）按需启停自身动画
     dispatchSectionChange(currentIndex)
+    prepareSectionFonts(currentIndex)
+    scheduleStudioFontPrefetch()
 
     // 首屏入场动画：仅在首页（无 hash 或 #Prologue）播放，且用户未开启减少动画
     // 注意：不动 .logo（深浅切换完全交给 CSS class，避免 gsap 内联 opacity 干扰）
@@ -103,15 +130,22 @@ function goTo(index: number) {
     const direction = index > currentIndex ? 1 : -1
     const outgoing = sections[currentIndex]
     const incoming = sections[index]
+    // 在过渡结束前保留旧区域的 active 状态，避免旧区域仍然可见时就失去自己的
+    // font-family，造成明显的字体闪烁。
+    setEnteringSection(index)
+    currentIndex = index
+    syncHash(index)
+    dispatchSectionChange(index)
+    prepareSectionFonts(index)
 
     const tl = gsap.timeline({
         onComplete: () => {
             gsap.set(outgoing, { autoAlpha: 0, zIndex: 0, pointerEvents: 'none' })
             gsap.set(incoming, { yPercent: 0, zIndex: 1, pointerEvents: 'auto' })
+            outgoing.classList.remove('is-active')
+            setEnteringSection(null)
+            incoming.classList.add('is-active')
             isAnimating = false
-            currentIndex = index
-            syncHash(index)
-            dispatchSectionChange(index)
         },
         defaults: { duration: reducedMotion ? 0 : 1.2, ease: 'power4.inOut' },
     })

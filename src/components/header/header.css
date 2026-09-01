@@ -60,6 +60,8 @@ header[data-header] {
     background: var(--studio-topbar-bg);
     color: var(--studio-topbar-color);
     border-block-end: 0.0625rem solid var(--studio-topbar-border);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI",
+    "PingFang SC", "Microsoft YaHei", "Noto Sans CJK SC", sans-serif;
 }
 
 .top-bar {
@@ -143,7 +145,7 @@ header[data-can-move] .top-bar {
 .dark .logo-wrapper .logo-dark  { opacity: 1; }
 
 .title-text {
-    font-family: 'Huiwen-HKHei', -apple-system, BlinkMacSystemFont, "Segoe UI",
+    font-family: 'Huiwen-HKHei-Header', -apple-system, BlinkMacSystemFont, "Segoe UI",
     "PingFang SC", "Microsoft YaHei", "Noto Sans CJK SC", sans-serif;
     font-size: 1.3rem;
     font-weight: 300;

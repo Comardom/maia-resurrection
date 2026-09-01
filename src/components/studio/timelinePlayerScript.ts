@@ -258,4 +258,16 @@ export function initTimelinePlayer() {
     // 等列表布局稳定后检测标题溢出
     requestAnimationFrame(() => initMarquee())
     setTimeout(initMarquee, 300)
+
+    // pageAnimator may initialize after this component script; recover direct hash entry.
+    setTimeout(() => {
+        const activeId = document.querySelector<HTMLElement>('.snap-section.is-active')?.id
+        if (activeId === 'Timeline') {
+            preloadTimelineImages()
+            inView = true
+            initialized = true
+            const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+            if (!reduce) setPlaying(true)
+        }
+    }, 0)
 }

@@ -1,0 +1,73 @@
+/* 由 scripts/generate-studio-fonts.mjs 自动生成，请勿手动修改。 */
+
+@font-face {
+    font-family: 'PMingLiU-TW-Prologue';
+    src: url('/font/pmingliu-prologue-64fe9553.woff2') format('woff2');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Unifont-Prologue';
+    src: url('/font/unifont-prologue-5f0beb8c.woff2') format('woff2');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'PangMenZhengDao-Prologue';
+    src: url('/font/pmzd-prologue-a925e938.woff2') format('woff2');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'cwTeXMing-Prologue';
+    src: url('/font/cwtex-prologue-242b0dde.woff2') format('woff2');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Huiwen-HKHei-Symphony';
+    src: url('/font/hkhei-symphony-e41efa8b.woff2') format('woff2');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'PMingLiU-TW-Symphony';
+    src: url('/font/pmingliu-symphony-dae818dc.woff2') format('woff2');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'PangMenZhengDao-Symphony';
+    src: url('/font/pmzd-symphony-76380e70.woff2') format('woff2');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Huiwen-HKHei-Epilogue';
+    src: url('/font/hkhei-epilogue-f3218464.woff2') format('woff2');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'PMingLiU-TW-Epilogue';
+    src: url('/font/pmingliu-epilogue-3d356e27.woff2') format('woff2');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}

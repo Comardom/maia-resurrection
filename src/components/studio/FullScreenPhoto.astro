@@ -31,17 +31,22 @@ import { studio } from "@/data/studio.ts";
     //   上层(新字)右侧裁剪 = 已扫过部分显现；下层(旧字)左侧裁剪 = 已扫过部分隐藏
     //   同一个变量驱动两侧，辉光带路径固定
     const titleStates = [
-        { text: '河南大学网站工作室', font: "'PMingLiU-TW', Georgia, 'Times New Roman', serif" },
-        { text: '河南大学网站工作室', font: "'Unifont', cursive" },
-        { text: '河南大学网站工作室', font: "'PangMenZhengDao', cursive" },
-        { text: '河南大學網站工作室', font: "'cwTeXMing', 'PMingLiU-TW', serif" },
+        { text: '河南大学网站工作室', font: "'PMingLiU-TW-Prologue', Georgia, 'Times New Roman', serif" },
+        { text: '河南大学网站工作室', font: "'Unifont-Prologue', cursive" },
+        { text: '河南大学网站工作室', font: "'PangMenZhengDao-Prologue', cursive" },
+        { text: '河南大學網站工作室', font: "'cwTeXMing-Prologue', serif" },
     ]
 
-    const titleEl = document.querySelector<HTMLElement>('.title-anim')
-    const baseEl = document.querySelector<HTMLElement>('.title-base')
-    const scanEl = document.querySelector<HTMLElement>('.title-scan')
-    const barEl = document.querySelector<HTMLElement>('.scan-bar')
-    if (titleEl && baseEl && scanEl && barEl) {
+    let started = false
+    function startTitleAnimation() {
+        if (started) return
+        const section = document.getElementById('Prologue')
+        const titleEl = section?.querySelector<HTMLElement>('.title-anim')
+        const baseEl = section?.querySelector<HTMLElement>('.title-base')
+        const scanEl = section?.querySelector<HTMLElement>('.title-scan')
+        const barEl = section?.querySelector<HTMLElement>('.scan-bar')
+        if (!section?.classList.contains('is-active') || !titleEl || !baseEl || !scanEl || !barEl) return
+        started = true
         const title: HTMLElement = titleEl
         const base: HTMLElement = baseEl
         const scan: HTMLElement = scanEl
@@ -83,6 +88,9 @@ import { studio } from "@/data/studio.ts";
             setInterval(doScan, 4000)
         }
     }
+    startTitleAnimation()
+    window.addEventListener('section:change', startTitleAnimation)
+    setTimeout(startTitleAnimation, 0)
 </script>
 
 <style>
@@ -173,9 +181,10 @@ import { studio } from "@/data/studio.ts";
         background: linear-gradient(to right, transparent, rgb(64 224 208 / 0.9), transparent);
         box-shadow: 0 0 1.5em rgb(64 224 208 / 0.8);
     }
-    .content p {
+    :global(#Prologue.is-active) .content p,
+    :global(#Prologue.is-entering) .content p {
         font-size: 1.25rem;
-        font-family: 'PMingLiU-TW', Georgia, 'Times New Roman', serif;
+        font-family: 'PMingLiU-TW-Prologue', Georgia, 'Times New Roman', serif;
         text-align: center;
         margin: 0;
         padding-inline: 2rem;

@@ -1,0 +1,9 @@
+/* 由 scripts/generate-studio-fonts.mjs 自动生成，请勿手动修改。 */
+
+@font-face {
+    font-family: 'Huiwen-HKHei-Header';
+    src: url('/font/hkhei-header-c7543e82.woff2') format('woff2');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}

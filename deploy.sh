@@ -11,7 +11,8 @@ PACKAGE_JSON="$DEPLOY_PACKAGES/hdwzgzs.cn.package.json"
 
 echo "==> 1/5 构建"
 cd "$PROJECT_DIR"
-pnpm run build
+pnpm font:subset:studio
+pnpm build
 
 echo "==> 2/5 备份旧包"
 if [ -f "$TARBALL" ]; then

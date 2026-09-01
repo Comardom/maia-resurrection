@@ -12,6 +12,7 @@
     "astro": "astro",
     "typecheck": "vue-tsc -b && astro check",
     "font:subset:all": "pnpm font:subset:hk && pnpm font:subset:tw && pnpm font:subset:pmzd && pnpm font:subset:cwtex && pnpm font:subset:unifont",
+    "font:subset:studio": "node ./scripts/generate-studio-fonts.mjs",
     "font:subset:hk": "glyphhanger ./font/hkhei-words.txt --subset=./font/汇文港黑.ttf --formats=woff2 --output=./public/font && mv ./public/font/汇文港黑-subset.woff2 ./public/font/hkhei-subset.woff2",
     "font:subset:tw": "glyphhanger ./font/pmingliu-words.txt --subset=./font/臺灣新細明體.ttf --formats=woff2 --output=./public/font && mv ./public/font/臺灣新細明體-subset.woff2 ./public/font/pmingliu-subset.woff2",
     "font:subset:pmzd": "glyphhanger ./font/pangmenzhengdao-words.txt --subset=./font/庞门正道标题体2.0增强版.ttf --formats=woff2 --output=./public/font && mv ./public/font/庞门正道标题体2.0增强版-subset.woff2 ./public/font/pangmenzhengdao-subset.woff2",

@@ -8,10 +8,12 @@ import TimelinePlayer from "@/components/studio/TimelinePlayer.astro";
 import Footer from "@/components/studio/Footer.astro";
 import '/src/css/nonGlobal/studioColor.css'
 import '/src/css/nonGlobal/studio.css'
+import '/src/css/generated-studio-fonts.css'
 ---
 <FullScreenPagingLayout
     title={studio.title}
     description={studio.description}
+    pageClass="studio-page"
 >
     <Header />
     <div class="snap-section" id="Prologue" data-section="1">

@@ -1,0 +1,18 @@
+---
+import { videoPage } from '@/data/video'
+---
+
+<section class="video-section video-join" aria-labelledby="join-title">
+    <div class="video-section__content">
+        <div class="join-panel">
+            <div class="join-panel__back">
+                <h2 id="join-title">{videoPage.join.title}</h2>
+                <p class="join-panel__lead">练啥不如练技术，学啥不如学技能。<br />同学，技多不压身哦！</p>
+                <p class="join-panel__context">视频化时代，掌握视频剪辑技能不仅能增强就业竞争力，更能利用剪辑副业多一份外快收入。</p>
+                <div class="join-panel__front">
+                    {videoPage.join.paragraphs.map((paragraph) => <p>{paragraph}</p>)}
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

@@ -1,27 +1,35 @@
 ---
-import Header from '@/components/header/Header.astro'
-import VideoCapabilities from '@/components/video/VideoCapabilities.astro'
-import VideoEpilogue from '@/components/video/VideoEpilogue.astro'
-import VideoHero from '@/components/video/VideoHero.astro'
-import VideoSectionNav from '@/components/video/VideoSectionNav.astro'
 import { videoPage } from '@/data/video'
 import FullScreenPagingLayout from '@/layouts/FullScreenPagingLayout.astro'
-
+import Header from '@/components/header/Header.astro'
+import VideoHero from '@/components/video/VideoHero.astro'
+import VideoCapabilities from '@/components/video/VideoCapabilities.astro'
+import VideoJoin from '@/components/video/VideoJoin.astro'
 import '@/css/nonGlobal/studioColor.css'
 import '@/css/nonGlobal/studio.css'
-import '@/css/nonGlobal/videoColor.css'
 import '@/css/nonGlobal/video.css'
 ---
 
 <FullScreenPagingLayout
     title={videoPage.seo.title}
     description={videoPage.seo.description}
+    pageClass="video-page"
 >
     <Header />
-    <main class="video-page">
+    <div class="video-frame" aria-hidden="true">
+        <span class="hero-frame-corner hero-frame-corner--top-left"></span>
+        <span class="hero-frame-corner hero-frame-corner--top-right"></span>
+        <span class="hero-frame-corner hero-frame-corner--bottom-left"></span>
+        <span class="hero-frame-corner hero-frame-corner--bottom-right"></span>
+        <span class="video-rec"><i></i>REC</span>
+    </div>
+    <div class="snap-section" id="Hero" data-section="1">
         <VideoHero />
+    </div>
+    <div class="snap-section" id="Capabilities" data-section="2">
         <VideoCapabilities />
-        <VideoEpilogue />
-    </main>
-    <VideoSectionNav />
+    </div>
+    <div class="snap-section" id="Join" data-section="3">
+        <VideoJoin />
+    </div>
 </FullScreenPagingLayout>

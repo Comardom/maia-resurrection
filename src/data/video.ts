@@ -14,13 +14,13 @@ export const videoPage = {
 
     hero: {
         title: '视频部',
-        slogan: '练啥不如练技术，学啥不如学技能。同学，技多不压身哦！',
+        slogan: '专业影像制作 · 校园传媒核心团队',
         introduction:
-            '视频化时代，掌握视频剪辑技能不仅能增强就业竞争力，更能利用剪辑副业多一份外快收入。',
+            '河南大学视频部是校内专业的视频制作与传媒团队，致力于校园活动记录、宣传片制作与媒体内容创作。我们拥有专业的设备与培训体系，为校园文化传播提供有力支持。',
     },
 
     capabilities: {
-        title: '我们的工作',
+        title: '主要职能',
         items: [
             {
                 label: '01',
@@ -46,7 +46,8 @@ export const videoPage = {
         ] satisfies VideoCapability[],
     },
 
-    epilogue: {
+    join: {
+        title: '加入我们',
         paragraphs: [
             '来视频部吧，学长学姐将与你们分享所学，带你们从 0 到 1 学习视频剪辑、特效制作、摄影录像。',
             '在这里，街头采访，趣味团建，精彩不断！',

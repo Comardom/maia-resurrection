@@ -1,0 +1,13 @@
+---
+import { maintenancePage } from '@/data/maintenance'
+---
+
+<section class="maintenance-hero" aria-labelledby="maintenance-title">
+    <div class="maintenance-frame" aria-hidden="true"></div>
+    <div class="maintenance-hero__content">
+        <p class="maintenance-kicker">MAINTENANCE DEPARTMENT</p>
+        <h1 id="maintenance-title">{maintenancePage.hero.title}</h1>
+        <p class="maintenance-hero__slogan">{maintenancePage.hero.slogan}</p>
+        <p class="maintenance-glass maintenance-hero__intro">{maintenancePage.hero.introduction}</p>
+    </div>
+</section>

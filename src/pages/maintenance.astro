@@ -1,31 +1,35 @@
 ---
-import { tmp } from "@/data/tmp";
-import FullScreenPagingLayout from "@/layouts/FullScreenPagingLayout.astro";
-import Header from "@/components/header/Header.astro";
-import '/src/css/nonGlobal/studioColor.css'
-import '/src/css/nonGlobal/studio.css'
+import Header from '@/components/header/Header.astro'
+import MaintenanceAbout from '@/components/maintenance/MaintenanceAbout.astro'
+import MaintenanceHero from '@/components/maintenance/MaintenanceHero.astro'
+import MaintenanceJoin from '@/components/maintenance/MaintenanceJoin.astro'
+import MaintenanceServices from '@/components/maintenance/MaintenanceServices.astro'
+import ScrollablePageLayout from '@/layouts/ScrollablePageLayout.astro'
+import { maintenancePage } from '@/data/maintenance'
+import '@/css/nonGlobal/studioColor.css'
+import '@/css/nonGlobal/maintenance.css'
 ---
-<FullScreenPagingLayout
-        title={tmp.title}
-        description={tmp.description}
->
-    <Header />
-    <div class="tmp">
-        <span>监修中</span>
-    </div>
-</FullScreenPagingLayout>
 
-<style>
-    .tmp{
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        min-block-size: 100dvb;
-        padding-top: 7svb;
-        box-sizing: border-box;
+<ScrollablePageLayout title={maintenancePage.seo.title} description={maintenancePage.seo.description}>
+    <Header />
+    <main class="maintenance-page">
+        <MaintenanceHero />
+        <MaintenanceAbout />
+        <MaintenanceServices />
+        <MaintenanceJoin />
+    </main>
+</ScrollablePageLayout>
+
+<script>
+    document.documentElement.classList.add('js')
+
+    const sections = document.querySelectorAll('.maintenance-section')
+    if ('IntersectionObserver' in window) {
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach((entry) => {
+                if (entry.isIntersecting) entry.target.classList.add('is-in-view')
+            })
+        }, { threshold: 0.12 })
+        sections.forEach((section) => observer.observe(section))
     }
-    .tmp span{
-        font-family: Huiwen-HKHei, cursive;
-        font-size: 7.5rem;
-    }
-</style>
+</script>

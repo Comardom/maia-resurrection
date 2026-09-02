@@ -1,0 +1,17 @@
+---
+import { maintenancePage } from '@/data/maintenance'
+---
+
+<section class="maintenance-section maintenance-join" aria-labelledby="maintenance-join-title">
+    <div class="maintenance-section__inner">
+        <div class="maintenance-glass maintenance-join__panel">
+            <h2 id="maintenance-join-title">{maintenancePage.join.title}</h2>
+            <div class="maintenance-join__content">
+                <h3>为什么选择我们？</h3>
+                <ul>
+                    {maintenancePage.join.reasons.map((reason) => <li>{reason}</li>)}
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>

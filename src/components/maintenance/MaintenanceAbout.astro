@@ -1,0 +1,25 @@
+---
+import { maintenancePage } from '@/data/maintenance'
+---
+
+<section class="maintenance-section maintenance-about" aria-labelledby="maintenance-about-title">
+    <div class="maintenance-section__inner">
+        <h2 id="maintenance-about-title">{maintenancePage.about.title}</h2>
+        <div class="maintenance-about__grid">
+            <div class="maintenance-glass maintenance-about__copy">
+                <h3>{maintenancePage.about.mission.title}</h3>
+                <p>{maintenancePage.about.mission.text}</p>
+                <h3>{maintenancePage.about.environment.title}</h3>
+                <p>{maintenancePage.about.environment.text}</p>
+            </div>
+            <div class="maintenance-stats">
+                {maintenancePage.about.stats.map((stat) => (
+                    <div class="maintenance-glass maintenance-stat">
+                        <strong>{stat.number}</strong>
+                        <span>{stat.label}</span>
+                    </div>
+                ))}
+            </div>
+        </div>
+    </div>
+</section>

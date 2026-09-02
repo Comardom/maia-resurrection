@@ -301,6 +301,12 @@ const firstAlt = first.image?.alt ?? `${first.year} ${first.title}`;
         cursor: pointer;
         border-radius: inherit;
     }
+    /* 覆盖全局深色模式 button:hover，避免透明点击层变成灰色盖住蓝色条目 */
+    .event-item__hit:hover,
+    .event-item__hit:active,
+    .event-item__hit:focus {
+        background-color: transparent !important;
+    }
     /* 键盘焦点可见性 */
     .event-item__hit:focus-visible {
         outline: 0.125rem solid rgb(113 152 240);

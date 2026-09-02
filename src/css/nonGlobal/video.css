@@ -29,6 +29,67 @@
     text-align: center;
 }
 
+/* 旧版 video.astro 的左上/右下取景框与右侧相机装饰，不覆盖页面背景。 */
+.hero-video-elements {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    overflow: hidden;
+    pointer-events: none;
+}
+
+.hero-video-element {
+    position: absolute;
+    display: block;
+}
+
+.hero-video-frame-left {
+    inset-block-start: 15svb;
+    inset-inline-start: 5svi;
+    inline-size: 21svi;
+    block-size: 22svb;
+    border: 0.2svi solid var(--theme-link);
+    border-radius: 0.35svi;
+    box-shadow: 0 0 2svi color-mix(in srgb, var(--theme-link) 30%, transparent);
+    opacity: 0.4;
+    animation: video-frame-float 8s ease-in-out infinite;
+}
+
+.hero-video-frame-right {
+    inset-block-end: 15svb;
+    inset-inline-end: 5svi;
+    inline-size: 17.5svi;
+    block-size: 16.7svb;
+    border: 0.2svi solid var(--theme-link);
+    border-radius: 0.35svi;
+    box-shadow: 0 0 1.4svi color-mix(in srgb, var(--theme-link) 30%, transparent);
+    opacity: 0.4;
+    animation: video-frame-float 6s ease-in-out infinite reverse;
+}
+
+.hero-camera-icon {
+    inset-block-start: 50%;
+    inset-inline-end: 15svi;
+    inline-size: 7svi;
+    block-size: 11svb;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%234169e1'%3E%3Cpath d='M5 4h14a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2zm0 2v12h14V6H5zm7 10a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm0-2a2 2 0 1 0 0-4 2 2 0 0 0 0 4z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-size: contain;
+    filter: drop-shadow(0 0 1svi color-mix(in srgb, var(--theme-link) 50%, transparent));
+    opacity: 0.3;
+    animation: video-camera-float 10s ease-in-out infinite;
+}
+
+@keyframes video-frame-float {
+    0%, 100% { transform: translateY(0) rotate(0deg); }
+    50% { transform: translateY(-1.7svb) rotate(1deg); }
+}
+
+@keyframes video-camera-float {
+    0%, 100% { transform: translateY(0) scale(1); }
+    50% { transform: translateY(-2.2svb) scale(1.1); }
+}
+
 .hero-frame-corner {
     position: absolute;
     z-index: 1;
@@ -161,23 +222,56 @@
 .capability-grid {
     inline-size: 100%;
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 1.5svi;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1svb 1svi;
+    padding: 1.5svb 1.5svi;
 }
 
 .capability-card {
-    min-block-size: 27svb;
+    min-block-size: 24svb;
     padding: 3svb 2svi;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     border: 0.0625rem solid var(--video-new-media-border);
-    background-color: color-mix(in srgb, var(--video-new-media-surface) 50%, transparent);
+    background:
+        linear-gradient(135deg, var(--video-new-media-accent-soft), transparent 58%),
+        linear-gradient(rgba(255, 255, 255, 0.12), transparent),
+        var(--video-new-media-surface);
     -webkit-backdrop-filter: blur(0.625rem);
     backdrop-filter: blur(0.625rem);
     box-shadow: 0 1rem 2rem rgba(0, 0, 0, 0.12);
     text-align: center;
+    transform-origin: center;
+    transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1),
+        box-shadow 0.6s ease;
+}
+
+/* 按左上、右上、右下、左下形成连续旋转的风车，而不是镜像对称。 */
+.capability-card:nth-child(1) { --card-rotation: -18deg; --card-hover-rotation: -2deg; transform: translate(12svi, 12svb) rotate(var(--card-rotation)); }
+.capability-card:nth-child(2) { --card-rotation: 9deg; --card-hover-rotation: 1deg; transform: translate(-12svi, 12svb) rotate(var(--card-rotation)); }
+.capability-card:nth-child(3) { --card-rotation: -9deg; --card-hover-rotation: -1deg; transform: translate(12svi, -12svb) rotate(var(--card-rotation)); }
+.capability-card:nth-child(4) { --card-rotation: 18deg; --card-hover-rotation: 2deg; transform: translate(-12svi, -12svb) rotate(var(--card-rotation)); }
+
+.capability-grid:hover .capability-card:nth-child(1),
+.capability-grid:focus-within .capability-card:nth-child(1) {
+    transform: translate(0, 0) rotate(var(--card-hover-rotation));
+}
+
+.capability-grid:hover .capability-card:nth-child(2),
+.capability-grid:focus-within .capability-card:nth-child(2) {
+    transform: translate(0, 0) rotate(var(--card-hover-rotation));
+}
+
+.capability-grid:hover .capability-card:nth-child(3),
+.capability-grid:focus-within .capability-card:nth-child(3) {
+    transform: translate(0, 0) rotate(var(--card-hover-rotation));
+}
+
+.capability-grid:hover .capability-card:nth-child(4),
+.capability-grid:focus-within .capability-card:nth-child(4) {
+    transform: translate(0, 0) rotate(var(--card-hover-rotation));
 }
 
 .capability-card h3 {
@@ -327,12 +421,11 @@
     max-inline-size: 60svi;
     margin: 0 auto;
     padding: clamp(2.5svb, 3svi, 4svb);
-    border: 0.0625rem solid rgba(255, 255, 255, 0.1);
-    background-color: var(--video-rainbow-band);
-    background-image: linear-gradient(rgba(255, 255, 255, 0.12), transparent);
+    border: 0.0625rem solid var(--video-new-media-border);
+    background-color: color-mix(in srgb, var(--video-new-media-surface) 50%, transparent);
     -webkit-backdrop-filter: blur(0.625rem);
     backdrop-filter: blur(0.625rem);
-    box-shadow: 0 1.5625rem 1.5625rem rgba(0, 0, 0, 0.25);
+    box-shadow: 0 1rem 2rem rgba(0, 0, 0, 0.12);
     color: var(--theme-color);
     font-size: clamp(1rem, 1.5vw, 1.2rem);
     font-weight: 400;
@@ -354,10 +447,29 @@
 @media (prefers-reduced-motion: reduce) {
     .hero-text-back,
     .intro,
+    .hero-video-frame-left,
+    .hero-video-frame-right,
+    .hero-camera-icon,
     .video-rec i::after { animation: none; }
 }
 
 @media (max-width: 48rem) {
+    .hero-video-frame-left {
+        inline-size: 28svi;
+        block-size: 16svb;
+    }
+
+    .hero-video-frame-right {
+        inline-size: 24svi;
+        block-size: 13svb;
+    }
+
+    .hero-camera-icon {
+        inset-inline-end: 10svi;
+        inline-size: 12svi;
+        block-size: 7svb;
+    }
+
     .video-rec {
         inset-block-start: calc(var(--header-top-height) + 4svb - 2px);
         inset-inline-start: calc(6svi + 10px);
@@ -397,8 +509,24 @@
     .video-section__heading > p:last-child { margin-block-start: 1.5svb; }
 
     .capability-grid {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 2svi;
+        gap: 2svb 2svi;
+        padding: 1svb 1svi;
+    }
+
+    .capability-card:nth-child(1) { transform: translate(8svi, 8svb) rotate(var(--card-rotation)); }
+    .capability-card:nth-child(2) { transform: translate(-8svi, 8svb) rotate(var(--card-rotation)); }
+    .capability-card:nth-child(3) { transform: translate(8svi, -8svb) rotate(var(--card-rotation)); }
+    .capability-card:nth-child(4) { transform: translate(-8svi, -8svb) rotate(var(--card-rotation)); }
+
+    .capability-grid:hover .capability-card:nth-child(1),
+    .capability-grid:focus-within .capability-card:nth-child(1),
+    .capability-grid:hover .capability-card:nth-child(2),
+    .capability-grid:focus-within .capability-card:nth-child(2),
+    .capability-grid:hover .capability-card:nth-child(3),
+    .capability-grid:focus-within .capability-card:nth-child(3),
+    .capability-grid:hover .capability-card:nth-child(4),
+    .capability-grid:focus-within .capability-card:nth-child(4) {
+        transform: translate(0, 0) rotate(var(--card-hover-rotation));
     }
 
     .capability-card {

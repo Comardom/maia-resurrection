@@ -1,31 +1,29 @@
 ---
-import { tmp } from "@/data/tmp";
-import FullScreenPagingLayout from "@/layouts/FullScreenPagingLayout.astro";
-import Header from "@/components/header/Header.astro";
-import '/src/css/nonGlobal/studioColor.css'
-import '/src/css/nonGlobal/studio.css'
+import Header from '@/components/header/Header.astro'
+import WebVerse from '@/components/web/WebVerse.astro'
+import FullScreenPagingLayout from '@/layouts/FullScreenPagingLayout.astro'
+import { webPage } from '@/data/web'
+import '@/css/nonGlobal/studioColor.css'
+import '@/css/nonGlobal/studio.css'
+import '@/css/nonGlobal/web.css'
 ---
+
 <FullScreenPagingLayout
-        title={tmp.title}
-        description={tmp.description}
+    title={webPage.seo.title}
+    description={webPage.seo.description}
+    pageClass="web-page"
 >
     <Header />
-    <div class="tmp">
-        <span>监修中</span>
+    <div class="web-side-labels" aria-hidden="true">
+        <span class="web-side-label web-side-label--left"><span class="web-side-label__text">网页部</span></span>
+        <span class="web-side-label web-side-label--right"><span class="web-side-label__text">网页部</span></span>
     </div>
+    <div class="web-page-frame" aria-hidden="true">
+        <span></span><span></span><span></span><span></span>
+    </div>
+    {webPage.verses.map((verse, index) => (
+        <div class="snap-section" id={verse.id} data-section={index + 1}>
+            <WebVerse title={verse.title} index={index} />
+        </div>
+    ))}
 </FullScreenPagingLayout>
-
-<style>
-    .tmp{
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        min-block-size: 100dvb;
-        padding-top: 7svb;
-        box-sizing: border-box;
-    }
-    .tmp span{
-        font-family: Huiwen-HKHei, cursive;
-        font-size: 7.5rem;
-    }
-</style>

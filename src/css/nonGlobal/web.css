@@ -1,0 +1,185 @@
+.web-page {
+    --web-ink: var(--theme-color);
+    --web-accent: #7198f0;
+    color: var(--web-ink);
+}
+
+.web-side-labels {
+    position: fixed;
+    top: var(--header-top-height);
+    right: 0;
+    bottom: 0;
+    left: 0;
+    block-size: calc(100dvb - var(--header-top-height));
+    z-index: 3;
+    pointer-events: none;
+}
+
+.web-side-label {
+    position: absolute;
+    top: 50%;
+    inline-size: 20svi;
+    block-size: 80svb;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.web-side-label__text {
+    color: var(--theme-color);
+    font-family: Huiwen-HKHei, 'Noto Serif CJK SC', serif;
+    font-size: clamp(12rem, 27svi, 27rem);
+    font-weight: 700;
+    line-height: 1;
+    letter-spacing: 0.16em;
+    writing-mode: vertical-rl;
+    text-orientation: upright;
+    white-space: nowrap;
+    opacity: 0.16;
+}
+
+.web-side-label--left {
+    left: 0;
+    right: auto;
+    transform: translate(-50%, calc(-50% - 12svb));
+}
+
+.web-side-label--right {
+    left: auto;
+    right: 0;
+    transform: translate(50%, calc(-50% + 12svb));
+}
+
+.web-page-frame {
+    position: fixed;
+    top: calc(var(--header-top-height) + 7svb);
+    right: 4svi;
+    bottom: 4svb;
+    left: 4svi;
+    z-index: 3;
+    border: 0.0625rem solid color-mix(in srgb, var(--web-frame-accent) 25%, transparent);
+    pointer-events: none;
+    transition: border-color 0.6s ease;
+}
+
+.web-page-frame span {
+    position: absolute;
+    inline-size: 2.5svi;
+    block-size: 2.5svb;
+    border-color: var(--web-frame-accent);
+    border-style: solid;
+    border-width: 0;
+    opacity: 0.7;
+    transition: border-color 0.6s ease;
+}
+
+.web-page-frame span:nth-child(1) {
+    inset: -0.1svi auto auto -0.1svi;
+    border-block-start-width: 0.16svi;
+    border-inline-start-width: 0.16svi;
+}
+
+.web-page-frame span:nth-child(2) {
+    inset: -0.1svi -0.1svi auto auto;
+    border-block-start-width: 0.16svi;
+    border-inline-end-width: 0.16svi;
+}
+
+.web-page-frame span:nth-child(3) {
+    inset: auto auto -0.1svi -0.1svi;
+    border-block-end-width: 0.16svi;
+    border-inline-start-width: 0.16svi;
+}
+
+.web-page-frame span:nth-child(4) {
+    inset: auto -0.1svi -0.1svi auto;
+    border-block-end-width: 0.16svi;
+    border-inline-end-width: 0.16svi;
+}
+
+.web-page { --web-frame-accent: #7198f0; }
+.web-page:has(#Lux.is-active) { --web-frame-accent: #f472b6; }
+.web-page:has(#Terra.is-active) { --web-frame-accent: #6cc7b0; }
+.web-page:has(#Spes.is-active) { --web-frame-accent: #d6a85b; }
+
+.web-verse {
+    position: absolute;
+    inset-inline: 0;
+    inset-block-start: var(--header-top-height);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    block-size: calc(100dvb - var(--header-top-height));
+    box-sizing: border-box;
+    color: var(--web-ink);
+}
+
+.web-verse__content {
+    position: relative;
+    z-index: 1;
+    inline-size: min(82svi, 100% - 8svi);
+    text-align: center;
+}
+
+.web-verse h1 {
+    margin: 0;
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: clamp(3rem, 8svi, 8rem);
+    font-weight: 400;
+    line-height: 1.05;
+    letter-spacing: 0.015em;
+}
+
+.web-verse__rule {
+    display: block;
+    inline-size: 12svi;
+    block-size: 0.12svi;
+    margin: 5svb auto 0;
+    background: var(--web-accent);
+}
+
+.web-verse--1 { --web-accent: #7198f0; }
+.web-verse--2 { --web-accent: #f472b6; }
+.web-verse--3 { --web-accent: #6cc7b0; }
+.web-verse--4 { --web-accent: #d6a85b; }
+
+.web-verse--1 .web-verse__content { transform: translateY(-1svb); }
+.web-verse--2 .web-verse__content { transform: translateY(1svb); }
+.web-verse--3 .web-verse__content { transform: translateY(-1svb); }
+.web-verse--4 .web-verse__content { transform: translateY(1svb); }
+
+@media (max-width: 48rem) {
+    .web-side-labels { display: none; }
+
+    .web-verse--1 .web-verse__content,
+    .web-verse--2 .web-verse__content,
+    .web-verse--3 .web-verse__content,
+    .web-verse--4 .web-verse__content {
+        inline-size: 90svi;
+        margin-inline: auto;
+        transform: none;
+    }
+
+    .web-verse h1 {
+        font-size: clamp(1.8rem, 8svi, 4rem);
+        line-height: 1.15;
+        text-wrap: balance;
+    }
+
+    .web-verse__rule {
+        inline-size: 18svi;
+        margin-block-start: 4svb;
+    }
+
+    .web-page-frame {
+        top: calc(var(--header-top-height) + 9svb);
+        right: 4svi;
+        bottom: 4svb;
+        left: 4svi;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .web-verse__content { transform: none; }
+}

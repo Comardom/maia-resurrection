@@ -1,0 +1,15 @@
+---
+interface Props {
+    title: string
+    index: number
+}
+
+const { title, index } = Astro.props
+---
+
+<section class:list={['web-verse', `web-verse--${index + 1}`]} aria-labelledby={`web-verse-title-${index}`}>
+    <div class="web-verse__content">
+        <h1 id={`web-verse-title-${index}`}>{title}</h1>
+        <span class="web-verse__rule" aria-hidden="true"></span>
+    </div>
+</section>
